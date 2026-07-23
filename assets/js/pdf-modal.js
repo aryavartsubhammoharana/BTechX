@@ -35,26 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const showNotFound = () => {
     pdfModalBody.innerHTML = `
-      <div class="pdf-not-found">
-        <i class="fas fa-file-excel" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-        <h4 style="color: var(--text); margin-bottom: 5px;">PDF Not Available</h4>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">This document is not uploaded yet. Please check back later.</p>
+      <div class="pdf-not-found" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px; background: rgba(10, 10, 10, 0.9); height: 100%;">
+        <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #ef4444; margin-bottom: 15px;"></i>
+        <h4 style="color: var(--text); margin-bottom: 10px; font-size: 1.3rem;">PDF / Notes Not Available</h4>
+        <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 80%; margin: 0 auto;">PDF is not available or Notes is not available in our file structure. Please check back later.</p>
       </div>
     `;
   };
 
   const showIframe = (href) => {
-    let finalUrl = href;
-    // Use Google Drive Viewer for mobile/tablet if not on local file system
-    if (window.innerWidth <= 1024 && !window.location.protocol.startsWith("file")) {
-       const a = document.createElement("a");
-       a.href = href;
-       const absoluteUrl = a.href;
-       finalUrl = `https://docs.google.com/gview?url=${encodeURIComponent(absoluteUrl)}&embedded=true`;
-    }
-
     pdfModalBody.innerHTML = `
-      <iframe src="${finalUrl}" width="100%" height="100%" frameborder="0" style="border-radius: 0 0 12px 12px;"></iframe>
+      <iframe src="${href}" width="100%" height="100%" frameborder="0" style="border-radius: 0 0 12px 12px; background: #fff;"></iframe>
     `;
   };
 
@@ -69,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       e.preventDefault();
-      pdfModal.classList.add("active");
       
       let title = "Document Viewer";
       const subjectEl = link.closest("tr")?.querySelector(".syl-subject-name") || link.closest(".module-block")?.querySelector("h3");
@@ -77,35 +67,52 @@ document.addEventListener("DOMContentLoaded", () => {
          title = subjectEl.innerText;
       }
       pdfModalTitle.innerText = title;
-      
+
+      // Handle missing/dummy links immediately
       if (!href || href === "#" || href.includes("javascript:void") || link.innerText.includes("Coming Soon") || link.classList.contains("unavailable")) {
+        pdfModal.classList.add("active");
         showNotFound();
         return;
       }
 
+      // Show loading spinner
+      pdfModal.classList.add("active");
       pdfModalBody.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color: var(--text);"><i class="fas fa-spinner fa-spin fa-2x"></i></div>`;
 
+      // Construct absolute URL for Google Drive Viewer
+      const tempAnchor = document.createElement("a");
+      tempAnchor.href = href;
+      const absoluteUrl = tempAnchor.href;
+
+      // Check if file exists on server
       fetch(href, { method: 'HEAD' })
         .then(res => {
           if (res.ok) {
-            showIframe(href);
+            const isMobile = window.innerWidth <= 1024;
+            if (isMobile) {
+              closeModal();
+              // Open PDF directly in a new tab for mobile (uses browser's native PDF viewer)
+              window.open(href, '_blank');
+            } else {
+              showIframe(href);
+            }
           } else {
             showNotFound();
           }
         })
         .catch(() => {
-          pdfModalBody.innerHTML = `
-            <object data="${href}" type="application/pdf" width="100%" height="100%" style="border-radius: 0 0 12px 12px;" id="pdfObjFallback">
-               <div class="pdf-not-found">
-                 <i class="fas fa-file-excel" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-                 <h4 style="color: var(--text); margin-bottom: 5px;">PDF Not Available</h4>
-                 <p style="color: var(--text-muted); font-size: 0.95rem;">This document is not uploaded yet or missing locally.</p>
-               </div>
-            </object>
-          `;
-          const obj = document.getElementById("pdfObjFallback");
-          if(obj) {
-            obj.onerror = showNotFound;
+          // Fallback for local testing (file:// protocol) where fetch throws CORS error
+          if (window.location.protocol.startsWith("file")) {
+            const isMobile = window.innerWidth <= 1024;
+            if (isMobile) {
+              closeModal();
+              // Open locally
+              window.open(href, '_blank');
+            } else {
+              showIframe(href);
+            }
+          } else {
+            showNotFound();
           }
         });
     });

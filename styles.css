@@ -17,6 +17,15 @@
   --transition: all 0.3s ease;
 }
 
+.download-btn {
+  color: #3b82f6 !important;
+  transition: var(--transition);
+}
+
+.download-btn:hover {
+  color: #60a5fa !important;
+}
+
 body {
     background-color: #000000;
     color: var(--text);
@@ -315,7 +324,7 @@ a:hover {
     bottom: 30px;
     right: 30px;
     background: var(--primary);
-    color: #fff;
+    color: #000;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -335,6 +344,9 @@ a:hover {
 /* Fix missing old CSS layout classes */
 .about-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .about-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+@media (max-width: 480px) {
+  .about-stat-row { grid-template-columns: 1fr; gap: 12px; }
+}
 .about-image-col { text-align: center; padding: 40px; background: var(--bg); border-radius: var(--radius-xl); border: 1px solid var(--border); }
 @media (max-width: 768px) { .about-intro { grid-template-columns: 1fr; } }
 .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; background: var(--primary-light); color: #fff; margin: 0 5px; }
@@ -342,7 +354,7 @@ a:hover {
 /* Filter Tabs */
 .year-filter { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
 .year-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 20px; border-radius: 20px; cursor: pointer; transition: var(--transition); }
-.year-btn.active, .year-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.year-btn.active, .year-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
 .year-content { display: none; }
 .year-content.active { display: block; }
 
