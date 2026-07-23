@@ -1,0 +1,20 @@
+# BTechX
+> A free, comprehensive academic resource and structured notes platform for B.Tech engineering students.
+
+## Subjects & Notes
+Provides structured curriculum notes, syllabi, and downloadable PDFs for engineering students.
+- [Engineering Mathematics 1](https://btechx.infinityfreeapp.com/1stYearSub/math1.html): Differential calculus, multivariable functions, and vector calculus notes.
+- [Engineering Mathematics 2](https://btechx.infinityfreeapp.com/1stYearSub/math2.html): Linear algebra, differential equations, and complex analysis.
+- [Engineering Physics](https://btechx.infinityfreeapp.com/1stYearSub/physics.html): Quantum mechanics, optics, and solid-state physics theory.
+- [Programming for Problem Solving (CSE)](https://btechx.infinityfreeapp.com/1stYearSub/cse.html): C programming fundamentals and data structures.
+- [Basic Electrical Engineering (BEE)](https://btechx.infinityfreeapp.com/1stYearSub/bee.html): AC/DC circuits, transformers, and electrical machines.
+- [Basic Electronics Engineering (IEE)](https://btechx.infinityfreeapp.com/1stYearSub/iee.html): Semiconductors, diodes, transistors, and logic gates.
+- [Engineering Mechanics (IME)](https://btechx.infinityfreeapp.com/1stYearSub/ime.html): Statics, dynamics, and structural analysis principles.
+- [Discrete Mathematics & Graph Theory (DMGT)](https://btechx.infinityfreeapp.com/2ndYearSub/dmgt.html): Logic, set theory, combinatorics, and graph algorithms.
+
+## Tools & Utilities
+- [CGPA & SGPA Calculator](https://btechx.infinityfreeapp.com/tool.html): Specialized tool for B.Tech students to calculate academic performance.
+
+## Resources
+- [Syllabus Tracker](https://btechx.infinityfreeapp.com/syllabus.html): Complete semester-wise engineering syllabus mapping.
+- [About & Contact](https://btechx.infinityfreeapp.com/about.html): Information about the BTechX platform and developer team.

@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="BTechX is a free academic resource platform for B.Tech students with engineering notes, syllabus resources, and student tools.">
+  <meta name="keywords" content="btechx cgu, btechx, engineering notes, btech, cgu notes">
+  <meta name="author" content="BTechX">
+  <meta name="robots" content="index, follow">
+  <meta name="application-name" content="BTechX">
+  <meta property="og:site_name" content="BTechX">
+  <meta property="og:title" content="BTechX - Engineering Notes">
+  <meta property="og:description"
+    content="Free B.Tech engineering notes, syllabus resources, and useful student tools from BTechX.">
+  <meta property="og:image" content="https://btechx.infinityfreeapp.com/logo.png">
+  <meta property="og:url" content="https://btechx.infinityfreeapp.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BTechX - Engineering Notes">
+  <meta name="twitter:description"
+    content="Free B.Tech engineering notes, syllabus resources, and useful student tools from BTechX.">
+  <title>BTechX - Engineering Notes</title>
+  <link rel="canonical" href="https://btechx.infinityfreeapp.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;700&family=Outfit:wght@700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css?v=2.99">
+
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "BTechX",
+    "url": "https://btechx.infinityfreeapp.com/",
+    "description": "A free academic resource platform for B.Tech engineering students offering notes, syllabi, and tools.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BTechX",
+      "url": "https://btechx.infinityfreeapp.com/",
+      "logo": "https://btechx.infinityfreeapp.com/logo.png"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- ══ INTRO OVERLAY (first-time only) ══ -->
+  <div id="introOverlay"
+    style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#03050a;overflow:hidden;font-family:'Fira Code',monospace;perspective:1200px">
+    <style>
+      #introOverlay * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box
+      }
+
+      #introOverlay canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none
+      }
+
+      #introOverlay canvas#iMatrix {
+        opacity: .12
+      }
+
+      .i-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none
+      }
+
+      .i-orb-1 {
+        width: 600px;
+        height: 600px;
+        background: rgba(0, 229, 255, .08);
+        top: -200px;
+        left: -100px;
+        animation: io1 12s ease-in-out infinite
+      }
+
+      .i-orb-2 {
+        width: 500px;
+        height: 500px;
+        background: rgba(189, 0, 255, .08);
+        bottom: -200px;
+        right: -100px;
+        animation: io2 14s ease-in-out infinite
+      }
+
+      @keyframes io1 {
+
+        0%,
+        100% {
+          transform: translate(0, 0)
+        }
+
+        50% {
+          transform: translate(80px, 60px)
+        }
+      }
+
+      @keyframes io2 {
+
+        0%,
+        100% {
+          transform: translate(0, 0)
+        }
+
+        50% {
+          transform: translate(-60px, -80px)
+        }
+      }
+
+      .i-scene {
+        width: 880px;
+        height: 560px;
+        transform-style: preserve-3d;
+        animation: iPan 3s cubic-bezier(.1, 1, .3, 1) forwards;
+        position: relative;
+        z-index: 2
+      }
+
+      .i-editor {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 15, 25, .82);
+        border: 1px solid rgba(0, 229, 255, .12);
+        border-radius: 16px;
+        box-shadow: 0 40px 80px -20px rgba(0, 0, 0, .9), 0 0 60px rgba(0, 229, 255, .08);
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+        transform-style: preserve-3d
+      }
+
+      .i-header {
+        height: 48px;
+        background: rgba(0, 0, 0, .5);
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, .06);
+        gap: 8px
+      }
+
+      .i-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%
+      }
+
+      .i-dot-r {
+        background: #ff5f56;
+        box-shadow: 0 0 8px #ff5f56
+      }
+
+      .i-dot-y {
+        background: #ffbd2e;
+        box-shadow: 0 0 8px #ffbd2e
+      }
+
+      .i-dot-g {
+        background: #27c93f;
+        box-shadow: 0 0 8px #27c93f
+      }
+
+      .i-tabs {
+        display: flex;
+        gap: 2px;
+        margin-left: 20px;
+        flex: 1
+      }
+
+      .i-tab {
+        padding: 6px 16px;
+        font-size: 12px;
+        color: #6e7681;
+        background: rgba(255, 255, 255, .03);
+        border-radius: 8px 8px 0 0;
+        border: 1px solid transparent;
+        border-bottom: none
+      }
+
+      .i-tab.active {
+        color: #00e5ff;
+        background: rgba(0, 229, 255, .08);
+        border-color: rgba(0, 229, 255, .15)
+      }
+
+      .i-main {
+        display: flex;
+        height: calc(100% - 48px)
+      }
+
+      .i-sidebar {
+        width: 48px;
+        background: rgba(0, 0, 0, .3);
+        border-right: 1px solid rgba(255, 255, 255, .04);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 14px;
+        gap: 18px
+      }
+
+      .i-si {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #484f58;
+        font-size: 14px
+      }
+
+      .i-si.active {
+        color: #00e5ff;
+        background: rgba(0, 229, 255, .1)
+      }
+
+      .i-code {
+        flex: 1;
+        padding: 24px 30px 24px 20px;
+        overflow: hidden;
+        position: relative
+      }
+
+      .i-line {
+        display: flex;
+        gap: 16px;
+        opacity: 0;
+        transform: translateY(8px);
+        animation: iFade .35s ease forwards
+      }
+
+      .i-ln {
+        color: #484f58;
+        min-width: 28px;
+        text-align: right;
+        font-size: 14px
+      }
+
+      .i-cd {
+        font-size: 14.5px;
+        line-height: 1.65;
+        white-space: nowrap;
+        color: #e6edf3
+      }
+
+      .i-kw {
+        color: #ff7b72;
+        text-shadow: 0 0 6px rgba(255, 123, 114, .3)
+      }
+
+      .i-fn {
+        color: #d2a8ff;
+        text-shadow: 0 0 6px rgba(210, 168, 255, .3)
+      }
+
+      .i-st {
+        color: #a5d6ff
+      }
+
+      .i-vr {
+        color: #79c0ff
+      }
+
+      .i-cm {
+        color: #6e7681;
+        font-style: italic
+      }
+
+      .i-br {
+        color: #ffa657
+      }
+
+      .i-op {
+        color: #ff7b72
+      }
+
+      .i-tp {
+        color: #7ee787;
+        text-shadow: 0 0 6px rgba(126, 231, 135, .3)
+      }
+
+      .i-cur {
+        display: inline-block;
+        width: 2px;
+        height: 18px;
+        background: #00e5ff;
+        box-shadow: 0 0 12px #00e5ff;
+        animation: iBlink 1s step-end infinite;
+        vertical-align: text-bottom;
+        margin-left: 2px
+      }
+
+      .i-term {
+        position: absolute;
+        bottom: 0;
+        left: 48px;
+        right: 0;
+        height: 0;
+        background: rgba(0, 0, 0, .6);
+        border-top: 1px solid rgba(0, 229, 255, .1);
+        overflow: hidden;
+        transition: height .8s cubic-bezier(.4, 0, .2, 1);
+        z-index: 4
+      }
+
+      .i-term.open {
+        height: 130px
+      }
+
+      .i-th {
+        padding: 6px 16px;
+        font-size: 11px;
+        color: #6e7681;
+        border-bottom: 1px solid rgba(255, 255, 255, .04);
+        display: flex;
+        align-items: center;
+        gap: 8px
+      }
+
+      .i-td {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #27c93f;
+        box-shadow: 0 0 6px #27c93f
+      }
+
+      .i-tb {
+        padding: 10px 16px;
+        font-size: 13px;
+        line-height: 1.6
+      }
+
+      .i-tl {
+        opacity: 0;
+        transform: translateX(-10px);
+        color: #8b949e
+      }
+
+      .i-tl.show {
+        animation: iTL .4s ease forwards
+      }
+
+      .i-tl .s {
+        color: #27c93f;
+        text-shadow: 0 0 8px rgba(39, 201, 63, .5)
+      }
+
+      .i-tl .w {
+        color: #ffbd2e
+      }
+
+      .i-tl .c {
+        color: #00e5ff
+      }
+
+      .i-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateZ(1px) scale(.5);
+        font-family: 'Outfit', sans-serif;
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: #fff;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 20;
+        white-space: nowrap
+      }
+
+      .i-logo.show {
+        animation: iPop 2.2s cubic-bezier(.175, .885, .32, 1.275) forwards
+      }
+
+      .i-tag {
+        position: absolute;
+        top: calc(50% + 80px);
+        left: 50%;
+        transform: translate(-50%, 0) translateZ(100px);
+        font-family: 'Outfit', sans-serif;
+        font-size: 18px;
+        color: rgba(255, 255, 255, .6);
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        opacity: 0;
+        z-index: 21;
+        pointer-events: none
+      }
+
+      .i-tag.show {
+        animation: iTagF 1.5s .5s ease forwards
+      }
+
+      .i-dim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(3, 5, 10, 0);
+        z-index: 15;
+        pointer-events: none;
+        transition: background 1.2s ease
+      }
+
+      .i-dim.active {
+        background: rgba(3, 5, 10, .88)
+      }
+
+      .i-sbar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 26px;
+        background: rgba(0, 229, 255, .08);
+        border-top: 1px solid rgba(0, 229, 255, .12);
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        font-size: 11px;
+        color: #6e7681;
+        gap: 16px;
+        z-index: 5
+      }
+
+      .i-sbar .ad {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #27c93f;
+        box-shadow: 0 0 6px #27c93f
+      }
+
+      .i-lb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #00e5ff, #bd00ff, #00e5ff);
+        background-size: 200% 100%;
+        width: 0;
+        z-index: 100;
+        animation: iLP 2.8s ease-out forwards, iSh 1.5s linear infinite;
+        box-shadow: 0 0 15px #00e5ff
+      }
+
+      .i-skip {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        z-index: 30;
+        background: rgba(255, 255, 255, .08);
+        border: 1px solid rgba(255, 255, 255, .15);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px;
+        cursor: pointer;
+        letter-spacing: 1px;
+        transition: .3s;
+        backdrop-filter: blur(8px)
+      }
+
+      .i-skip:hover {
+        background: rgba(0, 229, 255, .2);
+        border-color: #00e5ff
+      }
+
+      @keyframes iBlink {
+
+        0%,
+        100% {
+          opacity: 1
+        }
+
+        50% {
+          opacity: 0
+        }
+      }
+
+      @keyframes iPan {
+        0% {
+          transform: scale(.25) rotateX(55deg) rotateY(40deg) translateZ(-800px);
+          opacity: 0
+        }
+
+        100% {
+          transform: rotateX(10deg) rotateY(-10deg) translateZ(0);
+          opacity: 1
+        }
+      }
+
+      @keyframes iFade {
+        to {
+          opacity: 1;
+          transform: translateY(0)
+        }
+      }
+
+      @keyframes iTL {
+        to {
+          opacity: 1;
+          transform: translateX(0)
+        }
+      }
+
+      @keyframes iTagF {
+        to {
+          opacity: 1
+        }
+      }
+
+      @keyframes iLP {
+        0% {
+          width: 0
+        }
+
+        40% {
+          width: 60%
+        }
+
+        100% {
+          width: 100%
+        }
+      }
+
+      @keyframes iSh {
+        0% {
+          background-position: 200% 0
+        }
+
+        100% {
+          background-position: -200% 0
+        }
+      }
+
+      @keyframes iPop {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) translateZ(10px) scale(.4);
+          text-shadow: none
+        }
+
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) translateZ(280px) scale(1.15)
+        }
+
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) translateZ(160px) scale(1);
+          text-shadow: -1px 1px 0 #bd00ff, -2px 2px 0 #bd00ff, -3px 3px 0 #bd00ff, -4px 4px 0 #bd00ff, -5px 5px 0 #bd00ff, -6px 6px 0 #bd00ff, -7px 7px 0 #a200e0, -8px 8px 35px rgba(189, 0, 255, .8), 1px -1px 0 #00e5ff, 2px -2px 0 #00e5ff, 3px -3px 0 #00e5ff, 4px -4px 0 #00e5ff, 5px -5px 0 #00e5ff, 6px -6px 0 #00e5ff, 7px -7px 0 #00c8e0, 8px -8px 35px rgba(0, 229, 255, .8)
+        }
+      }
+
+      @media(max-width:920px) {
+        .i-scene {
+          width: 95vw;
+          height: 65vw
+        }
+
+        .i-logo {
+          font-size: 60px
+        }
+
+        .i-tag {
+          font-size: 12px;
+          top: calc(50% + 50px)
+        }
+      }
+
+      @media(max-width:600px) {
+        .i-scene {
+          width: 98vw;
+          height: 80vh
+        }
+
+        .i-header {
+          height: 36px;
+          padding: 0 10px
+        }
+
+        .i-dot {
+          width: 8px;
+          height: 8px
+        }
+
+        .i-tab:not(.active) {
+          display: none
+        }
+
+        .i-tab {
+          font-size: 9px;
+          padding: 4px 8px
+        }
+
+        .i-sidebar {
+          width: 32px
+        }
+
+        .i-si {
+          width: 22px;
+          height: 22px;
+          font-size: 11px
+        }
+
+        .i-code {
+          padding: 10px 8px 10px 6px
+        }
+
+        .i-line {
+          gap: 8px
+        }
+
+        .i-ln {
+          font-size: 10px;
+          min-width: 18px
+        }
+
+        .i-cd {
+          font-size: 10.5px !important
+        }
+
+        .i-cur {
+          height: 14px
+        }
+
+        .i-logo {
+          font-size: 38px;
+          letter-spacing: 0
+        }
+
+        .i-tag {
+          font-size: 9px;
+          top: calc(50% + 35px)
+        }
+
+        .i-term.open {
+          height: 95px
+        }
+
+        .i-term {
+          left: 32px
+        }
+
+        .i-tb {
+          font-size: 10px;
+          padding: 6px 10px
+        }
+
+        .i-sbar {
+          height: 20px;
+          font-size: 9px
+        }
+
+        .i-skip {
+          bottom: 15px;
+          right: 15px;
+          font-size: 11px;
+          padding: 6px 14px
+        }
+
+        .i-orb {
+          filter: blur(80px)
+        }
+
+        .i-orb-1 {
+          width: 300px;
+          height: 300px
+        }
+
+        .i-orb-2 {
+          width: 250px;
+          height: 250px
+        }
+      }
+
+      @media(max-width:380px) {
+        .i-logo {
+          font-size: 30px
+        }
+
+        .i-sidebar {
+          display: none
+        }
+
+        .i-term {
+          left: 0
+        }
+
+        .i-cd {
+          font-size: 9px !important
+        }
+      }
+    </style>
+    <div class="i-lb"></div>
+    <canvas id="iParticles" style="z-index:0"></canvas>
+    <canvas id="iMatrix" style="z-index:0"></canvas>
+    <div class="i-orb i-orb-1"></div>
+    <div class="i-orb i-orb-2"></div>
+    <div class="i-scene" id="iScene">
+      <div class="i-editor">
+        <div class="i-header">
+          <div class="i-dot i-dot-r"></div>
+          <div class="i-dot i-dot-y"></div>
+          <div class="i-dot i-dot-g"></div>
+          <div class="i-tabs">
+            <div class="i-tab active">⚡ init.js</div>
+            <div class="i-tab">📦 package.json</div>
+            <div class="i-tab">⚙ config.ts</div>
+          </div>
+        </div>
+        <div class="i-main">
+          <div class="i-sidebar">
+            <div class="i-si active">📁</div>
+            <div class="i-si">🔍</div>
+            <div class="i-si">🔀</div>
+            <div class="i-si">🐛</div>
+          </div>
+          <div class="i-code" id="iCodeArea"></div>
+        </div>
+        <div class="i-term" id="iTerm">
+          <div class="i-th">
+            <div class="i-td"></div> TERMINAL — node
+          </div>
+          <div class="i-tb" id="iTermBody"></div>
+        </div>
+        <div class="i-sbar">
+          <div class="ad"></div><span>UTF-8</span><span>JavaScript</span><span style="margin-left:auto">BTechX
+            Workspace</span>
+        </div>
+        <div class="i-dim" id="iDim"></div>
+        <div class="i-logo" id="iLogo">&lt;BTechX/&gt;</div>
+        <div class="i-tag" id="iTag">Engineering • Notes • Redefined</div>
+      </div>
+    </div>
+    <button class="i-skip" id="iSkip">Skip Intro ▸</button>
+  </div>
+
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-text">BTechX</span>
+      </a>
+      <div class="navbar-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="index.html#subjects">Subjects</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="about.html">About & Contact</a>
+        <a href="tool.html">Tools</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-panel">
+      <div class="sidebar-header">
+        <span class="logo-text">BTechX</span>
+        <button class="close-btn" id="closeMenu">&times;</button>
+      </div>
+      <a href="index.html" class="active">Home</a>
+      <a href="index.html#subjects">Subjects</a>
+      <a href="syllabus.html">Syllabus</a>
+      <a href="about.html">About & Contact</a>
+      <a href="tool.html">Tools</a>
+    </div>
+  </div>
+
+
+
+  <section id="subjects" style="padding: 120px 0 60px;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Explore BTech Notes</h2>
+        <div class="section-divider"></div>
+
+        <!-- Year Filter matching syllabus.html -->
+        <div class="year-filter">
+          <button class="year-btn active" onclick="switchYear('year-1', this)">1st Year</button>
+          <button class="year-btn" onclick="switchYear('year-2', this)">2nd Year</button>
+          <button class="year-btn" onclick="switchYear('year-3', this)">3rd Year</button>
+          <button class="year-btn" onclick="switchYear('year-4', this)">4th Year</button>
+        </div>
+      </div>
+
+      <div id="year-1" class="year-content active">
+        <div class="subjects-grid">
+          <!-- Math 1 -->
+          <a href="1stYearSub/math1.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-square-root-alt"></i></div>
+              <span class="badge">MA101</span>
+            </div>
+            <h3>Mathematics — I</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Calculus, linear algebra, and differential equations.
+            </p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- Math 2 -->
+          <a href="1stYearSub/math2.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-infinity"></i></div>
+              <span class="badge">MA201</span>
+            </div>
+            <h3>Mathematics — II</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Advanced engineering mathematics and complex analysis.
+            </p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- Physics -->
+          <a href="1stYearSub/physics.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-atom"></i></div>
+              <span class="badge">PH101</span>
+            </div>
+            <h3>Engineering Physics</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Quantum mechanics, optics, and electromagnetism.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- CSE -->
+          <a href="1stYearSub/cse.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-code"></i></div>
+              <span class="badge">CS101</span>
+            </div>
+            <h3>Computer Science</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Programming basics, algorithms, and data structures.
+            </p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- IEE -->
+          <a href="1stYearSub/iee.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-bolt"></i></div>
+              <span class="badge">EE101</span>
+            </div>
+            <h3>Intro to Electrical</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Circuits, network theorems, and AC fundamentals.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- IME -->
+          <a href="1stYearSub/ime.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-cogs"></i></div>
+              <span class="badge">ME101</span>
+            </div>
+            <h3>Intro to Mechanical</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Thermodynamics, mechanics, and material science.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <!-- BEE -->
+          <a href="1stYearSub/bee.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-plug"></i></div>
+              <span class="badge">EE102</span>
+            </div>
+            <h3>Basic Electrical Engg</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Transformers, machines, and power systems.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div id="year-2" class="year-content" style="display: none;">
+
+        <h3
+          style="font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: var(--text); border-left: 4px solid var(--primary); padding-left: 10px;">
+          Compulsory Subjects</h3>
+        <div class="subjects-grid">
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-network-wired"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Data Communications & Network</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">OSI Model, TCP/IP, and network architecture.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-database"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Database Engineering</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">SQL, normalizations, and DBMS architecture.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+
+          <a href="2ndYearSub/dmgt.html" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-project-diagram"></i></div>
+              <span class="badge">MA203</span>
+            </div>
+            <h3>Discrete Mathematics and Graph Theory</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Graph theory, logic, and combinatorics.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5
+                Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </a>
+
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fab fa-python"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Python Programing Lab</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Practical python coding and applications.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-laptop-code"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Data Communications & Network Lab</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Practical network configuration and analysis.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-server"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Database Engineering Lab</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Practical SQL and DBMS implementation.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+        </div>
+
+        <h3
+          style="font-size: 1.2rem; font-weight: 600; margin: 40px 0 20px; color: var(--text); border-left: 4px solid var(--primary); padding-left: 10px;">
+          Elective Subjects</h3>
+        <div class="subjects-grid">
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-cogs"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Factory Automation with PLC & HMI</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Industrial automation and control systems.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-robot"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Embedded Systems and Robotics</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Microcontrollers and robot kinematics.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-industry"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Automation with Industry 4.0</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Smart manufacturing and IoT integration.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-microchip"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Mechatronics with IOT</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Synergy of mechanics, electronics, and IoT.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+        </div>
+
+        <h3
+          style="font-size: 1.2rem; font-weight: 600; margin: 40px 0 20px; color: var(--text); border-left: 4px solid var(--primary); padding-left: 10px;">
+          Satisfactory</h3>
+        <div class="subjects-grid">
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-leaf"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Biology and Enviornmental Science</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Biological systems and environmental impact.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+          <a href="#" class="subject-card">
+            <div class="subject-card-head">
+              <div class="subject-icon"><i class="fas fa-flask"></i></div>
+              <span class="badge">TBD</span>
+            </div>
+            <h3>Chemistry</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Chemical principles and material properties.</p>
+            <div class="subject-card-footer">
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div id="year-3" class="year-content" style="display: none;">
+        <div
+          style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
+          Content for 3rd Year coming soon!
+        </div>
+      </div>
+
+      <div id="year-4" class="year-content" style="display: none;">
+        <div
+          style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
+          Content for 4th Year coming soon!
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-text">BTechX</div>
+          <p>A free academic resource platform for B.Tech students.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/subham-moharana-465693373" target="_blank"><i
+                class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#subjects">Subjects</a></li>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025&ndash;2029 <strong>BTechX</strong>. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/pdf-modal.js"></script>
+  <script>
+    // Year Filter Script
+    function switchYear(yearId, btnElement) {
+      document.querySelectorAll('.year-content').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+      });
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      const target = document.getElementById(yearId);
+      if (target) {
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      btnElement.classList.add('active');
+    }
+  </script>
+
+  <!-- ══ INTRO ANIMATION ENGINE ══ -->
+  <script>
+    (function () {
+      // Show intro ONLY for first-time visitors
+      if (localStorage.getItem('btechx_seen')) return;
+      const ov = document.getElementById('introOverlay');
+      if (!ov) return;
+      ov.style.display = 'flex';
+      ov.style.justifyContent = 'center';
+      ov.style.alignItems = 'center';
+      document.body.style.overflow = 'hidden';
+
+      // Mark as seen
+      localStorage.setItem('btechx_seen', '1');
+
+      // Particles
+      const pc = document.getElementById('iParticles'), pctx = pc.getContext('2d');
+      let pw, ph, pp = []; const isMob = innerWidth <= 600; const pCnt = isMob ? 25 : 70;
+      function pResize() { pw = pc.width = innerWidth; ph = pc.height = innerHeight }
+      pResize();
+      for (let i = 0; i < pCnt; i++) pp.push({ x: Math.random() * pw, y: Math.random() * ph, r: Math.random() * 1.5 + .5, dx: (Math.random() - .5) * .4, dy: (Math.random() - .5) * .4, o: Math.random() * .5 + .2 });
+      let pRun = true;
+      function pDraw() {
+        if (!pRun) return;
+        pctx.clearRect(0, 0, pw, ph);
+        pp.forEach(p => { p.x += p.dx; p.y += p.dy; if (p.x < 0) p.x = pw; if (p.x > pw) p.x = 0; if (p.y < 0) p.y = ph; if (p.y > ph) p.y = 0; pctx.beginPath(); pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); pctx.fillStyle = `rgba(0,229,255,${p.o})`; pctx.fill() });
+        const cd = isMob ? 80 : 120;
+        for (let i = 0; i < pp.length; i++)for (let j = i + 1; j < pp.length; j++) { const d = Math.hypot(pp[i].x - pp[j].x, pp[i].y - pp[j].y); if (d < cd) { pctx.beginPath(); pctx.moveTo(pp[i].x, pp[i].y); pctx.lineTo(pp[j].x, pp[j].y); pctx.strokeStyle = `rgba(0,229,255,${.08 * (1 - d / cd)})`; pctx.stroke() } }
+        requestAnimationFrame(pDraw);
+      }
+      pDraw();
+
+      // Matrix rain
+      const mc = document.getElementById('iMatrix'), mctx = mc.getContext('2d');
+      mc.width = innerWidth; mc.height = innerHeight;
+      const mCols = Math.floor(innerWidth / 18), mDrops = Array(mCols).fill(1);
+      const mCh = '01アイウエオBTECHX</>{}=';
+      const mInt = setInterval(() => { mctx.fillStyle = 'rgba(3,5,10,.08)'; mctx.fillRect(0, 0, mc.width, mc.height); mctx.fillStyle = 'rgba(0,229,255,.35)'; mctx.font = '14px Fira Code'; mDrops.forEach((y, i) => { mctx.fillText(mCh[Math.floor(Math.random() * mCh.length)], i * 18, y * 18); if (y * 18 > mc.height && Math.random() > .975) mDrops[i] = 0; mDrops[i]++ }) }, 60);
+
+      // Code lines
+      const cLines = [
+        '<span class="i-cm">// ⚡ BTechX Platform — init.js</span>',
+        '<span class="i-cm">// Bootstrapping knowledge engine...</span>',
+        '',
+        '<span class="i-kw">import</span> { <span class="i-tp">Knowledge</span>, <span class="i-tp">Notes</span> } <span class="i-kw">from</span> <span class="i-st">"@btechx/core"</span>;',
+        '<span class="i-kw">import</span> { <span class="i-vr">deploy</span> } <span class="i-kw">from</span> <span class="i-st">"@btechx/engine"</span>;',
+        '',
+        '<span class="i-kw">const</span> <span class="i-vr">config</span> <span class="i-op">=</span> <span class="i-br">{</span>',
+        '    <span class="i-vr">name</span>:    <span class="i-st">"BTechX"</span>,',
+        '    <span class="i-vr">version</span>: <span class="i-st">"2.99"</span>,',
+        '    <span class="i-vr">mission</span>: <span class="i-st">"Free education for every engineer"</span>,',
+        '<span class="i-br">}</span>;',
+        '',
+        '<span class="i-kw">async function</span> <span class="i-fn">ignite</span><span class="i-br">()</span> <span class="i-br">{</span>',
+        '    <span class="i-kw">const</span> <span class="i-vr">engine</span> <span class="i-op">=</span> <span class="i-kw">await</span> <span class="i-tp">Knowledge</span>.<span class="i-fn">compile</span><span class="i-br">(</span><span class="i-vr">config</span><span class="i-br">)</span>;',
+        '    <span class="i-kw">return</span> <span class="i-vr">deploy</span><span class="i-br">(</span><span class="i-vr">engine</span><span class="i-br">)</span>;',
+        '<span class="i-br">}</span>',
+        '',
+        '<span class="i-fn">ignite</span><span class="i-br">()</span>.<span class="i-fn">then</span><span class="i-br">(()</span> <span class="i-op">=></span> <span class="i-vr">console</span>.<span class="i-fn">log</span><span class="i-br">(</span><span class="i-st">"🚀 BTechX is live!"</span><span class="i-br">))</span>;',
+      ];
+      const tLines = [
+        '<span class="c">$</span> node init.js',
+        '<span class="w">⏳</span> Compiling knowledge engine...',
+        '<span class="s">✔</span> 8 subjects loaded',
+        '<span class="s">✔</span> <span class="s">BTechX v2.99 deployed 🚀</span>',
+      ];
+
+      const ca = document.getElementById('iCodeArea');
+      let cl = 0;
+      function rLines() {
+        ca.querySelectorAll('.i-line').forEach(l => l.remove());
+        for (let i = 0; i <= cl && i < cLines.length; i++) {
+          const d = document.createElement('div'); d.className = 'i-line';
+          d.innerHTML = `<div class="i-ln">${i + 1}</div><div class="i-cd">${cLines[i]}${i === cl ? '<span class="i-cur"></span>' : ''}</div>`;
+          ca.appendChild(d);
+        }
+      }
+
+      function dismissIntro() {
+        pRun = false; clearInterval(mInt);
+        ov.style.transition = 'opacity 1s ease';
+        ov.style.opacity = '0';
+        setTimeout(() => { ov.remove(); document.body.style.overflow = ''; }, 1000);
+      }
+
+      // Skip button
+      document.getElementById('iSkip').addEventListener('click', dismissIntro);
+
+      function typeCode() {
+        if (cl < cLines.length) {
+          rLines(); cl++;
+          setTimeout(typeCode, cLines[cl - 1] === '' ? 50 : Math.random() * 150 + 80);
+        } else {
+          rLines();
+          setTimeout(() => {
+            document.getElementById('iTerm').classList.add('open');
+            let ti = 0; const tb = document.getElementById('iTermBody');
+            function nT() {
+              if (ti < tLines.length) {
+                const t = document.createElement('div'); t.className = 'i-tl';
+                t.innerHTML = tLines[ti]; tb.appendChild(t);
+                requestAnimationFrame(() => t.classList.add('show'));
+                ti++; setTimeout(nT, ti === tLines.length ? 500 : 400);
+              } else {
+                setTimeout(() => {
+                  document.getElementById('iDim').classList.add('active');
+                  setTimeout(() => {
+                    document.getElementById('iLogo').classList.add('show');
+                    document.getElementById('iTag').classList.add('show');
+                    // Auto dismiss after logo reveal
+                    setTimeout(dismissIntro, 3500);
+                  }, 400);
+                }, 500);
+              }
+            }
+            nT();
+          }, 600);
+        }
+      }
+      setTimeout(() => { rLines(); typeCode() }, 2200);
+    })();
+  </script>
+</body>
+
+</html>

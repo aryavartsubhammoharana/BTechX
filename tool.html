@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools - BTechX</title>
+  <meta name="description" content="Useful tools for students provided by BTechX." />
+  <meta name="keywords" content="Tools, dheeLM, GhostTrace" />
+  <meta name="author" content="BTechX" />
+  <meta property="og:title" content="Tools - BTechX" />
+  <meta property="og:description" content="Useful tools for students provided by BTechX." />
+  <meta property="og:image" content="https://btechx.infinityfreeapp.com/logo.png" />
+  <meta property="og:url" content="https://btechx.infinityfreeapp.com/tool.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css?v=2.99" />
+  <style>
+    .tools-showcase {
+      padding: 80px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 120px;
+    }
+
+    .showcase-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 80px;
+      width: 100%;
+    }
+
+    .showcase-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .showcase-content {
+      flex: 1;
+    }
+
+    .showcase-content h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-bottom: 5px;
+      /* prevents clipping of cursive bottoms */
+    }
+
+    .showcase-content p {
+      font-size: 0.95rem;
+      color: #a8a8a8;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .showcase-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .showcase-btn:hover {
+      background: #3b82f6;
+      /* slightly brighter */
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(43, 116, 234, 0.4);
+      color: #fff;
+    }
+
+    .showcase-image-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .showcase-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .showcase-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .showcase-item:hover .showcase-image img {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    .showcase-image .placeholder-icon {
+      font-size: 6rem;
+      color: var(--primary);
+      opacity: 0.5;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .showcase-item:hover .showcase-image .placeholder-icon {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+
+    @media (max-width: 992px) {
+
+      .showcase-item,
+      .showcase-item:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+      }
+
+      .showcase-content {
+        margin: 0 auto;
+      }
+
+      .tools-showcase {
+        gap: 80px;
+      }
+    }
+  </style>
+  <link rel="canonical" href="https://btechx.infinityfreeapp.com/tool.html" />
+  <link rel="icon" href="logo.png" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-text">BTechX</span>
+      </a>
+      <div class="navbar-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#subjects">Subjects</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="about.html">About & Contact</a>
+        <a href="tool.html" class="active">Tools</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-panel">
+      <div class="sidebar-header">
+        <span class="logo-text">BTechX</span>
+        <button class="close-btn" id="closeMenu">&times;</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="index.html#subjects">Subjects</a>
+      <a href="syllabus.html">Syllabus</a>
+      <a href="about.html">About & Contact</a>
+      <a href="tool.html" class="active">Tools</a>
+    </div>
+  </div>
+
+
+  <section class="tools-showcase">
+    <div class="container">
+
+
+
+      <!-- Tool: Metacleaner -->
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <h2>Metacleaner</h2>
+          <p>Clean hidden metadata from your files to protect your privacy before sharing them online. Remove EXIF data,
+            authors, and timestamps instantly.</p>
+          <a href="https://metacleaner.onrender.com/" target="_blank" class="showcase-btn">
+            Clean Metadata <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="showcase-image-wrapper particle-target">
+          <div class="showcase-image">
+            <img src="images/metacleaner.png" alt="Metacleaner Preview">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Veda AI -->
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <h2>Veda AI</h2>
+          <p>A futuristic Video Lecture Analyzer that converts unstructured YouTube educational videos into highly
+            structured notes. Powered by advanced LLMs like Sarvam AI and Groq LLaMA-3.</p>
+          <a href="https://veda-ai-k7a4.onrender.com/" target="_blank" class="showcase-btn">
+            Try Veda AI <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="showcase-image-wrapper particle-target">
+          <div class="showcase-image">
+            <img src="images/veda-ai.png" alt="Veda AI Preview">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Search SD -->
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <h2>Realiology</h2>
+          <p>A next-generation AI-powered knowledge retrieval platform engineered to provide accurate, multilingual, and
+            context-aware answers directly from the vast literature of Sanatana Dharma. Built on a sophisticated
+            Retrieval-Augmented Generation (RAG) architecture.</p>
+          <a href="https://realiology.infinityfreeapp.com" target="_blank" class="showcase-btn">
+            Explore Realiology <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="showcase-image-wrapper particle-target">
+          <div class="showcase-image">
+            <img src="images/realiology.png" alt="Realiology Preview">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-text">BTechX</div>
+          <p>A free academic resource platform for B.Tech students.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/subham-moharana-465693373" target="_blank"><i
+                class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#subjects">Subjects</a></li>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+            <li><a href="tool.html">Tools</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+            <li><a href="tool.html">Tools</a></li>
+            <li>
+              <a href="https://www.confessout.com/btechx-cgu" target="_blank">Feedback Portal</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2025&ndash;2029 <strong>BTechX</strong>. All rights
+          reserved.
+        </p>
+        <p>Built by <strong>BTechX</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" title="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/pdf-modal.js"></script>
+</body>
+
+</html>

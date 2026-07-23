@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTech Syllabus - BTechX</title>
+  <meta name="description" content="Subject-wise syllabus for BTech engineering curriculum.">
+  <meta name="keywords" content="BTech syllabus, BTech curriculum, BTechX">
+  <meta name="author" content="BTechX">
+  <meta property="og:title" content="BTech Syllabus - BTechX">
+  <meta property="og:description" content="Subject-wise syllabus for BTech engineering curriculum.">
+  <meta property="og:image" content="https://btechx.infinityfreeapp.com/logo.png">
+  <meta property="og:url" content="https://btechx.infinityfreeapp.com/syllabus.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css?v=2.99">
+  <style>
+   .syllabus-section {
+      padding: 56px 0;
+    }
+
+   .syl-table-wrap {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+   .syl-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+   .syl-table thead {
+      background: var(--bg-alt);
+    }
+
+   .syl-table th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+   .syl-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+   .syl-table tr:last-child td {
+      border-bottom: none;
+    }
+
+   .syl-table tr:hover td {
+      background: var(--bg-alt);
+    }
+
+   .syl-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+   .syl-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--primary-light);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 14px;
+      border: 1.5px solid var(--primary-muted);
+      flex-shrink: 0;
+    }
+
+   .syl-subject-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+   .syl-subject-code {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+   .syl-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: var(--radius);
+      font-size: 12.5px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+   .syl-link:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+   .syl-link.unavailable {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      pointer-events: none;
+    }
+
+    @media(max-width:680px) {
+     .syl-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+     .syl-table thead {
+        display: none;
+      }
+
+     .syl-table tr {
+        display: block;
+        border-bottom: 1.5px solid var(--border);
+        padding: 16px;
+      }
+
+     .syl-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: none;
+        padding: 6px 0;
+        font-size: 13px;
+      }
+
+     .syl-name {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+
+    
+  </style>
+  <link rel="canonical" href="https://btechx.infinityfreeapp.com/syllabus.html">
+  <link rel="icon" href="logo.png">
+</head>
+
+<body>
+  
+
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <span class="logo-text">BTechX</span>
+      </a>
+      <div class="navbar-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#subjects">Subjects</a>
+        <a href="syllabus.html" class="active">Syllabus</a>
+        <a href="about.html">About & Contact</a>
+        <a href="tool.html">Tools</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-panel">
+      <div class="sidebar-header">
+        <span class="logo-text">BTechX</span>
+        <button class="close-btn" id="closeMenu">&times;</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="index.html#subjects">Subjects</a>
+      <a href="syllabus.html" class="active">Syllabus</a>
+      <a href="about.html">About & Contact</a>
+      <a href="tool.html">Tools</a>
+    </div>
+  </div>
+
+
+  <section class="syllabus-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>All Subjects</h2>
+        <div class="section-divider"></div>
+      <div class="year-filter">
+        <button class="year-btn active" onclick="switchYear('year-1', this)">1st Year</button>
+        <button class="year-btn" onclick="switchYear('year-2', this)">2nd Year</button>
+        <button class="year-btn" onclick="switchYear('year-3', this)">3rd Year</button>
+        <button class="year-btn" onclick="switchYear('year-4', this)">4th Year</button>
+      </div>
+
+        <p>Click "Download" to get the full syllabus PDF for any subject. Click the subject name to access lecture
+        notes.</p>
+      </div>
+
+      <div id="year-1" class="year-content active">
+      <div class="syl-table-wrap">
+        <table class="syl-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Code</th>
+              <th>Syllabus PDF</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-square-root-alt"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Mathematics — I</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">MA101</span></td>
+              <td><a href="Data/Syllabus/1st Year/math_1.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/math1.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-infinity"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Mathematics — II</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">MA201</span></td>
+              <td><a href="Data/Syllabus/1st Year/math_2.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/math2.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-atom"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Engineering Physics</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">PH101</span></td>
+              <td><a href="Data/Syllabus/1st Year/physics.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/physics.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-code"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Programming For Problem Solving</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">CS101</span></td>
+              <td><a href="Data/Syllabus/1st Year/cse.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/cse.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-code"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Data Structures</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">CS102</span></td>
+              <td><a href="Data/Syllabus/1st Year/ds.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/cse.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-bolt"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Intro to Electrical Engineering</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">EE101</span></td>
+              <td><a href="Data/Syllabus/1st Year/iee.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/iee.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-cogs"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Intro to Mechanical Engineering</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">ME101</span></td>
+              <td><a href="Data/Syllabus/1st Year/ime.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/ime.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="syl-name">
+                  <div class="syl-icon"><i class="fas fa-plug"></i></div>
+                  <div>
+                    <div class="syl-subject-name">Basic Electrical Engineering</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">EE102</span></td>
+              <td><a href="Data/Syllabus/1st Year/bee.pdf" class="syl-link"><i class="fas fa-download"></i>
+                  Download</a></td>
+              <td><a href="1stYearSub/bee.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+
+      <div id="year-2" class="year-content" style="display:none;">
+        <div class="syl-table-wrap">
+          <table class="syl-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Syllabus PDF</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- COMPULSORY -->
+              <tr>
+                <th colspan="4" style="background:var(--bg); color:var(--text); text-align:center; padding: 12px; font-size: 14px; letter-spacing: 1px;">COMPULSORY SUBJECTS</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-network-wired"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Data Communications & Computer Network</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-database"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Database Engineering</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-project-diagram"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Discrete Mathematics and Graph Theory</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge">MA203</span></td>
+                <td><a href="Data/Syllabus/2nd Year/dmgt.pdf" class="syl-link"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="2ndYearSub/dmgt.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fab fa-python"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Python Programing Lab</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Data Communications & Computer Network Lab</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-server"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Database Engineering Lab</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+
+              <!-- ELECTIVE -->
+              <tr>
+                <th colspan="4" style="background:var(--bg); color:var(--text); text-align:center; padding: 12px; font-size: 14px; letter-spacing: 1px;">ELECTIVE SUBJECTS</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-cogs"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Factory Automation with PLC & HMI</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-robot"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Embedded Systems and Robotics</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-industry"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Automation with Industry 4.0</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-microchip"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Mechatronics with IOT</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+
+              <!-- SATISFACTORY -->
+              <tr>
+                <th colspan="4" style="background:var(--bg); color:var(--text); text-align:center; padding: 12px; font-size: 14px; letter-spacing: 1px;">SATISFACTORY</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-leaf"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Biology and Enviornmental Science</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="syl-name">
+                    <div class="syl-icon"><i class="fas fa-flask"></i></div>
+                    <div>
+                      <div class="syl-subject-name">Chemistry</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">TBD</span></td>
+                <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
+                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="year-3" class="year-content" style="display:none;">
+        <div class="syl-table-wrap" style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
+          Content for 3rd Year coming soon!
+        </div>
+      </div>
+
+      <div id="year-4" class="year-content" style="display:none;">
+        <div class="syl-table-wrap" style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
+          Content for 4th Year coming soon!
+        </div>
+      </div>
+
+      </div>
+
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-text">BTechX</div>
+          <p>A free academic resource platform for B.Tech students.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/subham-moharana-465693373" target="_blank"><i
+                class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#subjects">Subjects</a></li>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+            <li><a href="https://www.confessout.com/btechx-cgu" target="_blank">Feedback Portal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025&ndash;2029 <strong>BTechX</strong>. All rights reserved.</p>
+        <p>Built by <strong>BTechX</strong></p>
+      </div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="backToTop" title="Back to top"><i class="fas fa-chevron-up"></i></button>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/pdf-modal.js"></script>
+  <script>
+    // Year Filter Script
+    function switchYear(yearId, btnElement) {
+        document.querySelectorAll('.year-content').forEach(el => {
+            el.classList.remove('active');
+            el.style.display = 'none';
+        });
+        document.querySelectorAll('.year-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const target = document.getElementById(yearId);
+        if(target) {
+            target.classList.add('active');
+            target.style.display = 'block';
+        }
+        btnElement.classList.add('active');
+    }
+    </script>
+</body>
+</html>

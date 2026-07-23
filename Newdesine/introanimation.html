@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTechX 3D Editor Intro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@700;900&display=swap');
+
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        body{
+            background:#03050a;
+            display:flex;justify-content:center;align-items:center;
+            height:100vh;
+            font-family:'Fira Code',monospace;
+            overflow:hidden;
+            perspective:1200px;
+        }
+
+        /* ── Canvas layers ── */
+        canvas#particles{position:fixed;top:0;left:0;z-index:0;pointer-events:none}
+        canvas#matrix{position:fixed;top:0;left:0;z-index:0;pointer-events:none;opacity:.12}
+
+        /* ── Ambient glow orbs ── */
+        .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+        .orb-1{width:600px;height:600px;background:rgba(0,229,255,.08);top:-200px;left:-100px;animation:orbFloat1 12s ease-in-out infinite}
+        .orb-2{width:500px;height:500px;background:rgba(189,0,255,.08);bottom:-200px;right:-100px;animation:orbFloat2 14s ease-in-out infinite}
+        .orb-3{width:350px;height:350px;background:rgba(255,123,114,.06);top:40%;left:60%;animation:orbFloat3 10s ease-in-out infinite}
+
+        @keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,60px)}}
+        @keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-80px)}}
+        @keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
+
+        /* ── 3D Scene ── */
+        .scene{
+            width:880px;height:560px;
+            transform-style:preserve-3d;
+            animation:introPan 3s cubic-bezier(.1,1,.3,1) forwards;
+            position:relative;z-index:2;
+        }
+
+        /* ── Editor Window ── */
+        .editor{
+            position:absolute;width:100%;height:100%;
+            background:rgba(10,15,25,.82);
+            border:1px solid rgba(0,229,255,.12);
+            border-radius:16px;
+            box-shadow:0 40px 80px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.04),inset 0 1px 0 rgba(255,255,255,.08),0 0 60px rgba(0,229,255,.08);
+            backdrop-filter:blur(16px);
+            transform-style:preserve-3d;
+            overflow:hidden;z-index:2;
+        }
+
+        /* ── Editor Header (macOS style) ── */
+        .editor-header{
+            height:48px;background:rgba(0,0,0,.5);
+            display:flex;align-items:center;padding:0 18px;
+            border-bottom:1px solid rgba(255,255,255,.06);
+            gap:8px;
+        }
+        .dot{width:12px;height:12px;border-radius:50%;transition:box-shadow .3s}
+        .dot.r{background:#ff5f56;box-shadow:0 0 8px #ff5f56}
+        .dot.y{background:#ffbd2e;box-shadow:0 0 8px #ffbd2e}
+        .dot.g{background:#27c93f;box-shadow:0 0 8px #27c93f}
+
+        .tabs{display:flex;gap:2px;margin-left:20px;flex:1}
+        .tab{
+            padding:6px 16px;font-size:12px;color:#6e7681;
+            background:rgba(255,255,255,.03);border-radius:8px 8px 0 0;
+            border:1px solid transparent;border-bottom:none;
+            cursor:default;transition:.3s;
+        }
+        .tab.active{color:#00e5ff;background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.15)}
+        .tab-icon{margin-right:6px;font-size:10px}
+
+        /* ── Sidebar ── */
+        .editor-main{display:flex;height:calc(100% - 48px)}
+        .sidebar{
+            width:48px;background:rgba(0,0,0,.3);
+            border-right:1px solid rgba(255,255,255,.04);
+            display:flex;flex-direction:column;align-items:center;
+            padding-top:14px;gap:18px;
+        }
+        .sidebar-icon{
+            width:28px;height:28px;border-radius:6px;
+            display:flex;align-items:center;justify-content:center;
+            color:#484f58;font-size:14px;transition:.3s;cursor:default;
+        }
+        .sidebar-icon.active{color:#00e5ff;background:rgba(0,229,255,.1)}
+
+        /* ── Minimap ── */
+        .minimap{
+            position:absolute;right:12px;top:60px;
+            width:60px;height:180px;
+            background:rgba(255,255,255,.02);border-radius:4px;
+            overflow:hidden;z-index:3;opacity:.5;
+        }
+        .minimap-line{
+            height:3px;margin:2px 4px;border-radius:1px;
+            background:rgba(0,229,255,.15);
+            opacity:0;animation:minimapFade .3s forwards;
+        }
+
+        /* ── Code Area ── */
+        .code-area{flex:1;padding:24px 30px 24px 20px;overflow:hidden;position:relative}
+
+        .line{display:flex;gap:16px;opacity:0;transform:translateY(8px);animation:fadeLine .35s ease forwards}
+        .line-number{color:#484f58;user-select:none;min-width:28px;text-align:right;font-size:14px}
+        .code{font-size:14.5px;line-height:1.65;white-space:nowrap}
+
+        .keyword{color:#ff7b72;text-shadow:0 0 6px rgba(255,123,114,.3)}
+        .function{color:#d2a8ff;text-shadow:0 0 6px rgba(210,168,255,.3)}
+        .string{color:#a5d6ff}
+        .variable{color:#79c0ff}
+        .comment{color:#6e7681;font-style:italic}
+        .bracket{color:#ffa657}
+        .operator{color:#ff7b72}
+        .number{color:#79c0ff}
+        .type{color:#7ee787;text-shadow:0 0 6px rgba(126,231,135,.3)}
+
+        .cursor{
+            display:inline-block;width:2px;height:18px;
+            background:#00e5ff;box-shadow:0 0 12px #00e5ff,0 0 30px rgba(0,229,255,.4);
+            animation:blink 1s step-end infinite;
+            vertical-align:text-bottom;margin-left:2px;
+        }
+
+        /* ── Terminal Panel ── */
+        .terminal{
+            position:absolute;bottom:0;left:48px;right:0;
+            height:0;background:rgba(0,0,0,.6);
+            border-top:1px solid rgba(0,229,255,.1);
+            overflow:hidden;transition:height .8s cubic-bezier(.4,0,.2,1);
+            z-index:4;
+        }
+        .terminal.open{height:130px}
+        .terminal-header{
+            padding:6px 16px;font-size:11px;color:#6e7681;
+            border-bottom:1px solid rgba(255,255,255,.04);
+            display:flex;align-items:center;gap:8px;
+        }
+        .terminal-dot{width:8px;height:8px;border-radius:50%;background:#27c93f;box-shadow:0 0 6px #27c93f}
+        .terminal-body{padding:10px 16px;font-size:13px;line-height:1.6}
+        .terminal-line{opacity:0;transform:translateX(-10px);color:#8b949e}
+        .terminal-line.show{animation:termLine .4s ease forwards}
+        .terminal-line .success{color:#27c93f;text-shadow:0 0 8px rgba(39,201,63,.5)}
+        .terminal-line .warn{color:#ffbd2e}
+        .terminal-line .info{color:#00e5ff}
+
+        /* ── 3D Logo Pop ── */
+        .btechx-3d{
+            position:absolute;top:50%;left:50%;
+            transform:translate(-50%,-50%) translateZ(1px) scale(.5);
+            font-family:'Outfit',sans-serif;
+            font-size:110px;font-weight:900;letter-spacing:3px;
+            color:#fff;opacity:0;pointer-events:none;z-index:20;
+            white-space:nowrap;
+        }
+        .btechx-3d.show{animation:pop3D 2.2s cubic-bezier(.175,.885,.32,1.275) forwards}
+
+        .tagline{
+            position:absolute;top:calc(50% + 80px);left:50%;
+            transform:translate(-50%,0) translateZ(100px);
+            font-family:'Outfit',sans-serif;font-size:18px;
+            color:rgba(255,255,255,.6);letter-spacing:6px;
+            text-transform:uppercase;opacity:0;z-index:21;
+            pointer-events:none;
+        }
+        .tagline.show{animation:tagFade 1.5s .5s ease forwards}
+
+        /* ── Dim overlay ── */
+        .editor-dim{
+            position:absolute;top:0;left:0;width:100%;height:100%;
+            background:rgba(3,5,10,0);z-index:15;pointer-events:none;
+            transition:background 1.2s ease;
+        }
+        .editor-dim.active{background:rgba(3,5,10,.88)}
+
+        /* ── Status bar ── */
+        .statusbar{
+            position:absolute;bottom:0;left:0;right:0;height:26px;
+            background:rgba(0,229,255,.08);
+            border-top:1px solid rgba(0,229,255,.12);
+            display:flex;align-items:center;padding:0 16px;
+            font-size:11px;color:#6e7681;gap:16px;z-index:5;
+        }
+        .statusbar .active-dot{width:6px;height:6px;border-radius:50%;background:#27c93f;box-shadow:0 0 6px #27c93f}
+
+        /* ── Loading bar ── */
+        .load-bar{
+            position:fixed;top:0;left:0;height:3px;
+            background:linear-gradient(90deg,#00e5ff,#bd00ff,#00e5ff);
+            background-size:200% 100%;
+            width:0;z-index:100;
+            animation:loadProgress 2.8s ease-out forwards,shimmer 1.5s linear infinite;
+            box-shadow:0 0 15px #00e5ff;
+        }
+
+        /* ── Keyframes ── */
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+        @keyframes introPan{
+            0%{transform:scale(.25) rotateX(55deg) rotateY(40deg) translateZ(-800px);opacity:0}
+            100%{transform:rotateX(10deg) rotateY(-10deg) translateZ(0);opacity:1}
+        }
+        @keyframes fadeLine{to{opacity:1;transform:translateY(0)}}
+        @keyframes minimapFade{to{opacity:1}}
+        @keyframes termLine{to{opacity:1;transform:translateX(0)}}
+        @keyframes tagFade{to{opacity:1}}
+        @keyframes loadProgress{0%{width:0}40%{width:60%}100%{width:100%}}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+        @keyframes pop3D{
+            0%{opacity:0;transform:translate(-50%,-50%) translateZ(10px) scale(.4);text-shadow:none}
+            50%{opacity:1;transform:translate(-50%,-50%) translateZ(280px) scale(1.15)}
+            100%{
+                opacity:1;
+                transform:translate(-50%,-50%) translateZ(160px) scale(1);
+                text-shadow:
+                    -1px 1px 0 #bd00ff,-2px 2px 0 #bd00ff,-3px 3px 0 #bd00ff,
+                    -4px 4px 0 #bd00ff,-5px 5px 0 #bd00ff,-6px 6px 0 #bd00ff,
+                    -7px 7px 0 #a200e0,-8px 8px 35px rgba(189,0,255,.8),
+                    1px -1px 0 #00e5ff,2px -2px 0 #00e5ff,3px -3px 0 #00e5ff,
+                    4px -4px 0 #00e5ff,5px -5px 0 #00e5ff,6px -6px 0 #00e5ff,
+                    7px -7px 0 #00c8e0,8px -8px 35px rgba(0,229,255,.8);
+            }
+        }
+
+        @keyframes scanline{
+            0%{top:-4px}100%{top:100%}
+        }
+        .scanline{
+            position:absolute;left:0;width:100%;height:4px;
+            background:linear-gradient(90deg,transparent,rgba(0,229,255,.15),transparent);
+            z-index:6;pointer-events:none;opacity:0;
+        }
+        .scanline.go{opacity:1;animation:scanline 2s linear infinite}
+
+        /* ── Responsive ── */
+
+        /* Tablets */
+        @media(max-width:920px){
+            body{perspective:800px}
+            .scene{width:95vw;height:65vw}
+            .btechx-3d{font-size:60px;letter-spacing:1px}
+            .tagline{font-size:12px;top:calc(50% + 50px);letter-spacing:4px}
+            .code{font-size:12px!important}
+            .line-number{font-size:11px;min-width:22px}
+            .code-area{padding:16px 20px 16px 12px}
+            .tab{padding:5px 10px;font-size:10px}
+            .terminal-body{font-size:11px}
+            .minimap{display:none}
+            .orb-3{display:none}
+            @keyframes pop3D{
+                0%{opacity:0;transform:translate(-50%,-50%) translateZ(5px) scale(.3);text-shadow:none}
+                50%{opacity:1;transform:translate(-50%,-50%) translateZ(120px) scale(1.1)}
+                100%{
+                    opacity:1;transform:translate(-50%,-50%) translateZ(80px) scale(1);
+                    text-shadow:
+                        -1px 1px 0 #bd00ff,-2px 2px 0 #bd00ff,-3px 3px 0 #bd00ff,
+                        -4px 4px 20px rgba(189,0,255,.7),
+                        1px -1px 0 #00e5ff,2px -2px 0 #00e5ff,3px -3px 0 #00e5ff,
+                        4px -4px 20px rgba(0,229,255,.7);
+                }
+            }
+        }
+
+        /* Phones */
+        @media(max-width:600px){
+            body{perspective:600px}
+            .scene{width:98vw;height:80vh}
+            .editor{border-radius:10px}
+            .editor-header{height:36px;padding:0 10px;gap:5px}
+            .dot{width:8px;height:8px}
+            .tabs{margin-left:8px}
+            .tab{padding:4px 8px;font-size:9px}
+            .tab:not(.active){display:none}
+            .sidebar{width:32px;padding-top:10px;gap:12px}
+            .sidebar-icon{width:22px;height:22px;font-size:11px}
+            .editor-main{height:calc(100% - 36px)}
+            .code-area{padding:10px 8px 10px 6px}
+            .line{gap:8px}
+            .line-number{font-size:10px;min-width:18px}
+            .code{font-size:10.5px!important;line-height:1.5}
+            .cursor{height:14px;width:1.5px}
+            .btechx-3d{font-size:38px;letter-spacing:0}
+            .tagline{font-size:9px;top:calc(50% + 35px);letter-spacing:3px}
+            .terminal.open{height:95px}
+            .terminal{left:32px}
+            .terminal-header{padding:4px 10px;font-size:9px}
+            .terminal-body{padding:6px 10px;font-size:10px;line-height:1.4}
+            .statusbar{height:20px;font-size:9px;padding:0 8px;gap:8px}
+            .minimap{display:none}
+            .orb{filter:blur(80px)}
+            .orb-1{width:300px;height:300px}
+            .orb-2{width:250px;height:250px}
+            .orb-3{display:none}
+            @keyframes introPan{
+                0%{transform:scale(.3) rotateX(40deg) rotateY(30deg) translateZ(-400px);opacity:0}
+                100%{transform:rotateX(5deg) rotateY(-5deg) translateZ(0);opacity:1}
+            }
+            @keyframes pop3D{
+                0%{opacity:0;transform:translate(-50%,-50%) translateZ(5px) scale(.3);text-shadow:none}
+                50%{opacity:1;transform:translate(-50%,-50%) translateZ(60px) scale(1.1)}
+                100%{
+                    opacity:1;transform:translate(-50%,-50%) translateZ(40px) scale(1);
+                    text-shadow:
+                        -1px 1px 0 #bd00ff,-2px 2px 0 #bd00ff,
+                        -3px 3px 15px rgba(189,0,255,.6),
+                        1px -1px 0 #00e5ff,2px -2px 0 #00e5ff,
+                        3px -3px 15px rgba(0,229,255,.6);
+                }
+            }
+        }
+
+        /* Very small phones */
+        @media(max-width:380px){
+            .btechx-3d{font-size:30px}
+            .tagline{font-size:8px;top:calc(50% + 28px);letter-spacing:2px}
+            .sidebar{display:none}
+            .terminal{left:0}
+            .code{font-size:9px!important}
+            .line-number{font-size:8.5px;min-width:14px}
+            .tab{font-size:8px}
+        }
+    </style>
+</head>
+<body>
+
+<div class="load-bar" id="loadBar"></div>
+<canvas id="particles"></canvas>
+<canvas id="matrix"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="scene" id="scene">
+    <div class="editor">
+        <div class="editor-header">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <div class="tabs">
+                <div class="tab active"><span class="tab-icon">⚡</span>init.js</div>
+                <div class="tab"><span class="tab-icon">📦</span>package.json</div>
+                <div class="tab"><span class="tab-icon">⚙</span>config.ts</div>
+            </div>
+        </div>
+        <div class="editor-main">
+            <div class="sidebar">
+                <div class="sidebar-icon active">📁</div>
+                <div class="sidebar-icon">🔍</div>
+                <div class="sidebar-icon">🔀</div>
+                <div class="sidebar-icon">🐛</div>
+                <div class="sidebar-icon">📦</div>
+            </div>
+            <div class="code-area" id="codeArea">
+                <div class="minimap" id="minimap"></div>
+                <div class="scanline" id="scanline"></div>
+            </div>
+        </div>
+        <div class="terminal" id="terminal">
+            <div class="terminal-header"><div class="terminal-dot"></div> TERMINAL — node</div>
+            <div class="terminal-body" id="termBody"></div>
+        </div>
+        <div class="statusbar">
+            <div class="active-dot"></div>
+            <span>UTF-8</span><span>JavaScript</span><span>Ln 1, Col 1</span>
+            <span style="margin-left:auto">BTechX Workspace</span>
+        </div>
+        <div class="editor-dim" id="editorDim"></div>
+        <div class="btechx-3d" id="btechxLogo">&lt;BTechX/&gt;</div>
+        <div class="tagline" id="tagline">Engineering • Notes • Redefined</div>
+    </div>
+</div>
+
+<script>
+// ── Particle System ──
+(function(){
+    const c=document.getElementById('particles'),ctx=c.getContext('2d');
+    let w,h,pts=[];
+    const isMob=innerWidth<=600;
+    const pCount=isMob?30:90;
+    const connDist=isMob?80:120;
+    function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+    resize();window.addEventListener('resize',resize);
+    for(let i=0;i<pCount;i++) pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,dx:(Math.random()-.5)*.4,dy:(Math.random()-.5)*.4,o:Math.random()*.5+.2});
+    function draw(){
+        ctx.clearRect(0,0,w,h);
+        pts.forEach(p=>{
+            p.x+=p.dx;p.y+=p.dy;
+            if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;
+            ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(0,229,255,${p.o})`;ctx.fill();
+        });
+        // connections
+        for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+            const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+            if(d<connDist){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,229,255,${.08*(1-d/connDist)})`;ctx.stroke()}
+        }
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
+// ── Matrix rain (subtle) ──
+(function(){
+    const c=document.getElementById('matrix'),ctx=c.getContext('2d');
+    let w,h;function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+    resize();window.addEventListener('resize',resize);
+    const cols=Math.floor(w/18),drops=Array(cols).fill(1);
+    const chars='01アイウエオカキクケコBTECHX</>{}=';
+    setInterval(()=>{
+        ctx.fillStyle='rgba(3,5,10,.08)';ctx.fillRect(0,0,w,h);
+        ctx.fillStyle='rgba(0,229,255,.35)';ctx.font='14px Fira Code';
+        drops.forEach((y,i)=>{
+            ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*18,y*18);
+            if(y*18>h&&Math.random()>.975)drops[i]=0;
+            drops[i]++;
+        });
+    },60);
+})();
+
+// ── Code typing engine ──
+const codeLines = [
+    '<span class="comment">// ⚡ BTechX Platform — init.js</span>',
+    '<span class="comment">// Bootstrapping knowledge engine...</span>',
+    '',
+    '<span class="keyword">import</span> { <span class="type">Knowledge</span>, <span class="type">Notes</span>, <span class="type">Resources</span> } <span class="keyword">from</span> <span class="string">"@btechx/core"</span>;',
+    '<span class="keyword">import</span> { <span class="type">Student</span> } <span class="keyword">from</span> <span class="string">"@btechx/users"</span>;',
+    '<span class="keyword">import</span> { <span class="variable">deploy</span> } <span class="keyword">from</span> <span class="string">"@btechx/engine"</span>;',
+    '',
+    '<span class="keyword">const</span> <span class="variable">config</span> <span class="operator">=</span> <span class="bracket">{</span>',
+    '    <span class="variable">name</span>:      <span class="string">"BTechX"</span>,',
+    '    <span class="variable">version</span>:   <span class="string">"2.99"</span>,',
+    '    <span class="variable">subjects</span>:  <span class="number">8</span>,',
+    '    <span class="variable">mission</span>:   <span class="string">"Free education for every engineer"</span>,',
+    '<span class="bracket">}</span>;',
+    '',
+    '<span class="keyword">async function</span> <span class="function">ignite</span><span class="bracket">()</span> <span class="bracket">{</span>',
+    '    <span class="keyword">const</span> <span class="variable">engine</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="type">Knowledge</span>.<span class="function">compile</span><span class="bracket">(</span><span class="variable">config</span><span class="bracket">)</span>;',
+    '    <span class="keyword">const</span> <span class="variable">notes</span>  <span class="operator">=</span> <span class="keyword">await</span> <span class="type">Notes</span>.<span class="function">loadAll</span><span class="bracket">()</span>;',
+    '    <span class="keyword">return</span> <span class="variable">deploy</span><span class="bracket">(</span><span class="variable">engine</span>, <span class="variable">notes</span><span class="bracket">)</span>;',
+    '<span class="bracket">}</span>',
+    '',
+    '<span class="function">ignite</span><span class="bracket">()</span>.<span class="function">then</span><span class="bracket">(()</span> <span class="operator">=></span> <span class="variable">console</span>.<span class="function">log</span><span class="bracket">(</span><span class="string">"🚀 BTechX is live!"</span><span class="bracket">))</span>;',
+];
+
+const terminalLines = [
+    '<span class="info">$</span> node init.js',
+    '<span class="warn">⏳</span> Compiling knowledge engine...',
+    '<span class="success">✔</span> 8 subjects loaded (Math, Physics, CSE, ...)',
+    '<span class="success">✔</span> 247 notes indexed',
+    '<span class="success">✔</span> <span class="success">BTechX v2.99 deployed successfully 🚀</span>',
+];
+
+const codeArea = document.getElementById('codeArea');
+const minimap = document.getElementById('minimap');
+let currentLine = 0;
+
+function renderLines(){
+    // Remove old lines (keep minimap & scanline)
+    codeArea.querySelectorAll('.line').forEach(l=>l.remove());
+    for(let i=0;i<=currentLine&&i<codeLines.length;i++){
+        const d=document.createElement('div');d.className='line';
+        d.innerHTML=`<div class="line-number">${i+1}</div><div class="code">${codeLines[i]}${i===currentLine?'<span class="cursor"></span>':''}</div>`;
+        codeArea.insertBefore(d,minimap);
+        // minimap
+        if(!minimap.children[i]){
+            const m=document.createElement('div');m.className='minimap-line';
+            m.style.width=(codeLines[i].length?Math.min(codeLines[i].replace(/<[^>]*>/g,'').length*1.2,52):8)+'px';
+            m.style.animationDelay=i*.05+'s';
+            minimap.appendChild(m);
+        }
+    }
+}
+
+function typeCode(){
+    if(currentLine<codeLines.length){
+        renderLines();
+        currentLine++;
+        const delay=codeLines[currentLine-1]===''?60:Math.random()*180+80;
+        setTimeout(typeCode,delay);
+    } else {
+        renderLines();
+        // Phase 2: scanline
+        document.getElementById('scanline').classList.add('go');
+        // Phase 3: terminal
+        setTimeout(()=>{
+            document.getElementById('terminal').classList.add('open');
+            let ti=0;
+            const termBody=document.getElementById('termBody');
+            function nextTerm(){
+                if(ti<terminalLines.length){
+                    const tl=document.createElement('div');tl.className='terminal-line';
+                    tl.innerHTML=terminalLines[ti];
+                    termBody.appendChild(tl);
+                    requestAnimationFrame(()=>tl.classList.add('show'));
+                    ti++;
+                    setTimeout(nextTerm,ti===terminalLines.length?600:500);
+                } else {
+                    // Phase 4: 3D Logo reveal
+                    setTimeout(()=>{
+                        document.getElementById('editorDim').classList.add('active');
+                        document.getElementById('scanline').classList.remove('go');
+                        setTimeout(()=>{
+                            document.getElementById('btechxLogo').classList.add('show');
+                            document.getElementById('tagline').classList.add('show');
+                            // remove loadbar
+                            document.getElementById('loadBar').style.opacity='0';
+                            // mouse + touch parallax
+                            const scene=document.getElementById('scene');
+                            scene.style.animation='none';
+                            const isMobile=innerWidth<=600;
+                            const baseTiltX=isMobile?5:10;
+                            const baseTiltY=isMobile?-5:-10;
+                            const sensitivity=isMobile?60:35;
+                            scene.style.transform=`rotateX(${baseTiltX}deg) rotateY(${baseTiltY}deg)`;
+                            function applyParallax(px,py){
+                                const xA=(innerWidth/2-px)/sensitivity;
+                                const yA=(innerHeight/2-py)/sensitivity;
+                                scene.style.transform=`rotateY(${xA+baseTiltY}deg) rotateX(${yA+baseTiltX}deg)`;
+                            }
+                            document.addEventListener('mousemove',e=>applyParallax(e.pageX,e.pageY));
+                            document.addEventListener('touchmove',e=>{
+                                const t=e.touches[0];
+                                applyParallax(t.clientX,t.clientY);
+                            },{passive:true});
+                        },400);
+                    },600);
+                }
+            }
+            nextTerm();
+        },800);
+    }
+}
+
+// Start after intro camera pan
+setTimeout(()=>{renderLines();typeCode()},2200);
+</script>
+</body>
+</html>
