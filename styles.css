@@ -2,23 +2,23 @@
 
 /* Base and Reset */
 :root {
-  --primary: #3b82f6;
-  --primary-light: rgba(59, 130, 246, 0.2);
-  --primary-muted: rgba(59, 130, 246, 0.5);
-  --bg: rgba(30, 41, 59, 0.4);
-  --bg-alt: rgba(15, 23, 42, 0.6);
-  --border: rgba(255, 255, 255, 0.1);
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
+  --primary: #ffffff;
+  --primary-light: rgba(255, 255, 255, 0.1);
+  --primary-muted: rgba(255, 255, 255, 0.3);
+  --bg: rgba(10, 10, 10, 0.7);
+  --bg-alt: rgba(0, 0, 0, 0.9);
+  --border: rgba(255, 255, 255, 0.15);
+  --text: #ffffff;
+  --text-muted: #a1a1aa;
   --radius: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.7);
   --transition: all 0.3s ease;
 }
 
 body {
-    background-color: #0f172a;
+    background-color: #000000;
     color: var(--text);
     overflow-x: hidden;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -29,7 +29,7 @@ body {
 
 /* 3D and Glassmorphism utilities for Index */
 .glass-nav {
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
 }
@@ -55,14 +55,14 @@ body {
     width: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #0f172a;
+    background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #27272a;
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: #3f3f46;
 }
 
 /* Base Layout for Legacy Pages */
@@ -85,7 +85,7 @@ a {
 }
 
 a:hover {
-    color: #60a5fa;
+    color: #d4d4d8;
 }
 
 /* Legacy Navbar */
@@ -94,7 +94,7 @@ a:hover {
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     padding: 15px 0;
@@ -116,7 +116,7 @@ a:hover {
     font-family: 'Dancing Script', cursive;
     font-size: 2.2rem;
     font-weight: 700;
-    background: linear-gradient(45deg, #f97316 10%, #ffffff 50%, #3b82f6 90%);
+    background: linear-gradient(45deg, #a1a1aa 10%, #ffffff 50%, #d4d4d8 90%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     padding: 0 5px;
@@ -168,7 +168,7 @@ a:hover {
     display: block;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 2000;
 }
 .mobile-menu-panel {
@@ -185,7 +185,7 @@ a:hover {
 .section-divider {
     width: 60px;
     height: 4px;
-    background: linear-gradient(to right, #3b82f6, #a855f7);
+    background: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0.2));
     margin: 15px auto;
     border-radius: 2px;
 }
@@ -207,7 +207,7 @@ a:hover {
 .card:hover, .contact-card:hover, .subject-card:hover, .about-stat:hover {
     transform: perspective(1000px) translateY(-5px) rotateX(2deg) rotateY(-2deg);
     border-color: var(--primary-muted);
-    box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05);
 }
 
 .subject-card-head {
@@ -224,7 +224,7 @@ a:hover {
 .page-hero {
     padding: 120px 0 60px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(30,41,59,0.3) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,10,10,0.8) 100%);
     position: relative;
 }
 
@@ -353,7 +353,7 @@ a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   z-index: 1000;
   display: flex;
@@ -373,7 +373,7 @@ a:hover {
   width: 90%;
   max-width: 900px;
   height: 85vh;
-  background: rgba(30, 41, 59, 0.95);
+  background: rgba(15, 15, 15, 0.95);
   border: 1px solid var(--border);
   border-radius: 12px;
   display: flex;
