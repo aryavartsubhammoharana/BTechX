@@ -237,7 +237,7 @@
         </div>
         <div class="showcase-image-wrapper particle-target">
           <div class="showcase-image">
-            <video src="Videos/INTRO.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s ease, opacity 0.5s ease;"></video>
+            <video src="Videos/INTRO.mp4" poster="images/realiology.png" loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s ease, opacity 0.5s ease;"></video>
           </div>
         </div>
       </div>
@@ -297,6 +297,22 @@
   <script src="assets/js/nav.js"></script>
   <script src="assets/js/pdf-modal.js"></script>
   <script src="assets/js/version-check.js"></script>
+  <script>
+    // Play video only on hover (mouseenter) and pause/reset on leave
+    document.querySelectorAll('.showcase-item').forEach(item => {
+      const video = item.querySelector('video');
+      if (video) {
+        video.preload = "auto";
+        item.addEventListener('mouseenter', () => {
+          video.play().catch(err => console.debug("Video play blocked:", err));
+        });
+        item.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>

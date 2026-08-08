@@ -3,7 +3,7 @@
   // Only run on http/https protocols (ignore local file:/// testing)
   if (window.location.protocol.startsWith('file')) return;
 
-  const CURRENT_VERSION = 7; // Current client version
+  const CURRENT_VERSION = 8; // Current client version
   const CHECK_INTERVAL = 30000; // Check every 30 seconds
 
   setInterval(() => {
