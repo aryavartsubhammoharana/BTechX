@@ -103,7 +103,7 @@
       justify-content: center;
     }
 
-    .showcase-image img {
+    .showcase-image img, .showcase-image video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -111,7 +111,7 @@
       transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
-    .showcase-item:hover .showcase-image img {
+    .showcase-item:hover .showcase-image img, .showcase-item:hover .showcase-image video {
       transform: scale(1.05);
       opacity: 1;
     }
@@ -237,7 +237,7 @@
         </div>
         <div class="showcase-image-wrapper particle-target">
           <div class="showcase-image">
-            <img src="images/realiology.png" alt="Realiology Preview">
+            <video src="Videos/INTRO.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s ease, opacity 0.5s ease;"></video>
           </div>
         </div>
       </div>
