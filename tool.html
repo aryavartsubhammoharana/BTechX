@@ -237,7 +237,7 @@
         </div>
         <div class="showcase-image-wrapper particle-target">
           <div class="showcase-image">
-            <video src="Videos/INTRO.mp4" poster="images/realiology.png" loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s ease, opacity 0.5s ease;"></video>
+            <video src="Videos/INTRO.mp4" poster="images/realiology.png" loop muted playsinline disablePictureInPicture controlsList="nodownload" oncontextmenu="return false;" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s ease, opacity 0.5s ease; pointer-events: none;"></video>
           </div>
         </div>
       </div>
@@ -308,7 +308,7 @@
         });
         item.addEventListener('mouseleave', () => {
           video.pause();
-          video.currentTime = 0;
+          video.load(); // Force video reload to reset and display the poster image again
         });
       }
     });
