@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://btechx.infinityfreeapp.com/</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/about.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/syllabus.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/syllabus.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/about.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/tool.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/tool.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/math1.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/bee.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/math2.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/cse.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/physics.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/iee.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/cse.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/ime.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/iee.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/math1.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/ime.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/math2.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/1stYearSub/bee.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/1stYearSub/physics.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://btechx.infinityfreeapp.com/2ndYearSub/dmgt.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <loc>https://btechx.online/2ndYearSub/dmgt.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
