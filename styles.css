@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
 /* Base and Reset */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 :root {
   --primary: #ffffff;
   --primary-light: rgba(255, 255, 255, 0.1);
@@ -14,7 +21,40 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.7);
-  --transition: all 0.3s ease;
+  --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* GPU Hardware Acceleration & Smoothness Optimizations */
+.glass-card, 
+.showcase-item, 
+.year-btn, 
+.view-btn, 
+.download-btn, 
+.syl-link, 
+.back-to-top,
+.showcase-btn,
+.nav-link,
+.hero-badge {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+  transition: var(--transition-smooth);
+}
+
+/* Tactile Active Pressed State for Buttons & Cards */
+.year-btn:active, 
+.view-btn:active, 
+.download-btn:active, 
+.syl-link:active, 
+.showcase-btn:active,
+.back-to-top:active {
+  transform: scale(0.96) !important;
+}
+
+.glass-card:active,
+.showcase-item:active {
+  transform: scale(0.99);
 }
 
 .download-btn {
@@ -332,13 +372,15 @@ a:hover {
     cursor: pointer;
     opacity: 0;
     pointer-events: none;
-    transition: var(--transition);
+    transform: translateY(15px) scale(0.9);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
     z-index: 99;
 }
 
 .back-to-top.visible {
     opacity: 1;
     pointer-events: auto;
+    transform: translateY(0) scale(1);
 }
 
 /* Fix missing old CSS layout classes */
@@ -373,7 +415,7 @@ a:hover {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pdf-modal.active {
@@ -391,12 +433,12 @@ a:hover {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md);
-  transform: scale(0.95);
-  transition: transform 0.3s ease;
+  transform: scale(0.92) translateY(15px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pdf-modal.active .pdf-modal-content {
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
 .pdf-modal-header {
