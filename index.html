@@ -1162,7 +1162,23 @@
         target.style.display = 'block';
       }
       btnElement.classList.add('active');
+
+      // Save chosen year to localStorage
+      localStorage.setItem('btechx_selected_year', yearId);
     }
+
+    // Restore chosen year from localStorage on load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedYear = localStorage.getItem('btechx_selected_year');
+      if (savedYear) {
+        const targetBtn = Array.from(document.querySelectorAll('.year-btn')).find(btn => {
+          return btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(savedYear);
+        });
+        if (targetBtn) {
+          switchYear(savedYear, targetBtn);
+        }
+      }
+    });
   </script>
 
   <!-- ══ INTRO ANIMATION ENGINE ══ -->
