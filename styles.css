@@ -29,7 +29,7 @@ html {
   --radius-lg: 12px;
   --radius-xl: 16px;
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.7);
-  --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -46,8 +46,14 @@ html {
 .hero-badge {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform;
   transition: var(--transition-smooth);
+}
+
+/* Dynamically optimize rendering layers for active transitions only on interaction */
+.glass-card:hover, .glass-card:active,
+.showcase-item:hover, .showcase-item:active,
+.back-to-top:hover, .back-to-top:active {
+  will-change: transform, opacity;
 }
 
 /* Tactile Active Pressed State for Buttons & Cards */
@@ -61,8 +67,12 @@ html {
 }
 
 .glass-card:active,
-.showcase-item:active {
-  transform: scale(0.99);
+.showcase-item:active,
+.card:active,
+.contact-card:active,
+.subject-card:active,
+.about-stat:active {
+  transform: scale(0.99) !important;
 }
 
 .download-btn {
@@ -95,16 +105,21 @@ body {
     background: var(--bg);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border);
-    transform-style: preserve-3d;
-    transform: perspective(1000px);
+    transition: var(--transition-smooth);
 }
 
-.card-content {
-    transform: translateZ(30px);
-}
-
-.card-icon {
-    transform: translateZ(50px);
+/* Enable 3D depth transforms only on hover-supporting desktop devices */
+@media (hover: hover) {
+    .glass-card {
+        transform-style: preserve-3d;
+        transform: perspective(1000px);
+    }
+    .card-content {
+        transform: translateZ(30px);
+    }
+    .card-icon {
+        transform: translateZ(50px);
+    }
 }
 
 /* Custom Scrollbar */
@@ -255,16 +270,21 @@ a:hover {
     border-radius: var(--radius-xl);
     padding: 25px;
     transition: var(--transition);
-    transform-style: preserve-3d;
-    transform: perspective(1000px);
     text-decoration: none;
     color: inherit;
 }
 
-.card:hover, .contact-card:hover, .subject-card:hover, .about-stat:hover {
-    transform: perspective(1000px) translateY(-5px) rotateX(2deg) rotateY(-2deg);
-    border-color: var(--primary-muted);
-    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05);
+/* Enable 3D transforms only on hover-supporting desktop devices */
+@media (hover: hover) {
+    .card, .contact-card, .subject-card, .about-stat {
+        transform-style: preserve-3d;
+        transform: perspective(1000px);
+    }
+    .card:hover, .contact-card:hover, .subject-card:hover, .about-stat:hover {
+        transform: perspective(1000px) translateY(-5px) rotateX(2deg) rotateY(-2deg);
+        border-color: var(--primary-muted);
+        box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05);
+    }
 }
 
 .subject-card-head {

@@ -16,7 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btt = document.getElementById("backToTop");
     if (btt) {
-        window.addEventListener("scroll", () => btt.classList.toggle("visible", window.scrollY > 400));
+        let scrollTimeout;
+        window.addEventListener("scroll", () => {
+            if (!scrollTimeout) {
+                scrollTimeout = setTimeout(() => {
+                    btt.classList.toggle("visible", window.scrollY > 400);
+                    scrollTimeout = null;
+                }, 100);
+            }
+        }, { passive: true });
         btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     }
 });
