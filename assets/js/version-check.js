@@ -1,18 +1,22 @@
 // BTechX - Smart Auto-Update & Cache Syncer (v15.6)
 (function() {
-  // Ignore local file:/// testing
+  // Ignore local file:/// testing or document viewer
   if (window.location.protocol.startsWith('file')) return;
+  if (window.location.pathname.includes('viewer.html')) return;
+
+  // Strict session lock: NEVER reload more than ONCE per browser session
+  if (sessionStorage.getItem('btechx_refresh_attempted')) return;
 
   const CURRENT_VERSION = 15.6;
-  const CHECK_INTERVAL = 25000; // Check every 25 seconds for ultra-fast syncing
 
   function getVersionJsonPath() {
-    // Resolve relative path to version.json whether in root or subfolder
     const isSub = window.location.pathname.includes('/1stYearSub/') || window.location.pathname.includes('/2ndYearSub/');
     return (isSub ? '../version.json' : 'version.json') + '?t=' + Date.now();
   }
 
   function checkForUpdates() {
+    if (sessionStorage.getItem('btechx_refresh_attempted')) return;
+
     fetch(getVersionJsonPath(), {
       cache: 'no-store',
       headers: {
@@ -22,35 +26,25 @@
     })
     .then(res => {
       if (res.ok) return res.json();
-      throw new Error('Version fetch returned ' + res.status);
+      throw new Error('Status: ' + res.status);
     })
     .then(data => {
       if (data && typeof data.version === 'number' && data.version > CURRENT_VERSION) {
-        console.log(`🚀 New version detected: v${data.version} (current: v${CURRENT_VERSION}). Refreshing...`);
-        // Force refresh bypassing browser disk cache
-        const targetUrl = window.location.pathname + '?v=' + data.version;
-        window.location.replace(targetUrl);
+        // Lock immediately to prevent ANY possible reload loops
+        sessionStorage.setItem('btechx_refresh_attempted', 'true');
+        console.log(`🚀 New version v${data.version} detected. Syncing once...`);
+        // Clean reload preserving all URL state
+        window.location.reload();
       }
     })
-    .catch(err => {
-      console.debug('Version check skipped:', err.message);
-    });
+    .catch(() => {});
   }
 
-  // 1. Run immediately on page load
+  // Check once gently after page loads (delayed to avoid interfering with user interaction)
   if (document.readyState === 'complete') {
-    checkForUpdates();
+    setTimeout(checkForUpdates, 3000);
   } else {
-    window.addEventListener('load', checkForUpdates);
+    window.addEventListener('load', () => setTimeout(checkForUpdates, 3000));
   }
-
-  // 2. Also check when user switches tabs back to BTechX
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      checkForUpdates();
-    }
-  });
-
-  // 3. Periodic background check
-  setInterval(checkForUpdates, CHECK_INTERVAL);
 })();
+
