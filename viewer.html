@@ -94,78 +94,99 @@
       flex-shrink: 0;
     }
 
-    /* Buttons */
-    .viewer-btn {
+    /* Action Buttons Base */
+    .viewer-action-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
+      justify-content: center;
+      border-radius: 12px;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
       touch-action: manipulation;
+      position: relative;
+      outline: none;
+      border: none;
+      will-change: transform, box-shadow;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .viewer-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
+    .viewer-action-btn:active {
+      transform: scale(0.92) !important;
     }
 
-    .viewer-btn:active {
-      transform: scale(0.96);
+    /* Back Button: 42x42px Glass Squircle */
+    .viewer-back-btn {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f4f4f5;
+      font-size: 15px;
     }
 
-    .viewer-btn.back-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.15);
-      color: #e4e4e7;
-    }
-
-    .viewer-btn.back-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .viewer-back-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.36);
       color: #ffffff;
+      transform: translateY(-1px) scale(1.04);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .viewer-btn.download-btn {
+    /* Download Button: 44x44px High-Contrast Prominent Squircle */
+    .viewer-download-btn {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
       background: #ffffff;
+      border: 1px solid #ffffff;
       color: #000000 !important;
+      font-size: 17px;
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.22);
+    }
+
+    .viewer-download-btn:hover {
+      background: #f4f4f5;
       border-color: #ffffff;
-      font-weight: 600;
+      transform: translateY(-1px) scale(1.06);
+      box-shadow: 0 6px 22px rgba(255, 255, 255, 0.4);
     }
 
-    .viewer-btn.download-btn:hover {
-      background: #e4e4e7;
-      border-color: #e4e4e7;
-      color: #000000 !important;
-      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-    }
-
-    .viewer-icon-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: flex;
+    /* Secondary Tool Buttons: External & Fullscreen */
+    .viewer-tool-btn {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 10px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #a1a1aa;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.2s ease;
+      font-size: 14px;
+      touch-action: manipulation;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.25s ease,
+                  color 0.25s ease,
+                  border-color 0.25s ease;
     }
 
-    .viewer-icon-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
+    .viewer-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
       color: #ffffff;
       border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .viewer-tool-btn:active {
+      transform: scale(0.92);
     }
 
     /* Main PDF Frame Container */
@@ -248,23 +269,31 @@
     /* Responsive */
     @media (max-width: 768px) {
       .viewer-header {
-        height: 52px;
-        min-height: 52px;
+        height: 54px;
+        min-height: 54px;
         padding: 0 12px;
       }
       .viewer-brand {
         display: none;
       }
-      .viewer-icon-btn {
+      .viewer-tool-btn {
         display: none;
       }
       .viewer-title {
-        font-size: 13px;
-        max-width: 180px;
+        font-size: 13.5px;
+        max-width: 220px;
       }
-      .viewer-btn {
-        padding: 6px 12px;
-        font-size: 12px;
+      .viewer-back-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 14px;
+      }
+      .viewer-download-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 16px;
       }
     }
   </style>
@@ -274,9 +303,8 @@
     <!-- Header -->
     <header class="viewer-header">
       <div class="viewer-header-left">
-        <button id="backBtn" class="viewer-btn back-btn" onclick="handleBack()" title="Back to Previous Page">
+        <button id="backBtn" class="viewer-action-btn viewer-back-btn" onclick="handleBack()" title="Back" aria-label="Back">
           <i class="fas fa-arrow-left"></i>
-          <span>Back</span>
         </button>
         <a href="index.html" class="viewer-brand">BTechX</a>
       </div>
@@ -286,15 +314,14 @@
       </div>
 
       <div class="viewer-header-right">
-        <a id="externalBtn" href="#" target="_blank" class="viewer-icon-btn" title="Open in New Tab">
+        <a id="externalBtn" href="#" target="_blank" class="viewer-tool-btn" title="Open in New Tab" aria-label="Open in New Tab">
           <i class="fas fa-external-link-alt"></i>
         </a>
-        <button id="fullscreenBtn" class="viewer-icon-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen">
+        <button id="fullscreenBtn" class="viewer-tool-btn" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle Fullscreen">
           <i class="fas fa-expand"></i>
         </button>
-        <a id="downloadBtn" href="#" download class="viewer-btn download-btn" title="Download Document">
+        <a id="downloadBtn" href="#" download class="viewer-action-btn viewer-download-btn" title="Download Document" aria-label="Download Document">
           <i class="fas fa-download"></i>
-          <span>Download</span>
         </a>
       </div>
     </header>
@@ -311,8 +338,8 @@
           <i class="fas fa-exclamation-circle error-icon"></i>
           <h2>PDF / Notes Not Available</h2>
           <p id="errorMessage">This study material or question bank has not been uploaded yet. Please check back later.</p>
-          <button onclick="handleBack()" class="viewer-btn back-btn" style="display: inline-flex;">
-            <i class="fas fa-arrow-left"></i> Return to Previous Page
+          <button onclick="handleBack()" class="viewer-action-btn viewer-back-btn" style="width: auto; padding: 10px 20px; font-size: 13.5px; gap: 8px;">
+            <i class="fas fa-arrow-left"></i> <span>Return to Previous Page</span>
           </button>
         </div>
       </div>
@@ -394,5 +421,6 @@
         });
     }
   </script>
+  <script src="assets/js/version-check.js?v=15.5"></script>
 </body>
 </html>
