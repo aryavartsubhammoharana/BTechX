@@ -1,9 +1,9 @@
-// BTechX - Smart Auto-Update & Cache Syncer (v15.5)
+// BTechX - Smart Auto-Update & Cache Syncer (v15.6)
 (function() {
   // Ignore local file:/// testing
   if (window.location.protocol.startsWith('file')) return;
 
-  const CURRENT_VERSION = 15.5;
+  const CURRENT_VERSION = 15.6;
   const CHECK_INTERVAL = 25000; // Check every 25 seconds for ultra-fast syncing
 
   function getVersionJsonPath() {

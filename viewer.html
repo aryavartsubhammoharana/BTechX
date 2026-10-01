@@ -37,12 +37,13 @@
     }
 
     /* Top Navigation Bar */
+    /* Top Navigation Bar - Ultra-Slim & Space-Saving */
     .viewer-header {
-      height: 56px;
-      min-height: 56px;
-      background: rgba(10, 10, 10, 0.95);
+      height: 44px;
+      min-height: 44px;
+      background: rgba(10, 10, 10, 0.96);
       backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -59,14 +60,19 @@
     }
 
     .viewer-brand {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      color: #ffffff;
+      color: rgba(255, 255, 255, 0.75);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .viewer-brand:hover {
+      color: #ffffff;
     }
 
     .viewer-header-center {
@@ -77,116 +83,103 @@
     }
 
     .viewer-title {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 500;
       color: #f4f4f5;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 500px;
       margin: 0 auto;
+      letter-spacing: 0.2px;
     }
 
     .viewer-header-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 14px;
       flex-shrink: 0;
     }
 
-    /* Action Buttons Base */
-    .viewer-action-btn {
+    /* Clean Frameless Icon Action Buttons (NO bulky boxes) */
+    .viewer-icon-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
-      cursor: pointer;
-      text-decoration: none;
-      touch-action: manipulation;
-      position: relative;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
       outline: none;
-      border: none;
-      will-change: transform, box-shadow;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .viewer-action-btn:active {
-      transform: scale(0.92) !important;
-    }
-
-    /* Back Button: 42x42px Glass Squircle */
-    .viewer-back-btn {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: #f4f4f5;
-      font-size: 15px;
-    }
-
-    .viewer-back-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.36);
-      color: #ffffff;
-      transform: translateY(-1px) scale(1.04);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Download Button: 44x44px High-Contrast Prominent Squircle */
-    .viewer-download-btn {
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
-      background: #ffffff;
-      border: 1px solid #ffffff;
-      color: #000000 !important;
-      font-size: 17px;
-      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.22);
-    }
-
-    .viewer-download-btn:hover {
-      background: #f4f4f5;
-      border-color: #ffffff;
-      transform: translateY(-1px) scale(1.06);
-      box-shadow: 0 6px 22px rgba(255, 255, 255, 0.4);
-    }
-
-    /* Secondary Tool Buttons: External & Fullscreen */
-    .viewer-tool-btn {
-      width: 38px;
-      height: 38px;
-      min-width: 38px;
-      border-radius: 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #a1a1aa;
+      color: #d4d4d8;
       cursor: pointer;
       text-decoration: none;
-      font-size: 14px;
+      padding: 6px;
+      line-height: 1;
       touch-action: manipulation;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  background 0.25s ease,
-                  color 0.25s ease,
-                  border-color 0.25s ease;
+      will-change: transform, color, filter;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .viewer-tool-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
+    .viewer-icon-btn:hover {
       color: #ffffff;
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
     }
 
-    .viewer-tool-btn:active {
-      transform: scale(0.92);
+    .viewer-icon-btn:active {
+      transform: scale(0.88) !important;
+    }
+
+    /* Back Icon: clean arrow */
+    .viewer-back-icon {
+      font-size: 17px;
+      color: #e4e4e7;
+    }
+
+    /* Download Icon: prominent pure icon without box */
+    .viewer-download-icon {
+      font-size: 19px;
+      color: #ffffff;
+    }
+
+    .viewer-download-icon:hover {
+      color: #ffffff;
+      transform: scale(1.22);
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    }
+
+    /* Secondary Tools: External & Fullscreen */
+    .viewer-tool-icon {
+      font-size: 14.5px;
+      color: #71717a;
+    }
+
+    .viewer-tool-icon:hover {
+      color: #e4e4e7;
+    }
+
+    /* Error Card Action Button */
+    .error-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .error-back-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
     }
 
     /* Main PDF Frame Container */
@@ -269,31 +262,25 @@
     /* Responsive */
     @media (max-width: 768px) {
       .viewer-header {
-        height: 54px;
-        min-height: 54px;
-        padding: 0 12px;
+        height: 42px;
+        min-height: 42px;
+        padding: 0 10px;
       }
       .viewer-brand {
         display: none;
       }
-      .viewer-tool-btn {
+      .viewer-tool-icon {
         display: none;
       }
       .viewer-title {
-        font-size: 13.5px;
-        max-width: 220px;
+        font-size: 13px;
+        max-width: 240px;
       }
-      .viewer-back-btn {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        font-size: 14px;
-      }
-      .viewer-download-btn {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
+      .viewer-back-icon {
         font-size: 16px;
+      }
+      .viewer-download-icon {
+        font-size: 18px;
       }
     }
   </style>
@@ -303,7 +290,7 @@
     <!-- Header -->
     <header class="viewer-header">
       <div class="viewer-header-left">
-        <button id="backBtn" class="viewer-action-btn viewer-back-btn" onclick="handleBack()" title="Back" aria-label="Back">
+        <button id="backBtn" class="viewer-icon-btn viewer-back-icon" onclick="handleBack()" title="Back" aria-label="Back">
           <i class="fas fa-arrow-left"></i>
         </button>
         <a href="index.html" class="viewer-brand">BTechX</a>
@@ -314,13 +301,13 @@
       </div>
 
       <div class="viewer-header-right">
-        <a id="externalBtn" href="#" target="_blank" class="viewer-tool-btn" title="Open in New Tab" aria-label="Open in New Tab">
+        <a id="externalBtn" href="#" target="_blank" class="viewer-icon-btn viewer-tool-icon" title="Open in New Tab" aria-label="Open in New Tab">
           <i class="fas fa-external-link-alt"></i>
         </a>
-        <button id="fullscreenBtn" class="viewer-tool-btn" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle Fullscreen">
+        <button id="fullscreenBtn" class="viewer-icon-btn viewer-tool-icon" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle Fullscreen">
           <i class="fas fa-expand"></i>
         </button>
-        <a id="downloadBtn" href="#" download class="viewer-action-btn viewer-download-btn" title="Download Document" aria-label="Download Document">
+        <a id="downloadBtn" href="#" download class="viewer-icon-btn viewer-download-icon" title="Download Document" aria-label="Download Document">
           <i class="fas fa-download"></i>
         </a>
       </div>
@@ -338,13 +325,13 @@
           <i class="fas fa-exclamation-circle error-icon"></i>
           <h2>PDF / Notes Not Available</h2>
           <p id="errorMessage">This study material or question bank has not been uploaded yet. Please check back later.</p>
-          <button onclick="handleBack()" class="viewer-action-btn viewer-back-btn" style="width: auto; padding: 10px 20px; font-size: 13.5px; gap: 8px;">
+          <button onclick="handleBack()" class="error-back-btn">
             <i class="fas fa-arrow-left"></i> <span>Return to Previous Page</span>
           </button>
         </div>
       </div>
 
-      <iframe id="pdfFrame" class="viewer-iframe" style="display: none;"></iframe>
+      <iframe id="pdfFrame" class="viewer-iframe" style="display: none;" allow="fullscreen"></iframe>
     </main>
   </div>
 
@@ -399,11 +386,15 @@
       downloadBtn.setAttribute('download', cleanFile.split('/').pop());
       externalBtn.href = cleanFile;
 
+      // Disable browser native PDF toolbars (Microsoft Edge, Chrome, Acrobat)
+      // and fit page horizontally for distraction-free edge-to-edge reading
+      const embedPdfUrl = `${cleanFile}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
+
       // Verify file existence via HEAD request
       fetch(cleanFile, { method: 'HEAD' })
         .then(res => {
           if (res.ok) {
-            pdfFrame.src = cleanFile;
+            pdfFrame.src = embedPdfUrl;
             pdfFrame.style.display = 'block';
             loadingState.style.display = 'none';
           } else {
@@ -415,12 +406,12 @@
         })
         .catch(() => {
           // Fallback for file:// or offline protocols
-          pdfFrame.src = cleanFile;
+          pdfFrame.src = embedPdfUrl;
           pdfFrame.style.display = 'block';
           loadingState.style.display = 'none';
         });
     }
   </script>
-  <script src="assets/js/version-check.js?v=15.5"></script>
+  <script src="assets/js/version-check.js?v=15.6"></script>
 </body>
 </html>
