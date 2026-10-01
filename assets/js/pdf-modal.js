@@ -1,5 +1,9 @@
-// BTechX - Common PDF Viewer Routing Logic (v15.2)
+// BTechX - Common PDF Viewer Routing Logic (v15.4)
 document.addEventListener("DOMContentLoaded", () => {
+  // Purge any legacy modal leftover in cached DOM
+  const legacyModal = document.getElementById("pdfModal");
+  if (legacyModal) legacyModal.remove();
+
   const pdfLinks = document.querySelectorAll(".syl-link, .download-btn, .view-btn, .qna-btn");
 
   pdfLinks.forEach(link => {
