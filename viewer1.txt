@@ -1,0 +1,51 @@
+================================================================================
+BTechX - Viewer 1 Architecture (Current Modal-Based PDF Logic)
+File: assets/js/pdf-modal.js
+Version: v15.1 (Previous / Classic Implementation)
+================================================================================
+
+1. OVERVIEW & WORKFLOW:
+   - When a user clicks on any element with the classes:
+     ".syl-link", ".download-btn", or ".view-btn"
+   - The JavaScript intercepts the click event using `e.preventDefault()`.
+   - It extracts the `href` attribute of the clicked button.
+   - It also extracts the subject/module title from either:
+     * Table row: `link.closest("tr")?.querySelector(".syl-subject-name")`
+     * Module card: `link.closest(".module-block")?.querySelector("h3")`
+
+2. POPUP MODAL CREATION (DOM INJECTION):
+   - Injects a popup dialog into document.body:
+     <div id="pdfModal" class="pdf-modal">
+       <div class="pdf-modal-content">
+         <div class="pdf-modal-header">
+           <h3 id="pdf-modal-title">Document Viewer</h3>
+           <button id="pdfCloseBtn">&times;</button>
+         </div>
+         <div id="pdfModalBody" class="pdf-modal-body"></div>
+       </div>
+     </div>
+
+3. PRE-FLIGHT CHECK & FALLBACK LOGIC:
+   - If href is empty, "#", "javascript:void", "Coming Soon", or has class ".unavailable":
+     * Opens modal immediately and displays a 404 "PDF / Notes Not Available" red icon alert.
+   - If href is a valid string:
+     * Shows a spinning loader icon inside the modal.
+     * Performs a lightweight `fetch(href, { method: 'HEAD' })` network probe.
+     * If response is 200 OK:
+       - Checks device width: `window.innerWidth <= 1024`
+       - Desktop (> 1024px): Embeds an <iframe> inside the modal body:
+         `<iframe src="${href}" width="100%" height="100%"></iframe>`
+       - Mobile / Tablet (<= 1024px): Closes the modal and triggers:
+         `window.open(href, '_blank')` to rely on native mobile browser PDF viewer.
+     * If response fails (404 / network error):
+       - Displays "PDF / Notes Not Available" message inside modal.
+
+4. LIMITATIONS IDENTIFIED:
+   - Modal window can feel cramped on medium screens or laptops (height restricted to 85vh).
+   - On mobile, opening in a new tab disrupts user session and loses BTechX dark monochrome UI branding.
+   - Modal scrolling can occasionally conflict with page body scrolling on touch devices.
+   - No dedicated controls for Back, Direct Download, or Fullscreen inside the modal header.
+
+================================================================================
+End of Viewer 1 Documentation
+================================================================================
