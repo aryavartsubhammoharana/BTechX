@@ -339,6 +339,7 @@
     const params = new URLSearchParams(window.location.search);
     const fileParam = params.get('file');
     const titleParam = params.get('title');
+    const refParam = params.get('ref');
 
     const docTitle = document.getElementById('docTitle');
     const pdfFrame = document.getElementById('pdfFrame');
@@ -354,13 +355,53 @@
       document.title = `${cleanTitle} - BTechX Viewer`;
     }
 
-    // Back button navigation
+    // Contextual fallback based on file path
+    function getContextualFallback(filePath) {
+      if (!filePath) return 'index.html';
+      const fp = decodeURIComponent(filePath).toLowerCase();
+      if (fp.includes('syllabus')) return 'syllabus.html';
+      if (fp.includes('physics')) return '1stYearSub/physics.html';
+      if (fp.includes('math/m1') || fp.includes('math1')) return '1stYearSub/math1.html';
+      if (fp.includes('math/m2') || fp.includes('math2')) return '1stYearSub/math2.html';
+      if (fp.includes('/bee/')) return '1stYearSub/bee.html';
+      if (fp.includes('/iee/')) return '1stYearSub/iee.html';
+      if (fp.includes('/ime/')) return '1stYearSub/ime.html';
+      if (fp.includes('/cse/')) return '1stYearSub/cse.html';
+      if (fp.includes('dmgt')) return '2ndYearSub/dmgt.html';
+      return 'index.html';
+    }
+
+    // Accurate Back navigation: returns to originating subject/page, NOT blindly to index.html
     function handleBack() {
-      if (window.history.length > 1 && document.referrer) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
+      // 1. Explicit return URL parameter
+      if (refParam) {
+        try {
+          const decodedRef = decodeURIComponent(refParam);
+          if (decodedRef && !decodedRef.includes('viewer.html')) {
+            window.location.href = decodedRef;
+            return;
+          }
+        } catch (e) {}
       }
+
+      // 2. SessionStorage saved return URL
+      try {
+        const storedRef = sessionStorage.getItem('btechx_viewer_return_url');
+        if (storedRef && !storedRef.includes('viewer.html')) {
+          sessionStorage.removeItem('btechx_viewer_return_url');
+          window.location.href = storedRef;
+          return;
+        }
+      } catch (e) {}
+
+      // 3. Browser history if coming from within the site
+      if (window.history.length > 1 && document.referrer && !document.referrer.includes('viewer.html')) {
+        window.history.back();
+        return;
+      }
+
+      // 4. Intelligent fallback based on opened document
+      window.location.href = getContextualFallback(fileParam);
     }
 
     // Fullscreen toggle

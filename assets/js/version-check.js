@@ -1,4 +1,4 @@
-// BTechX - Smart Auto-Update & Cache Syncer (v15.6)
+// BTechX - Smart Auto-Update & Cache Syncer (v15.7)
 (function() {
   // Ignore local file:/// testing or document viewer
   if (window.location.protocol.startsWith('file')) return;
@@ -7,7 +7,7 @@
   // Strict session lock: NEVER reload more than ONCE per browser session
   if (sessionStorage.getItem('btechx_refresh_attempted')) return;
 
-  const CURRENT_VERSION = 15.6;
+  const CURRENT_VERSION = 15.7;
 
   function getVersionJsonPath() {
     const isSub = window.location.pathname.includes('/1stYearSub/') || window.location.pathname.includes('/2ndYearSub/');

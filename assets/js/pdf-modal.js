@@ -33,9 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const isSubfolder = currentPath.includes("/1stYearSub/") || currentPath.includes("/2ndYearSub/");
       const viewerBase = isSubfolder ? "../viewer.html" : "viewer.html";
 
+      // Save originating page URL so viewer returns to exact subject section
+      const returnUrl = window.location.href;
+      try {
+        sessionStorage.setItem("btechx_viewer_return_url", returnUrl);
+      } catch (err) {}
+
       // Handle empty or placeholder links immediately
       if (!href || href === "#" || href.includes("javascript:void") || link.innerText.includes("Coming Soon") || link.classList.contains("unavailable")) {
-        window.location.href = `${viewerBase}?file=&title=${encodeURIComponent(title)}`;
+        window.location.href = `${viewerBase}?file=&title=${encodeURIComponent(title)}&ref=${encodeURIComponent(returnUrl)}`;
         return;
       }
 
@@ -45,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
         normalizedFile = normalizedFile.replace(/^(\.\.\/)+/, "");
       }
 
-      // Navigate to common standalone viewer in the same tab
-      window.location.href = `${viewerBase}?file=${encodeURIComponent(normalizedFile)}&title=${encodeURIComponent(title)}`;
+      // Navigate to common standalone viewer in the same tab with return reference
+      window.location.href = `${viewerBase}?file=${encodeURIComponent(normalizedFile)}&title=${encodeURIComponent(title)}&ref=${encodeURIComponent(returnUrl)}`;
     });
   });
 });
