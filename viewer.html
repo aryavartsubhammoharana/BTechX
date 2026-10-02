@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=15.9">
+  <link rel="stylesheet" href="styles.css?v=16.0">
   <link rel="icon" type="image/png" href="logo.png?v=7">
   <!-- PDF.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -84,7 +84,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 260px;
+      max-width: 240px;
       letter-spacing: 0.2px;
     }
 
@@ -160,12 +160,6 @@
       filter: none !important;
     }
 
-    /* Back Icon: clean arrow */
-    .viewer-back-icon {
-      font-size: 16px;
-      color: #e4e4e7;
-    }
-
     /* Highlight Mode Button - Glowing Accent when Active */
     .viewer-icon-btn.highlight-active {
       color: #facc15 !important;
@@ -195,7 +189,101 @@
       color: #e4e4e7;
     }
 
-    /* Main PDF Frame Container */
+    /* --- VIEW MODE DROPDOWN MENU --- */
+    .view-mode-wrapper {
+      position: relative;
+    }
+
+    .mode-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: rgba(18, 18, 22, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 6px;
+      width: 240px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 100;
+      animation: modeFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modeFadeIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .mode-dropdown.open {
+      display: flex;
+    }
+
+    .mode-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #a1a1aa;
+      transition: all 0.18s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .mode-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    .mode-item.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .mode-item-icon {
+      font-size: 15px;
+      width: 18px;
+      text-align: center;
+      color: #e4e4e7;
+    }
+
+    .mode-item.active .mode-item-icon {
+      color: #38bdf8;
+    }
+
+    .mode-item-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mode-item-title {
+      font-size: 12.5px;
+      color: inherit;
+    }
+
+    .mode-item-desc {
+      font-size: 10.5px;
+      color: #71717a;
+    }
+
+    .mode-check {
+      font-size: 12px;
+      color: #38bdf8;
+      display: none;
+    }
+
+    .mode-item.active .mode-check {
+      display: block;
+    }
+
+    /* --- MAIN PDF VIEWER CONTAINER --- */
     .viewer-main {
       flex: 1;
       position: relative;
@@ -206,12 +294,11 @@
       scroll-behavior: smooth;
     }
 
-    /* Single Page Container (Auto-margin centers in flex while allowing full scrolling when zoomed) */
+    /* Common PDF Page Container */
     .page-container {
-      margin: auto;
       position: relative;
       background: #ffffff;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7);
       border-radius: 4px;
       user-select: none;
       touch-action: pan-x pan-y;
@@ -223,14 +310,14 @@
       user-select: none;
     }
 
-    #pdfCanvas {
+    .page-container canvas {
       display: block;
       width: 100%;
       height: 100%;
       background: #ffffff;
     }
 
-    /* Highlight Layer overlay over canvas */
+    /* Highlight Layer overlay */
     .highlight-layer {
       position: absolute;
       top: 0;
@@ -239,9 +326,10 @@
       height: 100%;
       pointer-events: none;
       overflow: hidden;
+      z-index: 10;
     }
 
-    /* Individual Highlight */
+    /* Individual Highlight Item */
     .pdf-highlight {
       position: absolute;
       background: rgba(254, 240, 138, 0.48);
@@ -291,6 +379,180 @@
       border-radius: 3px;
       pointer-events: none;
       z-index: 25;
+    }
+
+    /* ========================================================
+       MODE 1: CONTINUOUS SCROLL CONTAINER (DEFAULT)
+       ======================================================== */
+    .scroll-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      margin: auto;
+      padding: 10px 0 30px 0;
+    }
+
+    .scroll-page-slot {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .scroll-page-slot .page-container {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .scroll-page-badge {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      background: rgba(10, 10, 12, 0.85);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 15;
+    }
+
+    .scroll-page-slot:hover .scroll-page-badge {
+      opacity: 1;
+    }
+
+    /* ========================================================
+       MODE 2: TWO PAGES BOOK FLIP (3D Authentic Page Turn)
+       ======================================================== */
+    .book-outer-wrapper {
+      margin: auto;
+      perspective: 2600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .book-viewport {
+      display: flex;
+      position: relative;
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0,0,0,0.6);
+      transform-style: preserve-3d;
+      transition: width 0.2s ease, height 0.2s ease;
+    }
+
+    /* Center Book Fold Spine Shadow */
+    .book-spine {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 32px;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, rgba(0,0,0,0.18), rgba(0,0,0,0.02) 42%, rgba(0,0,0,0.02) 58%, rgba(0,0,0,0.18));
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .book-page-half {
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-left {
+      box-shadow: inset -10px 0 20px -8px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      cursor: pointer;
+    }
+
+    .book-right {
+      box-shadow: inset 10px 0 20px -8px rgba(0, 0, 0, 0.2);
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* 3D Flipping Sheet Layer */
+    .book-flip-sheet {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      transform-style: preserve-3d;
+      display: none;
+      z-index: 25;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .book-flip-sheet.flip-forward {
+      left: 50%;
+      transform-origin: left center;
+    }
+
+    .book-flip-sheet.flip-backward {
+      left: 0;
+      transform-origin: right center;
+    }
+
+    .flip-face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .flip-face canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+    }
+
+    .flip-shadow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      opacity: 0;
+    }
+
+    .flip-front .flip-shadow {
+      background: linear-gradient(to right, rgba(0,0,0,0.35), transparent 70%);
+    }
+
+    .flip-back .flip-shadow {
+      background: linear-gradient(to left, rgba(0,0,0,0.35), transparent 70%);
+    }
+
+    /* ========================================================
+       MODE 3: SINGLE PAGE FIT/SLIDE (Window Fit)
+       ======================================================== */
+    .single-page-wrapper {
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Fallback Iframe */
@@ -418,7 +680,7 @@
         height: 42px;
         min-height: 42px;
         padding: 0 8px;
-        gap: 6px;
+        gap: 5px;
       }
       .viewer-brand {
         display: none;
@@ -431,14 +693,18 @@
       }
       .viewer-icon-btn {
         padding: 5px;
-        font-size: 14.5px;
+        font-size: 14px;
       }
       .page-indicator {
-        font-size: 11.5px;
-        padding: 0 3px;
+        font-size: 11px;
+        padding: 0 2px;
       }
       .viewer-main {
-        padding: 8px;
+        padding: 6px;
+      }
+      .mode-dropdown {
+        right: -20px;
+        width: 220px;
       }
     }
   </style>
@@ -468,10 +734,46 @@
         </div>
       </div>
 
-      <!-- Right: Tools, Highlight, Zoom In/Out/Reset, Download -->
+      <!-- Right: View Mode, Highlight, Zoom In/Out/Reset, Download -->
       <div class="viewer-header-right">
+        <!-- 3-Option Reading View Mode Selector -->
+        <div class="view-mode-wrapper">
+          <button id="modeMenuBtn" class="viewer-icon-btn" onclick="toggleModeMenu(event)" title="Reading Mode Options" aria-label="Reading Mode Options">
+            <i id="modeIcon" class="fas fa-bars-staggered"></i>
+          </button>
+          <div id="modeDropdown" class="mode-dropdown">
+            <!-- Option 1: Continuous Scroll (Default) -->
+            <div class="mode-item active" id="modeItemScroll" onclick="setReadingMode('scroll')">
+              <i class="fas fa-bars-staggered mode-item-icon"></i>
+              <div class="mode-item-text">
+                <span class="mode-item-title">Continuous Scroll</span>
+                <span class="mode-item-desc">Scroll pages vertically (Default)</span>
+              </div>
+              <i class="fas fa-check mode-check"></i>
+            </div>
+            <!-- Option 2: Two Pages Book Flip -->
+            <div class="mode-item" id="modeItemBook" onclick="setReadingMode('book')">
+              <i class="fas fa-book-open mode-item-icon"></i>
+              <div class="mode-item-text">
+                <span class="mode-item-title">Book Flip (2 Pages)</span>
+                <span class="mode-item-desc">Fold &amp; turn page like a real book</span>
+              </div>
+              <i class="fas fa-check mode-check"></i>
+            </div>
+            <!-- Option 3: Single Page Slide -->
+            <div class="mode-item" id="modeItemSingle" onclick="setReadingMode('single')">
+              <i class="fas fa-file-alt mode-item-icon"></i>
+              <div class="mode-item-text">
+                <span class="mode-item-title">Single Page</span>
+                <span class="mode-item-desc">1 page in window &bull; click to advance</span>
+              </div>
+              <i class="fas fa-check mode-check"></i>
+            </div>
+          </div>
+        </div>
+
         <!-- Highlight Toggle Button -->
-        <button id="highlightBtn" class="viewer-icon-btn" onclick="toggleHighlightMode()" title="Highlight Tool (Click & Drag)" aria-label="Highlight Tool">
+        <button id="highlightBtn" class="viewer-icon-btn" onclick="toggleHighlightMode()" title="Highlight Tool (Click &amp; Drag)" aria-label="Highlight Tool">
           <i class="fas fa-highlighter"></i>
         </button>
 
@@ -479,7 +781,7 @@
         <button id="zoomOutBtn" class="viewer-icon-btn" onclick="zoomOut()" title="Zoom Out (-)" aria-label="Zoom Out">
           <i class="fas fa-search-minus"></i>
         </button>
-        <button id="zoomResetBtn" class="viewer-icon-btn" onclick="resetView()" title="Reset (Fit Page in Window)" aria-label="Reset to Fit Window">
+        <button id="zoomResetBtn" class="viewer-icon-btn" onclick="resetView()" title="Reset (Fit Window)" aria-label="Reset to Fit Window">
           <i class="fas fa-expand-arrows-alt"></i>
         </button>
         <button id="zoomInBtn" class="viewer-icon-btn" onclick="zoomIn()" title="Zoom In (+)" aria-label="Zoom In">
@@ -519,10 +821,43 @@
         </div>
       </div>
 
-      <!-- Single Page Canvas Container -->
-      <div id="pageContainer" class="page-container" style="display: none;">
-        <canvas id="pdfCanvas"></canvas>
-        <div id="highlightLayer" class="highlight-layer"></div>
+      <!-- Mode 1: Continuous Scroll View Container -->
+      <div id="scrollContainer" class="scroll-container" style="display: none;"></div>
+
+      <!-- Mode 2: Two Pages Book Flip View Container -->
+      <div id="bookContainer" class="book-outer-wrapper" style="display: none;">
+        <div class="book-viewport" id="bookViewport">
+          <div class="book-spine"></div>
+          <!-- Left Static Page -->
+          <div class="book-page-half book-left" id="bookLeft" onclick="onBookLeftClick()">
+            <canvas id="bookCanvasLeft"></canvas>
+            <div class="highlight-layer" id="bookHlLeft"></div>
+          </div>
+          <!-- Right Static Page -->
+          <div class="book-page-half book-right" id="bookRight" onclick="onBookRightClick()">
+            <canvas id="bookCanvasRight"></canvas>
+            <div class="highlight-layer" id="bookHlRight"></div>
+          </div>
+          <!-- 3D Turning Sheet -->
+          <div class="book-flip-sheet" id="bookFlipSheet">
+            <div class="flip-face flip-front" id="flipFront">
+              <canvas id="flipCanvasFront"></canvas>
+              <div class="flip-shadow" id="flipShadowFront"></div>
+            </div>
+            <div class="flip-face flip-back" id="flipBack">
+              <canvas id="flipCanvasBack"></canvas>
+              <div class="flip-shadow" id="flipShadowBack"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode 3: Single Page Fit/Slide Container -->
+      <div id="singleContainer" class="single-page-wrapper" style="display: none;">
+        <div id="pageContainer" class="page-container">
+          <canvas id="pdfCanvas"></canvas>
+          <div id="highlightLayer" class="highlight-layer"></div>
+        </div>
       </div>
 
       <!-- Fallback native iframe -->
@@ -543,10 +878,6 @@
     // DOM Elements
     const docTitle = document.getElementById('docTitle');
     const viewerMain = document.getElementById('viewerMain');
-    const pageContainer = document.getElementById('pageContainer');
-    const pdfCanvas = document.getElementById('pdfCanvas');
-    const highlightLayer = document.getElementById('highlightLayer');
-    const pdfFrame = document.getElementById('pdfFrame');
     const loadingState = document.getElementById('loadingState');
     const errorState = document.getElementById('errorState');
     const downloadBtn = document.getElementById('downloadBtn');
@@ -556,17 +887,52 @@
     const pageIndicator = document.getElementById('pageIndicator');
     const highlightBtn = document.getElementById('highlightBtn');
     const viewerToast = document.getElementById('viewerToast');
+    const modeDropdown = document.getElementById('modeDropdown');
+    const modeIcon = document.getElementById('modeIcon');
+    const pdfFrame = document.getElementById('pdfFrame');
 
-    // Viewer State Variables
+    // Container DOM Elements
+    const scrollContainer = document.getElementById('scrollContainer');
+    const bookContainer = document.getElementById('bookContainer');
+    const bookViewport = document.getElementById('bookViewport');
+    const bookLeft = document.getElementById('bookLeft');
+    const bookRight = document.getElementById('bookRight');
+    const bookCanvasLeft = document.getElementById('bookCanvasLeft');
+    const bookCanvasRight = document.getElementById('bookCanvasRight');
+    const bookHlLeft = document.getElementById('bookHlLeft');
+    const bookHlRight = document.getElementById('bookHlRight');
+    const bookFlipSheet = document.getElementById('bookFlipSheet');
+    const flipCanvasFront = document.getElementById('flipCanvasFront');
+    const flipCanvasBack = document.getElementById('flipCanvasBack');
+    const flipShadowFront = document.getElementById('flipShadowFront');
+    const flipShadowBack = document.getElementById('flipShadowBack');
+
+    const singleContainer = document.getElementById('singleContainer');
+    const pageContainer = document.getElementById('pageContainer');
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const highlightLayer = document.getElementById('highlightLayer');
+
+    // State Variables
+    // Mode Options: 'scroll' (Option 1 - Default), 'book' (Option 2), 'single' (Option 3)
+    let currentMode = localStorage.getItem('btechx_pdf_view_mode') || 'scroll';
     let pdfDoc = null;
-    let currentPage = 1;
     let totalPages = 1;
-    let currentScale = 1.0;
-    let isFitToWindow = true;
-    let currentRenderTask = null;
+    let currentPage = 1; // 1-based index
+    let currentBookSpread = 1; // Left page of current 2-page book spread
+    let isFlipping = false;
+
+    // Zoom Scales
+    let scaleScroll = 1.0;
+    let scaleBook = 1.0;
+    let scaleSingle = 1.0;
+    let isFitSingle = true;
+
     let highlightModeActive = false;
     let cleanPdfPath = '';
     let toastTimeout = null;
+    let renderedScrollPages = new Set();
+    let scrollObserver = null;
+    let singleRenderTask = null;
 
     // Toast Notification Helper
     function showToast(msg, duration = 2400) {
@@ -601,7 +967,7 @@
       return 'index.html';
     }
 
-    // Back Navigation Logic
+    // Accurate Back navigation
     function handleBack() {
       if (refParam) {
         try {
@@ -641,6 +1007,72 @@
       }
     }
 
+    // --- VIEW MODE SELECTOR DROPDOWN ---
+    function toggleModeMenu(e) {
+      if (e) e.stopPropagation();
+      modeDropdown.classList.toggle('open');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.view-mode-wrapper')) {
+        modeDropdown.classList.remove('open');
+      }
+    });
+
+    function updateModeUI() {
+      document.getElementById('modeItemScroll').classList.toggle('active', currentMode === 'scroll');
+      document.getElementById('modeItemBook').classList.toggle('active', currentMode === 'book');
+      document.getElementById('modeItemSingle').classList.toggle('active', currentMode === 'single');
+
+      if (currentMode === 'scroll') {
+        modeIcon.className = 'fas fa-bars-staggered';
+      } else if (currentMode === 'book') {
+        modeIcon.className = 'fas fa-book-open';
+      } else {
+        modeIcon.className = 'fas fa-file-alt';
+      }
+    }
+
+    function setReadingMode(mode) {
+      if (currentMode === mode && pdfDoc) {
+        modeDropdown.classList.remove('open');
+        return;
+      }
+      currentMode = mode;
+      localStorage.setItem('btechx_pdf_view_mode', mode);
+      updateModeUI();
+      modeDropdown.classList.remove('open');
+
+      if (mode === 'scroll') {
+        showToast('<i class="fas fa-bars-staggered"></i> Continuous Scroll Mode (Default)');
+      } else if (mode === 'book') {
+        showToast('<i class="fas fa-book-open"></i> Book Mode &bull; Click page or arrow to turn');
+      } else {
+        showToast('<i class="fas fa-file-alt"></i> Single Page Mode &bull; 1 Page in Window');
+      }
+
+      applyViewMode();
+    }
+
+    function applyViewMode() {
+      if (!pdfDoc) return;
+
+      scrollContainer.style.display = 'none';
+      bookContainer.style.display = 'none';
+      singleContainer.style.display = 'none';
+
+      if (currentMode === 'scroll') {
+        scrollContainer.style.display = 'flex';
+        initScrollView();
+      } else if (currentMode === 'book') {
+        bookContainer.style.display = 'flex';
+        initBookView();
+      } else {
+        singleContainer.style.display = 'flex';
+        initSingleView();
+      }
+    }
+
     // --- HIGHLIGHT STORAGE IN BROWSER LOCALSTORAGE ---
     function getStorageKey() {
       return `btechx_pdf_hl_${encodeURIComponent(cleanPdfPath)}`;
@@ -663,8 +1095,9 @@
       }
     }
 
-    function renderPageHighlights(pageNum) {
-      highlightLayer.innerHTML = '';
+    function renderHighlightsInLayer(layerEl, pageNum) {
+      if (!layerEl) return;
+      layerEl.innerHTML = '';
       const allHighlights = loadHighlights();
       const pageHighlights = allHighlights.filter(h => h.page === pageNum);
 
@@ -677,7 +1110,6 @@
         el.style.width = (h.w * 100) + '%';
         el.style.height = (h.h * 100) + '%';
 
-        // Delete button badge on hover
         const delBtn = document.createElement('span');
         delBtn.className = 'hl-del-btn';
         delBtn.innerHTML = '&times;';
@@ -688,13 +1120,12 @@
         };
         el.appendChild(delBtn);
 
-        // Click to remove
         el.onclick = (e) => {
           e.stopPropagation();
           deleteHighlight(h.id);
         };
 
-        highlightLayer.appendChild(el);
+        layerEl.appendChild(el);
       });
     }
 
@@ -702,12 +1133,12 @@
       let list = loadHighlights();
       list = list.filter(h => h.id !== id);
       saveHighlights(list);
-      const el = highlightLayer.querySelector(`[data-id="${id}"]`);
-      if (el) {
+
+      document.querySelectorAll(`.pdf-highlight[data-id="${id}"]`).forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'scale(0.85)';
         setTimeout(() => el.remove(), 160);
-      }
+      });
       showToast('<i class="fas fa-trash-alt"></i> Highlight deleted from storage');
     }
 
@@ -716,23 +1147,23 @@
       highlightModeActive = !highlightModeActive;
       if (highlightModeActive) {
         highlightBtn.classList.add('highlight-active');
-        pageContainer.classList.add('highlighting-mode');
-        showToast('<i class="fas fa-highlighter" style="color: #facc15"></i> Highlight Mode ON &bull; Drag over text to highlight');
+        document.querySelectorAll('.page-container').forEach(c => c.classList.add('highlighting-mode'));
+        showToast('<i class="fas fa-highlighter" style="color: #facc15"></i> Highlight Mode ON &bull; Drag over text/notes to highlight');
       } else {
         highlightBtn.classList.remove('highlight-active');
-        pageContainer.classList.remove('highlighting-mode');
+        document.querySelectorAll('.page-container').forEach(c => c.classList.remove('highlighting-mode'));
         showToast('Highlight Mode OFF');
       }
     }
 
-    // Highlight Drag Interaction
-    let isDrawing = false;
-    let dragStartX = 0, dragStartY = 0;
-    let previewEl = null;
+    // Generic Highlight Drag Listener for any container
+    function bindHighlightDragEvents(containerEl, getPageNumFn, getLayerFn) {
+      let isDrawing = false;
+      let startX = 0, startY = 0;
+      let previewEl = null;
 
-    function initHighlightEvents() {
       const getContainerPos = (e) => {
-        const rect = pageContainer.getBoundingClientRect();
+        const rect = containerEl.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         return {
@@ -749,16 +1180,19 @@
 
         const pos = getContainerPos(e);
         isDrawing = true;
-        dragStartX = pos.x;
-        dragStartY = pos.y;
+        startX = pos.x;
+        startY = pos.y;
+
+        const layer = getLayerFn();
+        if (!layer) return;
 
         previewEl = document.createElement('div');
         previewEl.className = 'highlight-preview-rect';
-        previewEl.style.left = dragStartX + 'px';
-        previewEl.style.top = dragStartY + 'px';
+        previewEl.style.left = startX + 'px';
+        previewEl.style.top = startY + 'px';
         previewEl.style.width = '0px';
         previewEl.style.height = '0px';
-        highlightLayer.appendChild(previewEl);
+        layer.appendChild(previewEl);
 
         if (e.type === 'touchstart') e.preventDefault();
       };
@@ -766,10 +1200,10 @@
       const onMove = (e) => {
         if (!isDrawing || !previewEl) return;
         const pos = getContainerPos(e);
-        const left = Math.min(dragStartX, pos.x);
-        const top = Math.min(dragStartY, pos.y);
-        const w = Math.abs(pos.x - dragStartX);
-        const h = Math.abs(pos.y - dragStartY);
+        const left = Math.min(startX, pos.x);
+        const top = Math.min(startY, pos.y);
+        const w = Math.abs(pos.x - startX);
+        const h = Math.abs(pos.y - startY);
 
         previewEl.style.left = left + 'px';
         previewEl.style.top = top + 'px';
@@ -789,16 +1223,16 @@
         }
 
         const pos = getContainerPos(e);
-        const left = Math.min(dragStartX, pos.x);
-        const top = Math.min(dragStartY, pos.y);
-        const w = Math.abs(pos.x - dragStartX);
-        const h = Math.abs(pos.y - dragStartY);
+        const left = Math.min(startX, pos.x);
+        const top = Math.min(startY, pos.y);
+        const w = Math.abs(pos.x - startX);
+        const h = Math.abs(pos.y - startY);
 
-        // Require meaningful drag dimensions
         if (w >= 6 && h >= 4 && pos.rectW > 0 && pos.rectH > 0) {
+          const targetPage = getPageNumFn();
           const newHl = {
             id: 'hl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-            page: currentPage,
+            page: targetPage,
             x: left / pos.rectW,
             y: top / pos.rectH,
             w: w / pos.rectW,
@@ -808,24 +1242,432 @@
           const list = loadHighlights();
           list.push(newHl);
           saveHighlights(list);
-          renderPageHighlights(currentPage);
+
+          const layer = getLayerFn();
+          if (layer) renderHighlightsInLayer(layer, targetPage);
           showToast('<i class="fas fa-check-circle" style="color: #4ade80"></i> Highlight saved to Local Storage');
         }
       };
 
-      pageContainer.addEventListener('mousedown', onStart);
+      containerEl.addEventListener('mousedown', onStart);
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onEnd);
 
-      pageContainer.addEventListener('touchstart', onStart, { passive: false });
+      containerEl.addEventListener('touchstart', onStart, { passive: false });
       window.addEventListener('touchmove', onMove, { passive: false });
       window.addEventListener('touchend', onEnd);
     }
 
-    // --- PDF.JS RENDERING & ZOOM ENGINE ---
+    // ========================================================
+    // MODE 1: CONTINUOUS SCROLL VIEW IMPLEMENTATION (DEFAULT)
+    // ========================================================
+    function initScrollView() {
+      if (scrollContainer.children.length === 0) {
+        buildScrollSlots();
+      } else {
+        updateScrollLayout();
+      }
+      updateNavScroll();
+    }
 
-    // Calculate scale so EXACTLY ONE PAGE fits cleanly in window (single-page view)
-    function calculateFitScale(page) {
+    function buildScrollSlots() {
+      scrollContainer.innerHTML = '';
+      renderedScrollPages.clear();
+
+      pdfDoc.getPage(1).then(firstPage => {
+        const unscaled = firstPage.getViewport({ scale: 1.0 });
+        const availW = Math.max(100, Math.min(viewerMain.clientWidth - 40, 920));
+        scaleScroll = availW / unscaled.width;
+
+        const pageW = Math.floor(unscaled.width * scaleScroll);
+        const pageH = Math.floor(unscaled.height * scaleScroll);
+
+        for (let i = 1; i <= totalPages; i++) {
+          const slot = document.createElement('div');
+          slot.className = 'scroll-page-slot';
+          slot.id = `scrollSlot-${i}`;
+          slot.dataset.page = i;
+
+          const pContainer = document.createElement('div');
+          pContainer.className = 'page-container';
+          if (highlightModeActive) pContainer.classList.add('highlighting-mode');
+          pContainer.id = `pageContainer-scroll-${i}`;
+          pContainer.style.width = pageW + 'px';
+          pContainer.style.height = pageH + 'px';
+
+          const cvs = document.createElement('canvas');
+          cvs.id = `scrollCanvas-${i}`;
+
+          const hlLayer = document.createElement('div');
+          hlLayer.className = 'highlight-layer';
+          hlLayer.id = `scrollHl-${i}`;
+
+          const badge = document.createElement('div');
+          badge.className = 'scroll-page-badge';
+          badge.innerText = `Page ${i}`;
+
+          pContainer.appendChild(cvs);
+          pContainer.appendChild(hlLayer);
+          pContainer.appendChild(badge);
+          slot.appendChild(pContainer);
+          scrollContainer.appendChild(slot);
+
+          // Bind highlight drag events for this page
+          bindHighlightDragEvents(pContainer, () => i, () => hlLayer);
+        }
+
+        setupScrollObserver();
+      });
+    }
+
+    function updateScrollLayout() {
+      pdfDoc.getPage(1).then(firstPage => {
+        const unscaled = firstPage.getViewport({ scale: 1.0 });
+        const pageW = Math.floor(unscaled.width * scaleScroll);
+        const pageH = Math.floor(unscaled.height * scaleScroll);
+
+        for (let i = 1; i <= totalPages; i++) {
+          const pContainer = document.getElementById(`pageContainer-scroll-${i}`);
+          if (pContainer) {
+            pContainer.style.width = pageW + 'px';
+            pContainer.style.height = pageH + 'px';
+          }
+        }
+        // Re-render visible pages
+        renderedScrollPages.forEach(pNum => renderScrollPage(pNum));
+      });
+    }
+
+    function setupScrollObserver() {
+      if (scrollObserver) scrollObserver.disconnect();
+
+      scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const pageNum = parseInt(entry.target.dataset.page);
+            renderScrollPage(pageNum);
+          }
+        });
+      }, {
+        root: viewerMain,
+        rootMargin: '350px 0px 350px 0px'
+      });
+
+      for (let i = 1; i <= totalPages; i++) {
+        const el = document.getElementById(`scrollSlot-${i}`);
+        if (el) scrollObserver.observe(el);
+      }
+    }
+
+    function renderScrollPage(pageNum) {
+      if (!pdfDoc) return;
+      pdfDoc.getPage(pageNum).then(page => {
+        const cvs = document.getElementById(`scrollCanvas-${pageNum}`);
+        const pContainer = document.getElementById(`pageContainer-scroll-${pageNum}`);
+        const hlLayer = document.getElementById(`scrollHl-${pageNum}`);
+        if (!cvs || !pContainer) return;
+
+        const viewport = page.getViewport({ scale: scaleScroll });
+        const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+
+        cvs.width = Math.floor(viewport.width * pixelRatio);
+        cvs.height = Math.floor(viewport.height * pixelRatio);
+        cvs.style.width = Math.floor(viewport.width) + 'px';
+        cvs.style.height = Math.floor(viewport.height) + 'px';
+
+        pContainer.style.width = Math.floor(viewport.width) + 'px';
+        pContainer.style.height = Math.floor(viewport.height) + 'px';
+
+        const ctx = cvs.getContext('2d', { alpha: false });
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+        page.render({
+          canvasContext: ctx,
+          viewport: viewport
+        }).promise.then(() => {
+          renderedScrollPages.add(pageNum);
+          renderHighlightsInLayer(hlLayer, pageNum);
+        }).catch(err => {
+          if (err && err.name !== 'RenderingCancelledException') {
+            console.warn('Scroll render error:', err);
+          }
+        });
+      });
+    }
+
+    // Scroll listener to update page indicator dynamically
+    viewerMain.addEventListener('scroll', () => {
+      if (currentMode !== 'scroll' || !pdfDoc) return;
+      const centerLine = viewerMain.scrollTop + (viewerMain.clientHeight / 2);
+      let activeP = 1;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const slot = document.getElementById(`scrollSlot-${i}`);
+        if (slot) {
+          const top = slot.offsetTop;
+          const bottom = top + slot.offsetHeight;
+          if (centerLine >= top && centerLine <= bottom) {
+            activeP = i;
+            break;
+          }
+        }
+      }
+      if (activeP !== currentPage) {
+        currentPage = activeP;
+        updateNavScroll();
+      }
+    }, { passive: true });
+
+    function updateNavScroll() {
+      pageIndicator.innerText = `${currentPage} / ${totalPages}`;
+      prevBtn.disabled = currentPage <= 1;
+      nextBtn.disabled = currentPage >= totalPages;
+    }
+
+    function scrollToPage(p) {
+      if (p < 1) p = 1;
+      if (p > totalPages) p = totalPages;
+      currentPage = p;
+      updateNavScroll();
+      const slot = document.getElementById(`scrollSlot-${p}`);
+      if (slot) {
+        slot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // ========================================================
+    // MODE 2: TWO PAGES BOOK FLIP IMPLEMENTATION (AUTHENTIC 3D)
+    // ========================================================
+    function initBookView() {
+      if (currentBookSpread % 2 === 0) currentBookSpread--; // Keep spread odd (1, 3, 5...)
+      renderBookSpread(currentBookSpread);
+    }
+
+    function renderPageToCanvas(pageNumber, canvasEl, width, height) {
+      return new Promise((resolve) => {
+        if (pageNumber > totalPages || pageNumber < 1) {
+          // Blank clean page for odd end
+          const ctx = canvasEl.getContext('2d');
+          canvasEl.width = width;
+          canvasEl.height = height;
+          ctx.fillStyle = '#f8f8f9';
+          ctx.fillRect(0, 0, width, height);
+          resolve();
+          return;
+        }
+
+        pdfDoc.getPage(pageNumber).then(page => {
+          const unscaled = page.getViewport({ scale: 1.0 });
+          const scale = width / unscaled.width;
+          const viewport = page.getViewport({ scale: scale });
+          const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+
+          canvasEl.width = Math.floor(width * pixelRatio);
+          canvasEl.height = Math.floor(height * pixelRatio);
+          canvasEl.style.width = width + 'px';
+          canvasEl.style.height = height + 'px';
+
+          const ctx = canvasEl.getContext('2d', { alpha: false });
+          ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+          page.render({
+            canvasContext: ctx,
+            viewport: viewport
+          }).promise.then(() => resolve()).catch(() => resolve());
+        }).catch(() => resolve());
+      });
+    }
+
+    function calculateBookDimensions(page) {
+      const unscaled = page.getViewport({ scale: 1.0 });
+      const availW = Math.max(100, viewerMain.clientWidth - 40);
+      const availH = Math.max(100, viewerMain.clientHeight - 40);
+
+      // Book displays 2 pages side-by-side
+      const twoPageRatio = (unscaled.width * 2) / unscaled.height;
+      let bookW, bookH;
+
+      if (availW / availH > twoPageRatio) {
+        bookH = availH * scaleBook;
+        bookW = bookH * twoPageRatio;
+      } else {
+        bookW = availW * scaleBook;
+        bookH = bookW / twoPageRatio;
+      }
+
+      const singlePageW = Math.floor(bookW / 2);
+      bookH = Math.floor(bookH);
+      return { singlePageW, bookH };
+    }
+
+    function renderBookSpread(leftPageNum) {
+      if (!pdfDoc) return;
+      pdfDoc.getPage(1).then(firstPage => {
+        const { singlePageW, bookH } = calculateBookDimensions(firstPage);
+
+        bookViewport.style.width = (singlePageW * 2) + 'px';
+        bookViewport.style.height = bookH + 'px';
+
+        bookLeft.style.width = singlePageW + 'px';
+        bookLeft.style.height = bookH + 'px';
+        bookRight.style.width = singlePageW + 'px';
+        bookRight.style.height = bookH + 'px';
+
+        const rightPageNum = leftPageNum + 1;
+
+        // Render Left and Right pages
+        renderPageToCanvas(leftPageNum, bookCanvasLeft, singlePageW, bookH).then(() => {
+          renderHighlightsInLayer(bookHlLeft, leftPageNum);
+        });
+
+        renderPageToCanvas(rightPageNum, bookCanvasRight, singlePageW, bookH).then(() => {
+          renderHighlightsInLayer(bookHlRight, rightPageNum);
+        });
+
+        updateNavBook();
+      });
+    }
+
+    function updateNavBook() {
+      const rightPage = Math.min(currentBookSpread + 1, totalPages);
+      if (totalPages === 1) {
+        pageIndicator.innerText = `Page 1 / 1`;
+      } else {
+        pageIndicator.innerText = `Pages ${currentBookSpread}-${rightPage} / ${totalPages}`;
+      }
+      prevBtn.disabled = currentBookSpread <= 1;
+      nextBtn.disabled = currentBookSpread + 1 >= totalPages;
+    }
+
+    // Book 3D Page Turn: Next (Forward)
+    function flipBookNext() {
+      if (isFlipping || !pdfDoc) return;
+      const nextSpreadLeft = currentBookSpread + 2;
+      if (nextSpreadLeft > totalPages) return;
+
+      isFlipping = true;
+      pdfDoc.getPage(1).then(firstPage => {
+        const { singlePageW, bookH } = calculateBookDimensions(firstPage);
+        const oldRight = currentBookSpread + 1;
+        const newLeft = nextSpreadLeft;
+        const newRight = nextSpreadLeft + 1;
+
+        // Setup static background
+        renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
+        renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
+
+        // Setup flipping sheet
+        bookFlipSheet.className = 'book-flip-sheet flip-forward';
+        bookFlipSheet.style.width = singlePageW + 'px';
+        bookFlipSheet.style.height = bookH + 'px';
+        bookFlipSheet.style.transition = 'none';
+        bookFlipSheet.style.transform = 'rotateY(0deg)';
+        bookFlipSheet.style.display = 'block';
+
+        Promise.all([
+          renderPageToCanvas(oldRight, flipCanvasFront, singlePageW, bookH),
+          renderPageToCanvas(newLeft, flipCanvasBack, singlePageW, bookH)
+        ]).then(() => {
+          bookFlipSheet.offsetHeight; // Force reflow
+          bookFlipSheet.style.transition = 'transform 0.58s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          bookFlipSheet.style.transform = 'rotateY(-180deg)';
+          flipShadowFront.style.opacity = '1';
+
+          setTimeout(() => {
+            currentBookSpread = nextSpreadLeft;
+            currentPage = currentBookSpread;
+            renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
+            renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
+            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
+            renderHighlightsInLayer(bookHlRight, newRight);
+
+            bookFlipSheet.style.display = 'none';
+            bookFlipSheet.style.transition = 'none';
+            bookFlipSheet.style.transform = 'rotateY(0deg)';
+            flipShadowFront.style.opacity = '0';
+            updateNavBook();
+            isFlipping = false;
+          }, 600);
+        });
+      });
+    }
+
+    // Book 3D Page Turn: Prev (Backward)
+    function flipBookPrev() {
+      if (isFlipping || !pdfDoc) return;
+      if (currentBookSpread <= 1) return;
+
+      const prevSpreadLeft = Math.max(1, currentBookSpread - 2);
+      isFlipping = true;
+
+      pdfDoc.getPage(1).then(firstPage => {
+        const { singlePageW, bookH } = calculateBookDimensions(firstPage);
+        const oldLeft = currentBookSpread;
+        const oldRight = currentBookSpread + 1;
+        const newLeft = prevSpreadLeft;
+        const newRight = prevSpreadLeft + 1;
+
+        // Static background
+        renderPageToCanvas(newLeft, bookCanvasLeft, singlePageW, bookH);
+        renderPageToCanvas(oldRight, bookCanvasRight, singlePageW, bookH);
+
+        // Setup flipping sheet
+        bookFlipSheet.className = 'book-flip-sheet flip-backward';
+        bookFlipSheet.style.width = singlePageW + 'px';
+        bookFlipSheet.style.height = bookH + 'px';
+        bookFlipSheet.style.transition = 'none';
+        bookFlipSheet.style.transform = 'rotateY(-180deg)';
+        bookFlipSheet.style.display = 'block';
+
+        Promise.all([
+          renderPageToCanvas(oldLeft, flipCanvasFront, singlePageW, bookH),
+          renderPageToCanvas(newRight, flipCanvasBack, singlePageW, bookH)
+        ]).then(() => {
+          bookFlipSheet.offsetHeight; // Force reflow
+          bookFlipSheet.style.transition = 'transform 0.58s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          bookFlipSheet.style.transform = 'rotateY(0deg)';
+          flipShadowBack.style.opacity = '1';
+
+          setTimeout(() => {
+            currentBookSpread = prevSpreadLeft;
+            currentPage = currentBookSpread;
+            renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
+            renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
+            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
+            renderHighlightsInLayer(bookHlRight, newRight);
+
+            bookFlipSheet.style.display = 'none';
+            bookFlipSheet.style.transition = 'none';
+            flipShadowBack.style.opacity = '0';
+            updateNavBook();
+            isFlipping = false;
+          }, 600);
+        });
+      });
+    }
+
+    function onBookLeftClick() {
+      if (highlightModeActive) return;
+      flipBookPrev();
+    }
+
+    function onBookRightClick() {
+      if (highlightModeActive) return;
+      flipBookNext();
+    }
+
+    // Bind book mode highlight drag handlers
+    bindHighlightDragEvents(bookLeft, () => currentBookSpread, () => bookHlLeft);
+    bindHighlightDragEvents(bookRight, () => currentBookSpread + 1, () => bookHlRight);
+
+    // ========================================================
+    // MODE 3: SINGLE PAGE FIT/SLIDE IMPLEMENTATION
+    // ========================================================
+    function initSingleView() {
+      renderSinglePage(currentPage);
+    }
+
+    function calculateFitScaleSingle(page) {
       const unscaled = page.getViewport({ scale: 1.0 });
       const paddingX = window.innerWidth <= 768 ? 16 : 40;
       const paddingY = window.innerWidth <= 768 ? 16 : 32;
@@ -834,39 +1676,29 @@
 
       const scaleW = availW / unscaled.width;
       const scaleH = availH / unscaled.height;
-
-      // Fit entire page inside window
       const fit = Math.min(scaleW, scaleH);
       return Math.max(0.2, Math.min(fit, 3.5));
     }
 
-    function updateNavUI() {
-      pageIndicator.innerText = `${currentPage} / ${totalPages}`;
-      prevBtn.disabled = currentPage <= 1;
-      nextBtn.disabled = currentPage >= totalPages;
-    }
-
-    function renderPage(pageNum) {
+    function renderSinglePage(pageNum) {
       if (!pdfDoc) return;
-      updateNavUI();
+      updateNavSingle();
 
-      if (currentRenderTask) {
-        currentRenderTask.cancel();
+      if (singleRenderTask) {
+        singleRenderTask.cancel();
       }
 
       pdfDoc.getPage(pageNum).then(page => {
-        if (isFitToWindow || currentScale === null) {
-          currentScale = calculateFitScale(page);
+        if (isFitSingle) {
+          scaleSingle = calculateFitScaleSingle(page);
         }
 
-        const viewport = page.getViewport({ scale: currentScale });
+        const viewport = page.getViewport({ scale: scaleSingle });
         const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
 
-        // Canvas backing dimensions (HiDPI)
         pdfCanvas.width = Math.floor(viewport.width * pixelRatio);
         pdfCanvas.height = Math.floor(viewport.height * pixelRatio);
 
-        // Display dimensions
         const cssW = Math.floor(viewport.width) + 'px';
         const cssH = Math.floor(viewport.height) + 'px';
         pdfCanvas.style.width = cssW;
@@ -878,64 +1710,115 @@
         const ctx = pdfCanvas.getContext('2d', { alpha: false });
         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-        const renderContext = {
+        singleRenderTask = page.render({
           canvasContext: ctx,
           viewport: viewport
-        };
+        });
 
-        currentRenderTask = page.render(renderContext);
-        currentRenderTask.promise.then(() => {
-          currentRenderTask = null;
-          loadingState.style.display = 'none';
-          pageContainer.style.display = 'block';
-          renderPageHighlights(pageNum);
+        singleRenderTask.promise.then(() => {
+          singleRenderTask = null;
+          renderHighlightsInLayer(highlightLayer, pageNum);
         }).catch(err => {
           if (err && err.name !== 'RenderingCancelledException') {
-            console.error('Page render error:', err);
+            console.warn('Single render error:', err);
           }
         });
-      }).catch(err => {
-        console.error('Error getting page:', err);
-        loadingState.style.display = 'none';
       });
     }
 
-    // Page Navigation
+    function updateNavSingle() {
+      pageIndicator.innerText = `${currentPage} / ${totalPages}`;
+      prevBtn.disabled = currentPage <= 1;
+      nextBtn.disabled = currentPage >= totalPages;
+    }
+
+    // Bind single mode highlight drag handler
+    bindHighlightDragEvents(pageContainer, () => currentPage, () => highlightLayer);
+
+    // ========================================================
+    // GLOBAL NAVIGATION & ZOOM CONTROLS
+    // ========================================================
     function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderPage(currentPage);
+      if (currentMode === 'scroll') {
+        scrollToPage(currentPage - 1);
+      } else if (currentMode === 'book') {
+        flipBookPrev();
+      } else {
+        if (currentPage > 1) {
+          currentPage--;
+          renderSinglePage(currentPage);
+        }
       }
     }
 
     function nextPage() {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderPage(currentPage);
+      if (currentMode === 'scroll') {
+        scrollToPage(currentPage + 1);
+      } else if (currentMode === 'book') {
+        flipBookNext();
+      } else {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderSinglePage(currentPage);
+        }
       }
     }
 
-    // Zoom Functions
     function zoomIn() {
-      isFitToWindow = false;
-      currentScale = Math.min((currentScale || 1.0) * 1.25, 4.0);
-      renderPage(currentPage);
-      showToast(`Zoom: ${Math.round(currentScale * 100)}%`);
+      if (currentMode === 'scroll') {
+        scaleScroll = Math.min(scaleScroll * 1.2, 3.5);
+        updateScrollLayout();
+        showToast(`Zoom: ${Math.round(scaleScroll * 100)}%`);
+      } else if (currentMode === 'book') {
+        scaleBook = Math.min(scaleBook * 1.2, 2.5);
+        renderBookSpread(currentBookSpread);
+        showToast(`Zoom: ${Math.round(scaleBook * 100)}%`);
+      } else {
+        isFitSingle = false;
+        scaleSingle = Math.min(scaleSingle * 1.25, 4.0);
+        renderSinglePage(currentPage);
+        showToast(`Zoom: ${Math.round(scaleSingle * 100)}%`);
+      }
     }
 
     function zoomOut() {
-      isFitToWindow = false;
-      currentScale = Math.max((currentScale || 1.0) / 1.25, 0.3);
-      renderPage(currentPage);
-      showToast(`Zoom: ${Math.round(currentScale * 100)}%`);
+      if (currentMode === 'scroll') {
+        scaleScroll = Math.max(scaleScroll / 1.2, 0.4);
+        updateScrollLayout();
+        showToast(`Zoom: ${Math.round(scaleScroll * 100)}%`);
+      } else if (currentMode === 'book') {
+        scaleBook = Math.max(scaleBook / 1.2, 0.5);
+        renderBookSpread(currentBookSpread);
+        showToast(`Zoom: ${Math.round(scaleBook * 100)}%`);
+      } else {
+        isFitSingle = false;
+        scaleSingle = Math.max(scaleSingle / 1.25, 0.3);
+        renderSinglePage(currentPage);
+        showToast(`Zoom: ${Math.round(scaleSingle * 100)}%`);
+      }
     }
 
     function resetView() {
-      isFitToWindow = true;
-      currentScale = null;
-      viewerMain.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      renderPage(currentPage);
-      showToast('<i class="fas fa-compress-arrows-alt"></i> Reset: Fit 1 Page to Window');
+      if (currentMode === 'scroll') {
+        pdfDoc.getPage(1).then(page => {
+          const unscaled = page.getViewport({ scale: 1.0 });
+          const availW = Math.max(100, Math.min(viewerMain.clientWidth - 40, 920));
+          scaleScroll = availW / unscaled.width;
+          updateScrollLayout();
+          viewerMain.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+          showToast('<i class="fas fa-compress-arrows-alt"></i> Reset: Fit Page Width');
+        });
+      } else if (currentMode === 'book') {
+        scaleBook = 1.0;
+        renderBookSpread(currentBookSpread);
+        viewerMain.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        showToast('<i class="fas fa-compress-arrows-alt"></i> Reset: Fit 2-Page Book');
+      } else {
+        isFitSingle = true;
+        viewerMain.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        renderSinglePage(currentPage);
+        showToast('<i class="fas fa-compress-arrows-alt"></i> Reset: Fit 1 Page in Window');
+      }
     }
 
     // Keyboard Shortcuts
@@ -957,14 +1840,18 @@
       }
     });
 
-    // Window Resize Handler: Auto-recalculate fit if in fit-to-window mode
+    // Window Resize Handler
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        if (isFitToWindow && pdfDoc) {
-          currentScale = null;
-          renderPage(currentPage);
+        if (!pdfDoc) return;
+        if (currentMode === 'scroll') {
+          updateScrollLayout();
+        } else if (currentMode === 'book') {
+          renderBookSpread(currentBookSpread);
+        } else if (currentMode === 'single' && isFitSingle) {
+          renderSinglePage(currentPage);
         }
       }, 150);
     });
@@ -975,16 +1862,21 @@
       const embedPdfUrl = `${cleanFile}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
       pdfFrame.src = embedPdfUrl;
       pdfFrame.style.display = 'block';
-      pageContainer.style.display = 'none';
+      scrollContainer.style.display = 'none';
+      bookContainer.style.display = 'none';
+      singleContainer.style.display = 'none';
       loadingState.style.display = 'none';
       highlightBtn.style.display = 'none';
       document.getElementById('zoomInBtn').style.display = 'none';
       document.getElementById('zoomOutBtn').style.display = 'none';
       document.getElementById('zoomResetBtn').style.display = 'none';
       document.getElementById('pageNavGroup').style.display = 'none';
+      document.getElementById('modeMenuBtn').style.display = 'none';
     }
 
-    // --- DOCUMENT INITIALIZATION ---
+    // --- INITIALIZATION ---
+    updateModeUI();
+
     if (!fileParam || fileParam === '#' || fileParam.includes('javascript:void') || fileParam.trim() === '') {
       loadingState.style.display = 'none';
       errorState.style.display = 'flex';
@@ -992,13 +1884,13 @@
       externalBtn.style.display = 'none';
       document.getElementById('pageNavGroup').style.display = 'none';
       highlightBtn.style.display = 'none';
+      document.getElementById('modeMenuBtn').style.display = 'none';
     } else {
       cleanPdfPath = decodeURIComponent(fileParam);
       downloadBtn.href = cleanPdfPath;
       downloadBtn.setAttribute('download', cleanPdfPath.split('/').pop());
       externalBtn.href = cleanPdfPath;
 
-      // Initialize PDF.js
       if (typeof pdfjsLib !== 'undefined') {
         try {
           pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -1015,11 +1907,10 @@
         loadingTask.promise.then(pdf => {
           pdfDoc = pdf;
           totalPages = pdf.numPages;
-          initHighlightEvents();
-          resetView();
+          loadingState.style.display = 'none';
+          applyViewMode();
         }).catch(err => {
           console.warn('PDF.js loading error:', err);
-          // Verify with HEAD request to distinguish 404 from render error
           fetch(cleanPdfPath, { method: 'HEAD' })
             .then(res => {
               if (res.ok) {
