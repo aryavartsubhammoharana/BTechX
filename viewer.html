@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=15.1">
+  <link rel="stylesheet" href="styles.css?v=15.9">
   <link rel="icon" type="image/png" href="logo.png?v=7">
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -36,8 +38,7 @@
       width: 100vw;
     }
 
-    /* Top Navigation Bar */
-    /* Top Navigation Bar - Ultra-Slim & Space-Saving */
+    /* Top Navigation Bar - Ultra-Slim, Frameless & Minimalist */
     .viewer-header {
       height: 44px;
       min-height: 44px;
@@ -47,16 +48,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 14px;
       z-index: 50;
-      gap: 12px;
+      gap: 10px;
     }
 
     .viewer-header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-shrink: 0;
+      min-width: 0;
     }
 
     .viewer-brand {
@@ -75,29 +77,47 @@
       color: #ffffff;
     }
 
-    .viewer-header-center {
-      flex: 1;
-      text-align: center;
-      overflow: hidden;
-      padding: 0 8px;
-    }
-
     .viewer-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 500;
-      color: #f4f4f5;
+      color: #e4e4e7;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 260px;
       letter-spacing: 0.2px;
     }
 
+    /* Center Navigation (Pages) */
+    .viewer-header-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .page-nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      user-select: none;
+    }
+
+    .page-indicator {
+      font-size: 12px;
+      font-weight: 500;
+      color: #a1a1aa;
+      padding: 0 6px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Right Section: Tools, Zoom, Download */
     .viewer-header-right {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 8px;
       flex-shrink: 0;
     }
 
@@ -117,30 +137,45 @@
       line-height: 1;
       touch-action: manipulation;
       will-change: transform, color, filter;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
                   color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  filter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                  filter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 15px;
     }
 
     .viewer-icon-btn:hover {
       color: #ffffff;
       transform: scale(1.18);
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
     }
 
     .viewer-icon-btn:active {
-      transform: scale(0.88) !important;
+      transform: scale(0.9) !important;
+    }
+
+    .viewer-icon-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      transform: none !important;
+      filter: none !important;
     }
 
     /* Back Icon: clean arrow */
     .viewer-back-icon {
-      font-size: 17px;
+      font-size: 16px;
       color: #e4e4e7;
     }
 
-    /* Download Icon: prominent pure icon without box */
+    /* Highlight Mode Button - Glowing Accent when Active */
+    .viewer-icon-btn.highlight-active {
+      color: #facc15 !important;
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.85)) !important;
+    }
+
+    /* Download Icon */
     .viewer-download-icon {
-      font-size: 19px;
+      font-size: 17px;
       color: #ffffff;
     }
 
@@ -152,7 +187,7 @@
 
     /* Secondary Tools: External & Fullscreen */
     .viewer-tool-icon {
-      font-size: 14.5px;
+      font-size: 14px;
       color: #71717a;
     }
 
@@ -160,38 +195,105 @@
       color: #e4e4e7;
     }
 
-    /* Error Card Action Button */
-    .error-back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13.5px;
-      text-decoration: none;
-      transition: all 0.25s ease;
-    }
-
-    .error-back-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
-    }
-
     /* Main PDF Frame Container */
     .viewer-main {
       flex: 1;
       position: relative;
       background: #09090b;
-      overflow: hidden;
+      overflow: auto;
       display: flex;
-      flex-direction: column;
+      padding: 16px;
+      scroll-behavior: smooth;
     }
 
+    /* Single Page Container (Auto-margin centers in flex while allowing full scrolling when zoomed) */
+    .page-container {
+      margin: auto;
+      position: relative;
+      background: #ffffff;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75);
+      border-radius: 4px;
+      user-select: none;
+      touch-action: pan-x pan-y;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .page-container.highlighting-mode {
+      cursor: crosshair !important;
+      user-select: none;
+    }
+
+    #pdfCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+    }
+
+    /* Highlight Layer overlay over canvas */
+    .highlight-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Individual Highlight */
+    .pdf-highlight {
+      position: absolute;
+      background: rgba(254, 240, 138, 0.48);
+      mix-blend-mode: multiply;
+      border-radius: 3px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .pdf-highlight:hover {
+      background: rgba(250, 204, 21, 0.65);
+      box-shadow: 0 0 0 1.5px rgba(234, 179, 8, 0.9);
+    }
+
+    /* Delete badge on highlight hover */
+    .pdf-highlight .hl-del-btn {
+      display: none;
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      z-index: 30;
+    }
+
+    .pdf-highlight:hover .hl-del-btn {
+      display: flex;
+    }
+
+    /* Live Preview Rectangle when dragging to highlight */
+    .highlight-preview-rect {
+      position: absolute;
+      background: rgba(254, 240, 138, 0.45);
+      border: 1.5px dashed rgba(202, 138, 4, 0.9);
+      border-radius: 3px;
+      pointer-events: none;
+      z-index: 25;
+    }
+
+    /* Fallback Iframe */
     .viewer-iframe {
       width: 100%;
       height: 100%;
@@ -259,28 +361,84 @@
       margin-bottom: 24px;
     }
 
+    .error-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .error-back-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Floating Toast Indicator */
+    .viewer-toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(24, 24, 27, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #f4f4f5;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .viewer-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .viewer-header {
         height: 42px;
         min-height: 42px;
-        padding: 0 10px;
+        padding: 0 8px;
+        gap: 6px;
       }
       .viewer-brand {
+        display: none;
+      }
+      .viewer-title {
         display: none;
       }
       .viewer-tool-icon {
         display: none;
       }
-      .viewer-title {
-        font-size: 13px;
-        max-width: 240px;
+      .viewer-icon-btn {
+        padding: 5px;
+        font-size: 14.5px;
       }
-      .viewer-back-icon {
-        font-size: 16px;
+      .page-indicator {
+        font-size: 11.5px;
+        padding: 0 3px;
       }
-      .viewer-download-icon {
-        font-size: 18px;
+      .viewer-main {
+        padding: 8px;
       }
     }
   </style>
@@ -294,19 +452,49 @@
           <i class="fas fa-arrow-left"></i>
         </button>
         <a href="index.html" class="viewer-brand">BTechX</a>
-      </div>
-
-      <div class="viewer-header-center">
         <h1 id="docTitle" class="viewer-title">Document Viewer</h1>
       </div>
 
+      <!-- Center: Page Controls -->
+      <div class="viewer-header-center">
+        <div class="page-nav-group" id="pageNavGroup">
+          <button id="prevBtn" class="viewer-icon-btn" onclick="prevPage()" title="Previous Page (Left Arrow)" aria-label="Previous Page">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span id="pageIndicator" class="page-indicator">1 / 1</span>
+          <button id="nextBtn" class="viewer-icon-btn" onclick="nextPage()" title="Next Page (Right Arrow)" aria-label="Next Page">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Tools, Highlight, Zoom In/Out/Reset, Download -->
       <div class="viewer-header-right">
+        <!-- Highlight Toggle Button -->
+        <button id="highlightBtn" class="viewer-icon-btn" onclick="toggleHighlightMode()" title="Highlight Tool (Click & Drag)" aria-label="Highlight Tool">
+          <i class="fas fa-highlighter"></i>
+        </button>
+
+        <!-- Zoom Controls -->
+        <button id="zoomOutBtn" class="viewer-icon-btn" onclick="zoomOut()" title="Zoom Out (-)" aria-label="Zoom Out">
+          <i class="fas fa-search-minus"></i>
+        </button>
+        <button id="zoomResetBtn" class="viewer-icon-btn" onclick="resetView()" title="Reset (Fit Page in Window)" aria-label="Reset to Fit Window">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </button>
+        <button id="zoomInBtn" class="viewer-icon-btn" onclick="zoomIn()" title="Zoom In (+)" aria-label="Zoom In">
+          <i class="fas fa-search-plus"></i>
+        </button>
+
+        <!-- Secondary: External & Fullscreen -->
         <a id="externalBtn" href="#" target="_blank" class="viewer-icon-btn viewer-tool-icon" title="Open in New Tab" aria-label="Open in New Tab">
           <i class="fas fa-external-link-alt"></i>
         </a>
         <button id="fullscreenBtn" class="viewer-icon-btn viewer-tool-icon" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle Fullscreen">
           <i class="fas fa-expand"></i>
         </button>
+
+        <!-- Prominent Download Button -->
         <a id="downloadBtn" href="#" download class="viewer-icon-btn viewer-download-icon" title="Download Document" aria-label="Download Document">
           <i class="fas fa-download"></i>
         </a>
@@ -314,7 +502,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="viewer-main">
+    <main class="viewer-main" id="viewerMain">
       <div id="loadingState" class="viewer-state">
         <i class="fas fa-spinner fa-spin fa-2x"></i>
         <p>Loading document...</p>
@@ -331,22 +519,64 @@
         </div>
       </div>
 
+      <!-- Single Page Canvas Container -->
+      <div id="pageContainer" class="page-container" style="display: none;">
+        <canvas id="pdfCanvas"></canvas>
+        <div id="highlightLayer" class="highlight-layer"></div>
+      </div>
+
+      <!-- Fallback native iframe -->
       <iframe id="pdfFrame" class="viewer-iframe" style="display: none;" allow="fullscreen"></iframe>
     </main>
+
+    <!-- Toast Notification -->
+    <div id="viewerToast" class="viewer-toast"></div>
   </div>
 
   <script>
+    // URL Parameters
     const params = new URLSearchParams(window.location.search);
     const fileParam = params.get('file');
     const titleParam = params.get('title');
     const refParam = params.get('ref');
 
+    // DOM Elements
     const docTitle = document.getElementById('docTitle');
+    const viewerMain = document.getElementById('viewerMain');
+    const pageContainer = document.getElementById('pageContainer');
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const highlightLayer = document.getElementById('highlightLayer');
     const pdfFrame = document.getElementById('pdfFrame');
     const loadingState = document.getElementById('loadingState');
     const errorState = document.getElementById('errorState');
     const downloadBtn = document.getElementById('downloadBtn');
     const externalBtn = document.getElementById('externalBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageIndicator = document.getElementById('pageIndicator');
+    const highlightBtn = document.getElementById('highlightBtn');
+    const viewerToast = document.getElementById('viewerToast');
+
+    // Viewer State Variables
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 1;
+    let currentScale = 1.0;
+    let isFitToWindow = true;
+    let currentRenderTask = null;
+    let highlightModeActive = false;
+    let cleanPdfPath = '';
+    let toastTimeout = null;
+
+    // Toast Notification Helper
+    function showToast(msg, duration = 2400) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      viewerToast.innerHTML = msg;
+      viewerToast.classList.add('show');
+      toastTimeout = setTimeout(() => {
+        viewerToast.classList.remove('show');
+      }, duration);
+    }
 
     // Set page title
     if (titleParam) {
@@ -371,9 +601,8 @@
       return 'index.html';
     }
 
-    // Accurate Back navigation: returns to originating subject/page, NOT blindly to index.html
+    // Back Navigation Logic
     function handleBack() {
-      // 1. Explicit return URL parameter
       if (refParam) {
         try {
           const decodedRef = decodeURIComponent(refParam);
@@ -384,7 +613,6 @@
         } catch (e) {}
       }
 
-      // 2. SessionStorage saved return URL
       try {
         const storedRef = sessionStorage.getItem('btechx_viewer_return_url');
         if (storedRef && !storedRef.includes('viewer.html')) {
@@ -394,17 +622,15 @@
         }
       } catch (e) {}
 
-      // 3. Browser history if coming from within the site
       if (window.history.length > 1 && document.referrer && !document.referrer.includes('viewer.html')) {
         window.history.back();
         return;
       }
 
-      // 4. Intelligent fallback based on opened document
       window.location.href = getContextualFallback(fileParam);
     }
 
-    // Fullscreen toggle
+    // Fullscreen Toggle
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => console.debug(err));
@@ -415,42 +641,401 @@
       }
     }
 
-    // Load PDF
+    // --- HIGHLIGHT STORAGE IN BROWSER LOCALSTORAGE ---
+    function getStorageKey() {
+      return `btechx_pdf_hl_${encodeURIComponent(cleanPdfPath)}`;
+    }
+
+    function loadHighlights() {
+      try {
+        const raw = localStorage.getItem(getStorageKey());
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveHighlights(list) {
+      try {
+        localStorage.setItem(getStorageKey(), JSON.stringify(list));
+      } catch (e) {
+        console.warn('LocalStorage save failed', e);
+      }
+    }
+
+    function renderPageHighlights(pageNum) {
+      highlightLayer.innerHTML = '';
+      const allHighlights = loadHighlights();
+      const pageHighlights = allHighlights.filter(h => h.page === pageNum);
+
+      pageHighlights.forEach(h => {
+        const el = document.createElement('div');
+        el.className = 'pdf-highlight';
+        el.dataset.id = h.id;
+        el.style.left = (h.x * 100) + '%';
+        el.style.top = (h.y * 100) + '%';
+        el.style.width = (h.w * 100) + '%';
+        el.style.height = (h.h * 100) + '%';
+
+        // Delete button badge on hover
+        const delBtn = document.createElement('span');
+        delBtn.className = 'hl-del-btn';
+        delBtn.innerHTML = '&times;';
+        delBtn.title = 'Delete Highlight';
+        delBtn.onclick = (e) => {
+          e.stopPropagation();
+          deleteHighlight(h.id);
+        };
+        el.appendChild(delBtn);
+
+        // Click to remove
+        el.onclick = (e) => {
+          e.stopPropagation();
+          deleteHighlight(h.id);
+        };
+
+        highlightLayer.appendChild(el);
+      });
+    }
+
+    function deleteHighlight(id) {
+      let list = loadHighlights();
+      list = list.filter(h => h.id !== id);
+      saveHighlights(list);
+      const el = highlightLayer.querySelector(`[data-id="${id}"]`);
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.85)';
+        setTimeout(() => el.remove(), 160);
+      }
+      showToast('<i class="fas fa-trash-alt"></i> Highlight deleted from storage');
+    }
+
+    // Toggle Highlight Mode
+    function toggleHighlightMode() {
+      highlightModeActive = !highlightModeActive;
+      if (highlightModeActive) {
+        highlightBtn.classList.add('highlight-active');
+        pageContainer.classList.add('highlighting-mode');
+        showToast('<i class="fas fa-highlighter" style="color: #facc15"></i> Highlight Mode ON &bull; Drag over text to highlight');
+      } else {
+        highlightBtn.classList.remove('highlight-active');
+        pageContainer.classList.remove('highlighting-mode');
+        showToast('Highlight Mode OFF');
+      }
+    }
+
+    // Highlight Drag Interaction
+    let isDrawing = false;
+    let dragStartX = 0, dragStartY = 0;
+    let previewEl = null;
+
+    function initHighlightEvents() {
+      const getContainerPos = (e) => {
+        const rect = pageContainer.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: Math.max(0, Math.min(clientX - rect.left, rect.width)),
+          y: Math.max(0, Math.min(clientY - rect.top, rect.height)),
+          rectW: rect.width,
+          rectH: rect.height
+        };
+      };
+
+      const onStart = (e) => {
+        if (!highlightModeActive) return;
+        if (e.target.closest('.hl-del-btn') || e.target.closest('.pdf-highlight')) return;
+
+        const pos = getContainerPos(e);
+        isDrawing = true;
+        dragStartX = pos.x;
+        dragStartY = pos.y;
+
+        previewEl = document.createElement('div');
+        previewEl.className = 'highlight-preview-rect';
+        previewEl.style.left = dragStartX + 'px';
+        previewEl.style.top = dragStartY + 'px';
+        previewEl.style.width = '0px';
+        previewEl.style.height = '0px';
+        highlightLayer.appendChild(previewEl);
+
+        if (e.type === 'touchstart') e.preventDefault();
+      };
+
+      const onMove = (e) => {
+        if (!isDrawing || !previewEl) return;
+        const pos = getContainerPos(e);
+        const left = Math.min(dragStartX, pos.x);
+        const top = Math.min(dragStartY, pos.y);
+        const w = Math.abs(pos.x - dragStartX);
+        const h = Math.abs(pos.y - dragStartY);
+
+        previewEl.style.left = left + 'px';
+        previewEl.style.top = top + 'px';
+        previewEl.style.width = w + 'px';
+        previewEl.style.height = h + 'px';
+
+        if (e.type === 'touchmove') e.preventDefault();
+      };
+
+      const onEnd = (e) => {
+        if (!isDrawing) return;
+        isDrawing = false;
+
+        if (previewEl) {
+          previewEl.remove();
+          previewEl = null;
+        }
+
+        const pos = getContainerPos(e);
+        const left = Math.min(dragStartX, pos.x);
+        const top = Math.min(dragStartY, pos.y);
+        const w = Math.abs(pos.x - dragStartX);
+        const h = Math.abs(pos.y - dragStartY);
+
+        // Require meaningful drag dimensions
+        if (w >= 6 && h >= 4 && pos.rectW > 0 && pos.rectH > 0) {
+          const newHl = {
+            id: 'hl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+            page: currentPage,
+            x: left / pos.rectW,
+            y: top / pos.rectH,
+            w: w / pos.rectW,
+            h: h / pos.rectH,
+            date: Date.now()
+          };
+          const list = loadHighlights();
+          list.push(newHl);
+          saveHighlights(list);
+          renderPageHighlights(currentPage);
+          showToast('<i class="fas fa-check-circle" style="color: #4ade80"></i> Highlight saved to Local Storage');
+        }
+      };
+
+      pageContainer.addEventListener('mousedown', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
+
+      pageContainer.addEventListener('touchstart', onStart, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onEnd);
+    }
+
+    // --- PDF.JS RENDERING & ZOOM ENGINE ---
+
+    // Calculate scale so EXACTLY ONE PAGE fits cleanly in window (single-page view)
+    function calculateFitScale(page) {
+      const unscaled = page.getViewport({ scale: 1.0 });
+      const paddingX = window.innerWidth <= 768 ? 16 : 40;
+      const paddingY = window.innerWidth <= 768 ? 16 : 32;
+      const availW = Math.max(80, viewerMain.clientWidth - paddingX);
+      const availH = Math.max(80, viewerMain.clientHeight - paddingY);
+
+      const scaleW = availW / unscaled.width;
+      const scaleH = availH / unscaled.height;
+
+      // Fit entire page inside window
+      const fit = Math.min(scaleW, scaleH);
+      return Math.max(0.2, Math.min(fit, 3.5));
+    }
+
+    function updateNavUI() {
+      pageIndicator.innerText = `${currentPage} / ${totalPages}`;
+      prevBtn.disabled = currentPage <= 1;
+      nextBtn.disabled = currentPage >= totalPages;
+    }
+
+    function renderPage(pageNum) {
+      if (!pdfDoc) return;
+      updateNavUI();
+
+      if (currentRenderTask) {
+        currentRenderTask.cancel();
+      }
+
+      pdfDoc.getPage(pageNum).then(page => {
+        if (isFitToWindow || currentScale === null) {
+          currentScale = calculateFitScale(page);
+        }
+
+        const viewport = page.getViewport({ scale: currentScale });
+        const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+
+        // Canvas backing dimensions (HiDPI)
+        pdfCanvas.width = Math.floor(viewport.width * pixelRatio);
+        pdfCanvas.height = Math.floor(viewport.height * pixelRatio);
+
+        // Display dimensions
+        const cssW = Math.floor(viewport.width) + 'px';
+        const cssH = Math.floor(viewport.height) + 'px';
+        pdfCanvas.style.width = cssW;
+        pdfCanvas.style.height = cssH;
+
+        pageContainer.style.width = cssW;
+        pageContainer.style.height = cssH;
+
+        const ctx = pdfCanvas.getContext('2d', { alpha: false });
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+
+        currentRenderTask = page.render(renderContext);
+        currentRenderTask.promise.then(() => {
+          currentRenderTask = null;
+          loadingState.style.display = 'none';
+          pageContainer.style.display = 'block';
+          renderPageHighlights(pageNum);
+        }).catch(err => {
+          if (err && err.name !== 'RenderingCancelledException') {
+            console.error('Page render error:', err);
+          }
+        });
+      }).catch(err => {
+        console.error('Error getting page:', err);
+        loadingState.style.display = 'none';
+      });
+    }
+
+    // Page Navigation
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPage(currentPage);
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPage(currentPage);
+      }
+    }
+
+    // Zoom Functions
+    function zoomIn() {
+      isFitToWindow = false;
+      currentScale = Math.min((currentScale || 1.0) * 1.25, 4.0);
+      renderPage(currentPage);
+      showToast(`Zoom: ${Math.round(currentScale * 100)}%`);
+    }
+
+    function zoomOut() {
+      isFitToWindow = false;
+      currentScale = Math.max((currentScale || 1.0) / 1.25, 0.3);
+      renderPage(currentPage);
+      showToast(`Zoom: ${Math.round(currentScale * 100)}%`);
+    }
+
+    function resetView() {
+      isFitToWindow = true;
+      currentScale = null;
+      viewerMain.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      renderPage(currentPage);
+      showToast('<i class="fas fa-compress-arrows-alt"></i> Reset: Fit 1 Page to Window');
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevPage();
+      } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        nextPage();
+      } else if (e.key === '+' || e.key === '=') {
+        zoomIn();
+      } else if (e.key === '-' || e.key === '_') {
+        zoomOut();
+      } else if (e.key === '0' || e.key === 'r' || e.key === 'R') {
+        resetView();
+      } else if (e.key === 'h' || e.key === 'H') {
+        toggleHighlightMode();
+      }
+    });
+
+    // Window Resize Handler: Auto-recalculate fit if in fit-to-window mode
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (isFitToWindow && pdfDoc) {
+          currentScale = null;
+          renderPage(currentPage);
+        }
+      }, 150);
+    });
+
+    // Fallback directly to native iframe if PDF.js library fails to load
+    function fallbackToIframe(cleanFile) {
+      console.warn('PDF.js unavailable, activating native viewer fallback');
+      const embedPdfUrl = `${cleanFile}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
+      pdfFrame.src = embedPdfUrl;
+      pdfFrame.style.display = 'block';
+      pageContainer.style.display = 'none';
+      loadingState.style.display = 'none';
+      highlightBtn.style.display = 'none';
+      document.getElementById('zoomInBtn').style.display = 'none';
+      document.getElementById('zoomOutBtn').style.display = 'none';
+      document.getElementById('zoomResetBtn').style.display = 'none';
+      document.getElementById('pageNavGroup').style.display = 'none';
+    }
+
+    // --- DOCUMENT INITIALIZATION ---
     if (!fileParam || fileParam === '#' || fileParam.includes('javascript:void') || fileParam.trim() === '') {
       loadingState.style.display = 'none';
       errorState.style.display = 'flex';
       downloadBtn.style.display = 'none';
       externalBtn.style.display = 'none';
+      document.getElementById('pageNavGroup').style.display = 'none';
+      highlightBtn.style.display = 'none';
     } else {
-      const cleanFile = decodeURIComponent(fileParam);
-      downloadBtn.href = cleanFile;
-      downloadBtn.setAttribute('download', cleanFile.split('/').pop());
-      externalBtn.href = cleanFile;
+      cleanPdfPath = decodeURIComponent(fileParam);
+      downloadBtn.href = cleanPdfPath;
+      downloadBtn.setAttribute('download', cleanPdfPath.split('/').pop());
+      externalBtn.href = cleanPdfPath;
 
-      // Disable browser native PDF toolbars (Microsoft Edge, Chrome, Acrobat)
-      // and fit page horizontally for distraction-free edge-to-edge reading
-      const embedPdfUrl = `${cleanFile}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
+      // Initialize PDF.js
+      if (typeof pdfjsLib !== 'undefined') {
+        try {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        } catch (e) {
+          console.warn('Worker init warning:', e);
+        }
 
-      // Verify file existence via HEAD request
-      fetch(cleanFile, { method: 'HEAD' })
-        .then(res => {
-          if (res.ok) {
-            pdfFrame.src = embedPdfUrl;
-            pdfFrame.style.display = 'block';
-            loadingState.style.display = 'none';
-          } else {
-            loadingState.style.display = 'none';
-            errorState.style.display = 'flex';
-            downloadBtn.style.display = 'none';
-            externalBtn.style.display = 'none';
-          }
-        })
-        .catch(() => {
-          // Fallback for file:// or offline protocols
-          pdfFrame.src = embedPdfUrl;
-          pdfFrame.style.display = 'block';
-          loadingState.style.display = 'none';
+        const loadingTask = pdfjsLib.getDocument({
+          url: cleanPdfPath,
+          cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+          cMapPacked: true,
         });
+
+        loadingTask.promise.then(pdf => {
+          pdfDoc = pdf;
+          totalPages = pdf.numPages;
+          initHighlightEvents();
+          resetView();
+        }).catch(err => {
+          console.warn('PDF.js loading error:', err);
+          // Verify with HEAD request to distinguish 404 from render error
+          fetch(cleanPdfPath, { method: 'HEAD' })
+            .then(res => {
+              if (res.ok) {
+                fallbackToIframe(cleanPdfPath);
+              } else {
+                loadingState.style.display = 'none';
+                errorState.style.display = 'flex';
+                downloadBtn.style.display = 'none';
+                externalBtn.style.display = 'none';
+              }
+            })
+            .catch(() => fallbackToIframe(cleanPdfPath));
+        });
+      } else {
+        fallbackToIframe(cleanPdfPath);
+      }
     }
   </script>
 </body>
