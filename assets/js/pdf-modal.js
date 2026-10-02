@@ -15,6 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // If running locally via file:// protocol (double-clicked HTML file),
+      // allow browser's native viewer to open the local PDF directly without CORS blockage
+      if (window.location.protocol === "file:") {
+        return;
+      }
+
       e.preventDefault();
 
       let title = "Document Viewer";

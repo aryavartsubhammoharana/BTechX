@@ -796,7 +796,7 @@
         </button>
 
         <!-- Prominent Download Button -->
-        <a id="downloadBtn" href="#" download class="viewer-icon-btn viewer-download-icon" title="Download Document" aria-label="Download Document">
+        <a id="downloadBtn" class="viewer-icon-btn viewer-download-icon" title="Download Document" aria-label="Download Document">
           <i class="fas fa-download"></i>
         </a>
       </div>
@@ -871,8 +871,9 @@
         </div>
       </div>
 
-      <!-- Fallback native iframe -->
+      <!-- Fallback native iframe & embed for local file:// support -->
       <iframe id="pdfFrame" class="viewer-iframe" style="display: none;" allow="fullscreen"></iframe>
+      <embed id="pdfEmbed" class="viewer-iframe" style="display: none;" type="application/pdf">
     </main>
 
     <!-- Toast Notification -->
@@ -1884,10 +1885,20 @@
 
     // Fallback directly to native iframe if PDF.js library fails to load
     function fallbackToIframe(cleanFile) {
-      console.warn('PDF.js unavailable, activating native viewer fallback');
+      console.warn('Activating native PDF viewer fallback');
       const embedPdfUrl = `${cleanFile}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
-      pdfFrame.src = embedPdfUrl;
-      pdfFrame.style.display = 'block';
+
+      const pdfEmbed = document.getElementById('pdfEmbed');
+      if (window.location.protocol === 'file:' && pdfEmbed) {
+        pdfEmbed.src = cleanFile;
+        pdfEmbed.style.display = 'block';
+        pdfFrame.style.display = 'none';
+      } else {
+        pdfFrame.src = embedPdfUrl;
+        pdfFrame.style.display = 'block';
+        if (pdfEmbed) pdfEmbed.style.display = 'none';
+      }
+
       scrollContainer.style.display = 'none';
       bookContainer.style.display = 'none';
       singleContainer.style.display = 'none';
@@ -1913,14 +1924,21 @@
       document.getElementById('modeMenuBtn').style.display = 'none';
     } else {
       cleanPdfPath = decodeURIComponent(fileParam);
+
+      // Safe download button setup (never downloads HTML page)
       downloadBtn.href = cleanPdfPath;
       downloadBtn.setAttribute('download', cleanPdfPath.split('/').pop());
+      downloadBtn.onclick = (e) => {
+        if (!cleanPdfPath || cleanPdfPath === '#') {
+          e.preventDefault();
+        }
+      };
       externalBtn.href = cleanPdfPath;
 
-      // --- MOBILE: DIRECT STRAIGHT TO GOOGLE DRIVE ---
-      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                             (window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+      const isFileProtocol = window.location.protocol === 'file:';
+      const isMobileDevice = !isFileProtocol && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+      // --- MOBILE: DIRECT STRAIGHT TO GOOGLE DRIVE (Only for actual smartphones/tablets over HTTP/HTTPS) ---
       if (isMobileDevice) {
         const absoluteUrl = new URL(cleanPdfPath, window.location.href).href;
         const gDriveUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(absoluteUrl)}`;
@@ -1928,24 +1946,21 @@
         loadingState.style.display = 'none';
         const mobileRedirectState = document.getElementById('mobileRedirectState');
         const manualDriveBtn = document.getElementById('manualDriveBtn');
-        const mobileRedirectMsg = document.getElementById('mobileRedirectMsg');
 
         if (mobileRedirectState) mobileRedirectState.style.display = 'flex';
         if (manualDriveBtn) manualDriveBtn.href = gDriveUrl;
 
-        const isLocalhost = window.location.hostname === 'localhost' || 
-                            window.location.hostname === '127.0.0.1' || 
-                            window.location.protocol === 'file:';
-
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (!isLocalhost) {
           window.location.replace(gDriveUrl);
           return;
-        } else {
-          if (mobileRedirectMsg) {
-            mobileRedirectMsg.innerHTML = 'Mobile mode detected.<br><span style="color: #facc15;">On the live site, this automatically opens directly in Google Drive.</span><br><small style="color: #71717a;">(Localhost URLs cannot be fetched by Google servers)</small>';
-          }
-          return;
         }
+      }
+
+      // If running on local file:// protocol, bypass PDF.js worker/fetch restrictions directly
+      if (isFileProtocol) {
+        fallbackToIframe(cleanPdfPath);
+        return;
       }
 
       if (typeof pdfjsLib !== 'undefined') {
