@@ -380,9 +380,7 @@
       z-index: 25;
     }
 
-    /* ========================================================
-       MODE 1: CONTINUOUS SCROLL CONTAINER (DEFAULT)
-       ======================================================== */
+    /* Mode 1: Continuous Scroll Container */
     .scroll-container {
       display: flex;
       flex-direction: column;
@@ -423,9 +421,7 @@
       opacity: 1;
     }
 
-    /* ========================================================
-       MODE 2: TWO PAGES BOOK FLIP (3D Authentic Page Turn)
-       ======================================================== */
+    /* Mode 2: Two Pages Book Flip (3D) */
     .book-outer-wrapper {
       margin: auto;
       perspective: 2600px;
@@ -544,9 +540,7 @@
       background: linear-gradient(to left, rgba(0,0,0,0.35), transparent 70%);
     }
 
-    /* ========================================================
-       MODE 3: SINGLE PAGE FIT/SLIDE (Window Fit)
-       ======================================================== */
+    /* Mode 3: Single Page Fit/Slide */
     .single-page-wrapper {
       margin: auto;
       display: flex;
@@ -1271,9 +1265,7 @@
       window.addEventListener('touchend', onEnd);
     }
 
-    // ========================================================
-    // MODE 1: CONTINUOUS SCROLL VIEW IMPLEMENTATION (DEFAULT)
-    // ========================================================
+    // Mode 1: Continuous Scroll View
     function initScrollView() {
       if (scrollContainer.children.length === 0) {
         buildScrollSlots();
@@ -1475,9 +1467,7 @@
       }
     }
 
-    // ========================================================
-    // MODE 2: TWO PAGES BOOK FLIP IMPLEMENTATION (AUTHENTIC 3D)
-    // ========================================================
+    // Mode 2: Two Pages Book Flip (3D)
     function initBookView() {
       if (currentBookSpread % 2 === 0) currentBookSpread--; // Keep spread odd (1, 3, 5...)
       renderBookSpread(currentBookSpread);
@@ -1485,14 +1475,21 @@
 
     function renderPageToCanvas(pageNumber, canvasEl, width, height) {
       return new Promise((resolve) => {
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+        const targetW = Math.floor(width * pixelRatio);
+        const targetH = Math.floor(height * pixelRatio);
+
         if (pageNumber > totalPages || pageNumber < 1) {
-          // Blank clean page for odd end
+          if (canvasEl.width !== targetW || canvasEl.height !== targetH) {
+            canvasEl.width = targetW;
+            canvasEl.height = targetH;
+            canvasEl.style.width = width + 'px';
+            canvasEl.style.height = height + 'px';
+          }
           const ctx = canvasEl.getContext('2d');
-          canvasEl.width = width;
-          canvasEl.height = height;
           ctx.fillStyle = '#f8f8f9';
-          ctx.fillRect(0, 0, width, height);
-          resolve();
+          ctx.fillRect(0, 0, targetW, targetH);
+          resolve(canvasEl);
           return;
         }
 
@@ -1500,21 +1497,30 @@
           const unscaled = page.getViewport({ scale: 1.0 });
           const scale = width / unscaled.width;
           const viewport = page.getViewport({ scale: scale });
-          const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 
-          canvasEl.width = Math.floor(width * pixelRatio);
-          canvasEl.height = Math.floor(height * pixelRatio);
-          canvasEl.style.width = width + 'px';
-          canvasEl.style.height = height + 'px';
-
-          const ctx = canvasEl.getContext('2d', { alpha: false });
-          ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+          // Render to offscreen buffer first to eliminate any white blink/flash
+          const offscreen = document.createElement('canvas');
+          offscreen.width = targetW;
+          offscreen.height = targetH;
+          const offCtx = offscreen.getContext('2d', { alpha: false });
+          offCtx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
           page.render({
-            canvasContext: ctx,
+            canvasContext: offCtx,
             viewport: viewport
-          }).promise.then(() => resolve()).catch(() => resolve());
-        }).catch(() => resolve());
+          }).promise.then(() => {
+            if (canvasEl.width !== targetW || canvasEl.height !== targetH) {
+              canvasEl.width = targetW;
+              canvasEl.height = targetH;
+              canvasEl.style.width = width + 'px';
+              canvasEl.style.height = height + 'px';
+            }
+            const ctx = canvasEl.getContext('2d', { alpha: false });
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.drawImage(offscreen, 0, 0);
+            resolve(offscreen);
+          }).catch(() => resolve(null));
+        }).catch(() => resolve(null));
       });
     }
 
@@ -1522,8 +1528,6 @@
       const unscaled = page.getViewport({ scale: 1.0 });
       const availW = Math.max(100, viewerMain.clientWidth - 40);
       const availH = Math.max(100, viewerMain.clientHeight - 40);
-
-      // Book displays 2 pages side-by-side
       const twoPageRatio = (unscaled.width * 2) / unscaled.height;
       let bookW, bookH;
 
@@ -1547,7 +1551,6 @@
 
         bookViewport.style.width = (singlePageW * 2) + 'px';
         bookViewport.style.height = bookH + 'px';
-
         bookLeft.style.width = singlePageW + 'px';
         bookLeft.style.height = bookH + 'px';
         bookRight.style.width = singlePageW + 'px';
@@ -1555,7 +1558,6 @@
 
         const rightPageNum = leftPageNum + 1;
 
-        // Render Left and Right pages
         renderPageToCanvas(leftPageNum, bookCanvasLeft, singlePageW, bookH).then(() => {
           renderHighlightsInLayer(bookHlLeft, leftPageNum);
         });
@@ -1570,16 +1572,12 @@
 
     function updateNavBook() {
       const rightPage = Math.min(currentBookSpread + 1, totalPages);
-      if (totalPages === 1) {
-        pageIndicator.innerText = `Page 1 / 1`;
-      } else {
-        pageIndicator.innerText = `Pages ${currentBookSpread}-${rightPage} / ${totalPages}`;
-      }
+      pageIndicator.innerText = totalPages === 1 ? 'Page 1 / 1' : `Pages ${currentBookSpread}-${rightPage} / ${totalPages}`;
       prevBtn.disabled = currentBookSpread <= 1;
       nextBtn.disabled = currentBookSpread + 1 >= totalPages;
     }
 
-    // Book 3D Page Turn: Next (Forward)
+    // Ultra-Smooth 3D Book Page Turn: Next (Forward) - 100% Zero-Blink
     function flipBookNext() {
       if (isFlipping || !pdfDoc) return;
       const nextSpreadLeft = currentBookSpread + 2;
@@ -1592,47 +1590,53 @@
         const newLeft = nextSpreadLeft;
         const newRight = nextSpreadLeft + 1;
 
-        // Setup static background
-        renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
-        renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
-
-        // Setup flipping sheet
-        bookFlipSheet.className = 'book-flip-sheet flip-forward';
-        bookFlipSheet.style.width = singlePageW + 'px';
-        bookFlipSheet.style.height = bookH + 'px';
-        bookFlipSheet.style.transition = 'none';
-        bookFlipSheet.style.transform = 'rotateY(0deg)';
-        bookFlipSheet.style.display = 'block';
-
+        // Pre-render newLeft and newRight before starting animation so there is zero flicker
         Promise.all([
           renderPageToCanvas(oldRight, flipCanvasFront, singlePageW, bookH),
-          renderPageToCanvas(newLeft, flipCanvasBack, singlePageW, bookH)
+          renderPageToCanvas(newLeft, flipCanvasBack, singlePageW, bookH),
+          renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH)
         ]).then(() => {
+          bookFlipSheet.className = 'book-flip-sheet flip-forward';
+          bookFlipSheet.style.width = singlePageW + 'px';
+          bookFlipSheet.style.height = bookH + 'px';
+          bookFlipSheet.style.transition = 'none';
+          bookFlipSheet.style.transform = 'rotateY(0deg)';
+          bookFlipSheet.style.display = 'block';
+
           bookFlipSheet.offsetHeight; // Force reflow
-          bookFlipSheet.style.transition = 'transform 0.58s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          bookFlipSheet.style.transition = 'transform 0.52s cubic-bezier(0.25, 1, 0.5, 1)';
           bookFlipSheet.style.transform = 'rotateY(-180deg)';
           flipShadowFront.style.opacity = '1';
 
-          setTimeout(() => {
+          let finished = false;
+          const completeFlip = () => {
+            if (finished) return;
+            finished = true;
             currentBookSpread = nextSpreadLeft;
             currentPage = currentBookSpread;
-            renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
-            renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
-            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
-            renderHighlightsInLayer(bookHlRight, newRight);
+
+            const ctxLeft = bookCanvasLeft.getContext('2d');
+            ctxLeft.setTransform(1, 0, 0, 1, 0, 0);
+            ctxLeft.drawImage(flipCanvasBack, 0, 0);
 
             bookFlipSheet.style.display = 'none';
             bookFlipSheet.style.transition = 'none';
             bookFlipSheet.style.transform = 'rotateY(0deg)';
             flipShadowFront.style.opacity = '0';
+
+            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
+            renderHighlightsInLayer(bookHlRight, newRight);
             updateNavBook();
             isFlipping = false;
-          }, 600);
+          };
+
+          bookFlipSheet.addEventListener('transitionend', completeFlip, { once: true });
+          setTimeout(completeFlip, 560);
         });
       });
     }
 
-    // Book 3D Page Turn: Prev (Backward)
+    // Ultra-Smooth 3D Book Page Turn: Prev (Backward) - 100% Zero-Blink
     function flipBookPrev() {
       if (isFlipping || !pdfDoc) return;
       if (currentBookSpread <= 1) return;
@@ -1643,45 +1647,49 @@
       pdfDoc.getPage(1).then(firstPage => {
         const { singlePageW, bookH } = calculateBookDimensions(firstPage);
         const oldLeft = currentBookSpread;
-        const oldRight = currentBookSpread + 1;
         const newLeft = prevSpreadLeft;
         const newRight = prevSpreadLeft + 1;
 
-        // Static background
-        renderPageToCanvas(newLeft, bookCanvasLeft, singlePageW, bookH);
-        renderPageToCanvas(oldRight, bookCanvasRight, singlePageW, bookH);
-
-        // Setup flipping sheet
-        bookFlipSheet.className = 'book-flip-sheet flip-backward';
-        bookFlipSheet.style.width = singlePageW + 'px';
-        bookFlipSheet.style.height = bookH + 'px';
-        bookFlipSheet.style.transition = 'none';
-        bookFlipSheet.style.transform = 'rotateY(-180deg)';
-        bookFlipSheet.style.display = 'block';
-
         Promise.all([
           renderPageToCanvas(oldLeft, flipCanvasFront, singlePageW, bookH),
-          renderPageToCanvas(newRight, flipCanvasBack, singlePageW, bookH)
+          renderPageToCanvas(newRight, flipCanvasBack, singlePageW, bookH),
+          renderPageToCanvas(newLeft, bookCanvasLeft, singlePageW, bookH)
         ]).then(() => {
-          bookFlipSheet.offsetHeight; // Force reflow
-          bookFlipSheet.style.transition = 'transform 0.58s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          bookFlipSheet.className = 'book-flip-sheet flip-backward';
+          bookFlipSheet.style.width = singlePageW + 'px';
+          bookFlipSheet.style.height = bookH + 'px';
+          bookFlipSheet.style.transition = 'none';
+          bookFlipSheet.style.transform = 'rotateY(-180deg)';
+          bookFlipSheet.style.display = 'block';
+
+          bookFlipSheet.offsetHeight;
+          bookFlipSheet.style.transition = 'transform 0.52s cubic-bezier(0.25, 1, 0.5, 1)';
           bookFlipSheet.style.transform = 'rotateY(0deg)';
           flipShadowBack.style.opacity = '1';
 
-          setTimeout(() => {
+          let finished = false;
+          const completeFlip = () => {
+            if (finished) return;
+            finished = true;
             currentBookSpread = prevSpreadLeft;
             currentPage = currentBookSpread;
-            renderPageToCanvas(currentBookSpread, bookCanvasLeft, singlePageW, bookH);
-            renderPageToCanvas(newRight, bookCanvasRight, singlePageW, bookH);
-            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
-            renderHighlightsInLayer(bookHlRight, newRight);
+
+            const ctxRight = bookCanvasRight.getContext('2d');
+            ctxRight.setTransform(1, 0, 0, 1, 0, 0);
+            ctxRight.drawImage(flipCanvasBack, 0, 0);
 
             bookFlipSheet.style.display = 'none';
             bookFlipSheet.style.transition = 'none';
             flipShadowBack.style.opacity = '0';
+
+            renderHighlightsInLayer(bookHlLeft, currentBookSpread);
+            renderHighlightsInLayer(bookHlRight, newRight);
             updateNavBook();
             isFlipping = false;
-          }, 600);
+          };
+
+          bookFlipSheet.addEventListener('transitionend', completeFlip, { once: true });
+          setTimeout(completeFlip, 560);
         });
       });
     }
@@ -1700,9 +1708,7 @@
     bindHighlightDragEvents(bookLeft, () => currentBookSpread, () => bookHlLeft);
     bindHighlightDragEvents(bookRight, () => currentBookSpread + 1, () => bookHlRight);
 
-    // ========================================================
-    // MODE 3: SINGLE PAGE FIT/SLIDE IMPLEMENTATION
-    // ========================================================
+    // Mode 3: Single Page Fit/Slide
     function initSingleView() {
       renderSinglePage(currentPage);
     }
@@ -1775,9 +1781,7 @@
     // Bind single mode highlight drag handler
     bindHighlightDragEvents(pageContainer, () => currentPage, () => highlightLayer);
 
-    // ========================================================
-    // GLOBAL NAVIGATION & ZOOM CONTROLS
-    // ========================================================
+    // Navigation & Zoom Controls
     function prevPage() {
       if (currentMode === 'scroll') {
         scrollToPage(currentPage - 1);
@@ -1916,12 +1920,6 @@
       bookContainer.style.display = 'none';
       singleContainer.style.display = 'none';
       loadingState.style.display = 'none';
-      highlightBtn.style.display = 'none';
-      document.getElementById('zoomInBtn').style.display = 'none';
-      document.getElementById('zoomOutBtn').style.display = 'none';
-      document.getElementById('zoomResetBtn').style.display = 'none';
-      document.getElementById('pageNavGroup').style.display = 'none';
-      document.getElementById('modeMenuBtn').style.display = 'none';
     }
 
     // --- INITIALIZATION ---
@@ -2019,15 +2017,6 @@
           console.warn('Worker init warning:', e);
         }
 
-        // Watchdog: If PDF.js takes more than 3.5 seconds, instantly fallback to native viewer
-        let isLoadedSuccessfully = false;
-        const speedWatchdog = setTimeout(() => {
-          if (!isLoadedSuccessfully) {
-            console.warn('PDF.js taking too long, instantly falling back to native high-speed viewer');
-            fallbackToIframe(cleanPdfPath);
-          }
-        }, 3500);
-
         const loadingTask = pdfjsLib.getDocument({
           url: cleanPdfPath,
           disableAutoFetch: false,
@@ -2035,14 +2024,11 @@
         });
 
         loadingTask.promise.then(pdf => {
-          isLoadedSuccessfully = true;
-          clearTimeout(speedWatchdog);
           pdfDoc = pdf;
           totalPages = pdf.numPages;
           loadingState.style.display = 'none';
           applyViewMode();
         }).catch(err => {
-          clearTimeout(speedWatchdog);
           console.warn('PDF.js loading error:', err);
           fallbackToIframe(cleanPdfPath);
         });
