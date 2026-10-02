@@ -945,6 +945,7 @@
     let renderedScrollPages = new Set();
     let scrollObserver = null;
     let singleRenderTask = null;
+    const activeScrollTasks = new Map();
 
     // Toast Notification Helper
     function showToast(msg, duration = 2400) {
@@ -1404,14 +1405,26 @@
         const ctx = cvs.getContext('2d', { alpha: false });
         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-        page.render({
+        if (activeScrollTasks.has(pageNum)) {
+          try {
+            activeScrollTasks.get(pageNum).cancel();
+          } catch(e) {}
+          activeScrollTasks.delete(pageNum);
+        }
+
+        const renderTask = page.render({
           canvasContext: ctx,
           viewport: viewport
-        }).promise.then(() => {
+        });
+        activeScrollTasks.set(pageNum, renderTask);
+
+        renderTask.promise.then(() => {
+          activeScrollTasks.delete(pageNum);
           renderingScrollPages.delete(pageNum);
           renderedScrollPages.add(pageNum);
           renderHighlightsInLayer(hlLayer, pageNum);
         }).catch(err => {
+          activeScrollTasks.delete(pageNum);
           renderingScrollPages.delete(pageNum);
           if (err && err.name !== 'RenderingCancelledException') {
             console.warn('Scroll render error:', err);
@@ -1912,25 +1925,61 @@
     }
 
     // --- INITIALIZATION ---
-    updateModeUI();
+    function initViewer() {
+      updateModeUI();
 
-    if (!fileParam || fileParam === '#' || fileParam.includes('javascript:void') || fileParam.trim() === '') {
-      loadingState.style.display = 'none';
-      errorState.style.display = 'flex';
-      downloadBtn.style.display = 'none';
-      externalBtn.style.display = 'none';
-      document.getElementById('pageNavGroup').style.display = 'none';
-      highlightBtn.style.display = 'none';
-      document.getElementById('modeMenuBtn').style.display = 'none';
-    } else {
+      if (!fileParam || fileParam === '#' || fileParam.includes('javascript:void') || fileParam.trim() === '') {
+        loadingState.style.display = 'none';
+        errorState.style.display = 'flex';
+        downloadBtn.style.display = 'none';
+        externalBtn.style.display = 'none';
+        document.getElementById('pageNavGroup').style.display = 'none';
+        highlightBtn.style.display = 'none';
+        document.getElementById('modeMenuBtn').style.display = 'none';
+        return;
+      }
+
       cleanPdfPath = decodeURIComponent(fileParam);
 
       // Safe download button setup (never downloads HTML page)
+      const downloadFileName = cleanPdfPath.split('/').pop().split('?')[0] || 'document.pdf';
       downloadBtn.href = cleanPdfPath;
-      downloadBtn.setAttribute('download', cleanPdfPath.split('/').pop());
+      downloadBtn.setAttribute('download', downloadFileName);
+
       downloadBtn.onclick = (e) => {
-        if (!cleanPdfPath || cleanPdfPath === '#') {
+        if (!cleanPdfPath || cleanPdfPath === '#' || !cleanPdfPath.toLowerCase().endsWith('.pdf')) {
           e.preventDefault();
+          showToast('<i class="fas fa-exclamation-circle" style="color: #f87171"></i> PDF download unavailable for this item');
+          return;
+        }
+
+        // On HTTP/HTTPS servers, fetch as binary blob to verify it is NOT an HTML error page
+        if (window.location.protocol.startsWith('http')) {
+          e.preventDefault();
+          showToast('<i class="fas fa-arrow-down"></i> Downloading document...');
+          fetch(cleanPdfPath)
+            .then(res => {
+              const ct = (res.headers.get('content-type') || '').toLowerCase();
+              if (!res.ok || ct.includes('text/html')) {
+                throw new Error('Server returned HTML or 404 instead of PDF');
+              }
+              return res.blob();
+            })
+            .then(blob => {
+              const blobUrl = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = blobUrl;
+              a.download = downloadFileName;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
+            })
+            .catch(err => {
+              console.warn('Blob download error:', err);
+              // Fallback to direct navigation only if it's the actual PDF
+              window.open(cleanPdfPath, '_blank');
+            });
         }
       };
       externalBtn.href = cleanPdfPath;
@@ -2001,6 +2050,8 @@
         fallbackToIframe(cleanPdfPath);
       }
     }
+
+    initViewer();
   </script>
 </body>
 </html>
