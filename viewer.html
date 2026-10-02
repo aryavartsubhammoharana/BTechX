@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Document Viewer - BTechX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=16.0">
+  <link rel="stylesheet" href="styles.css?v=16.2">
   <link rel="icon" type="image/png" href="logo.png?v=7">
-  <!-- PDF.js Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- PDF.js Library (Local for ultra-fast instant loading) -->
+  <script src="assets/js/pdf.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -1329,6 +1328,7 @@
         }
 
         setupScrollObserver();
+        renderScrollPage(1);
       });
     }
 
@@ -1345,8 +1345,9 @@
             pContainer.style.height = pageH + 'px';
           }
         }
-        // Re-render visible pages
-        renderedScrollPages.forEach(pNum => renderScrollPage(pNum));
+        renderedScrollPages.clear();
+        renderingScrollPages.clear();
+        renderScrollPage(currentPage);
       });
     }
 
@@ -1362,7 +1363,7 @@
         });
       }, {
         root: viewerMain,
-        rootMargin: '350px 0px 350px 0px'
+        rootMargin: '300px 0px 300px 0px'
       });
 
       for (let i = 1; i <= totalPages; i++) {
@@ -1371,16 +1372,25 @@
       }
     }
 
+    const renderingScrollPages = new Set();
+
     function renderScrollPage(pageNum) {
       if (!pdfDoc) return;
+      if (renderedScrollPages.has(pageNum) || renderingScrollPages.has(pageNum)) return;
+
+      renderingScrollPages.add(pageNum);
+
       pdfDoc.getPage(pageNum).then(page => {
         const cvs = document.getElementById(`scrollCanvas-${pageNum}`);
         const pContainer = document.getElementById(`pageContainer-scroll-${pageNum}`);
         const hlLayer = document.getElementById(`scrollHl-${pageNum}`);
-        if (!cvs || !pContainer) return;
+        if (!cvs || !pContainer) {
+          renderingScrollPages.delete(pageNum);
+          return;
+        }
 
         const viewport = page.getViewport({ scale: scaleScroll });
-        const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 
         cvs.width = Math.floor(viewport.width * pixelRatio);
         cvs.height = Math.floor(viewport.height * pixelRatio);
@@ -1397,13 +1407,17 @@
           canvasContext: ctx,
           viewport: viewport
         }).promise.then(() => {
+          renderingScrollPages.delete(pageNum);
           renderedScrollPages.add(pageNum);
           renderHighlightsInLayer(hlLayer, pageNum);
         }).catch(err => {
+          renderingScrollPages.delete(pageNum);
           if (err && err.name !== 'RenderingCancelledException') {
             console.warn('Scroll render error:', err);
           }
         });
+      }).catch(() => {
+        renderingScrollPages.delete(pageNum);
       });
     }
 
@@ -1472,7 +1486,7 @@
           const unscaled = page.getViewport({ scale: 1.0 });
           const scale = width / unscaled.width;
           const viewport = page.getViewport({ scale: scale });
-          const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+          const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 
           canvasEl.width = Math.floor(width * pixelRatio);
           canvasEl.height = Math.floor(height * pixelRatio);
@@ -1706,7 +1720,7 @@
         }
 
         const viewport = page.getViewport({ scale: scaleSingle });
-        const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 
         pdfCanvas.width = Math.floor(viewport.width * pixelRatio);
         pdfCanvas.height = Math.floor(viewport.height * pixelRatio);
@@ -1936,36 +1950,37 @@
 
       if (typeof pdfjsLib !== 'undefined') {
         try {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+          pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('assets/js/pdf.worker.min.js', window.location.href).href;
         } catch (e) {
           console.warn('Worker init warning:', e);
         }
 
+        // Watchdog: If PDF.js takes more than 3.5 seconds, instantly fallback to native viewer
+        let isLoadedSuccessfully = false;
+        const speedWatchdog = setTimeout(() => {
+          if (!isLoadedSuccessfully) {
+            console.warn('PDF.js taking too long, instantly falling back to native high-speed viewer');
+            fallbackToIframe(cleanPdfPath);
+          }
+        }, 3500);
+
         const loadingTask = pdfjsLib.getDocument({
           url: cleanPdfPath,
-          cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-          cMapPacked: true,
+          disableAutoFetch: false,
+          disableStream: false
         });
 
         loadingTask.promise.then(pdf => {
+          isLoadedSuccessfully = true;
+          clearTimeout(speedWatchdog);
           pdfDoc = pdf;
           totalPages = pdf.numPages;
           loadingState.style.display = 'none';
           applyViewMode();
         }).catch(err => {
+          clearTimeout(speedWatchdog);
           console.warn('PDF.js loading error:', err);
-          fetch(cleanPdfPath, { method: 'HEAD' })
-            .then(res => {
-              if (res.ok) {
-                fallbackToIframe(cleanPdfPath);
-              } else {
-                loadingState.style.display = 'none';
-                errorState.style.display = 'flex';
-                downloadBtn.style.display = 'none';
-                externalBtn.style.display = 'none';
-              }
-            })
-            .catch(() => fallbackToIframe(cleanPdfPath));
+          fallbackToIframe(cleanPdfPath);
         });
       } else {
         fallbackToIframe(cleanPdfPath);
