@@ -47,13 +47,14 @@
 
     .showcase-content h2 {
       font-family: 'Dancing Script', cursive;
-      font-size: 3.2rem;
+      font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 700;
       margin-bottom: 16px;
       background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       padding-bottom: 5px;
+      word-break: break-word;
       /* prevents clipping of cursive bottoms */
     }
 
@@ -146,6 +147,24 @@
 
       .tools-showcase {
         gap: 80px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-showcase {
+        padding: 40px 0;
+        gap: 48px;
+      }
+      .showcase-content p {
+        margin-bottom: 24px;
+        font-size: 0.9rem;
+      }
+      .showcase-btn {
+        padding: 12px 26px;
+        font-size: 14px;
+      }
+      .showcase-image {
+        border-radius: 16px;
       }
     }
   </style>
@@ -267,10 +286,11 @@
           <div class="logo-text">BTechX</div>
           <p>A free academic resource platform for B.Tech students. BTechX is powered by <a href="https://itsme-gilt.vercel.app" target="_blank" style="color: #ffffff; text-decoration: underline;">DLM</a>.</p>
           <div class="footer-social">
-            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank" title="Instagram"><i
                 class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank"><i
+            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank" title="LinkedIn"><i
                 class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/SubhamM17005388" target="_blank" title="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
           </div>
         </div>
         <div class="footer-col">
@@ -311,7 +331,7 @@
 
   <script src="assets/js/nav.js"></script>
   <script src="assets/js/pdf-modal.js?v=15.7"></script>
-  <script src="assets/js/version-check.js?v=15.7"></script>
+  <script src="assets/js/version-check.js?v=16.7"></script>
   <script>
     // Play video only on hover (mouseenter) and pause/reset on leave
     document.querySelectorAll('.showcase-item').forEach(item => {

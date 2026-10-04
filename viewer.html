@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document Viewer - BTechX</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=16.2">
+  <link rel="stylesheet" href="styles.css?v=16.8">
   <link rel="icon" type="image/png" href="logo.png?v=7">
   <!-- PDF.js Library (Local for ultra-fast instant loading) -->
   <script src="assets/js/pdf.min.js"></script>
@@ -301,7 +301,18 @@
       border-radius: 4px;
       user-select: none;
       touch-action: pan-x pan-y;
-      transition: box-shadow 0.2s ease;
+      transition: box-shadow 0.2s ease, opacity 0.22s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .page-container.turn-slide-left {
+      opacity: 0 !important;
+      transform: translateX(-24px) scale(0.985);
+    }
+
+    .page-container.turn-slide-right {
+      opacity: 0 !important;
+      transform: translateX(24px) scale(0.985);
     }
 
     .page-container.highlighting-mode {
@@ -424,7 +435,7 @@
     /* Mode 2: Two Pages Book Flip (3D) */
     .book-outer-wrapper {
       margin: auto;
-      perspective: 2600px;
+      perspective: 1800px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -438,7 +449,7 @@
       border-radius: 6px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0,0,0,0.6);
       transform-style: preserve-3d;
-      transition: width 0.2s ease, height 0.2s ease;
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* Center Book Fold Spine Shadow */
@@ -447,9 +458,9 @@
       top: 0;
       bottom: 0;
       left: 50%;
-      width: 32px;
+      width: 36px;
       transform: translateX(-50%);
-      background: linear-gradient(to right, rgba(0,0,0,0.18), rgba(0,0,0,0.02) 42%, rgba(0,0,0,0.02) 58%, rgba(0,0,0,0.18));
+      background: linear-gradient(to right, rgba(0,0,0,0.22), rgba(0,0,0,0.03) 42%, rgba(0,0,0,0.03) 58%, rgba(0,0,0,0.22));
       z-index: 15;
       pointer-events: none;
     }
@@ -461,17 +472,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: transform 0.2s ease;
     }
 
     .book-left {
-      box-shadow: inset -10px 0 20px -8px rgba(0, 0, 0, 0.2);
+      box-shadow: inset -12px 0 24px -8px rgba(0, 0, 0, 0.22);
       border-top-left-radius: 6px;
       border-bottom-left-radius: 6px;
       cursor: pointer;
     }
 
     .book-right {
-      box-shadow: inset 10px 0 20px -8px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 12px 0 24px -8px rgba(0, 0, 0, 0.22);
       border-top-right-radius: 6px;
       border-bottom-right-radius: 6px;
       cursor: pointer;
@@ -488,6 +500,7 @@
       z-index: 25;
       pointer-events: none;
       will-change: transform;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.32));
     }
 
     .book-flip-sheet.flip-forward {
@@ -528,16 +541,16 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      transition: opacity 0.5s ease;
       opacity: 0;
+      will-change: opacity;
     }
 
     .flip-front .flip-shadow {
-      background: linear-gradient(to right, rgba(0,0,0,0.35), transparent 70%);
+      background: linear-gradient(to right, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.12) 36%, transparent 80%);
     }
 
     .flip-back .flip-shadow {
-      background: linear-gradient(to left, rgba(0,0,0,0.35), transparent 70%);
+      background: linear-gradient(to left, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.12) 36%, transparent 80%);
     }
 
     /* Mode 3: Single Page Fit/Slide */
@@ -668,10 +681,10 @@
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .viewer-header {
-        height: 42px;
-        min-height: 42px;
+        height: 48px;
+        min-height: 48px;
         padding: 0 8px;
         gap: 5px;
       }
@@ -685,12 +698,17 @@
         display: none;
       }
       .viewer-icon-btn {
-        padding: 5px;
+        min-width: 36px;
+        min-height: 36px;
+        padding: 7px;
         font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
       .page-indicator {
-        font-size: 11px;
-        padding: 0 2px;
+        font-size: 11.5px;
+        padding: 0 3px;
       }
       .viewer-main {
         padding: 6px;
@@ -698,6 +716,31 @@
       .mode-dropdown {
         right: -20px;
         width: 220px;
+      }
+    }
+
+    /* Tablet Header (601px - 1024px) */
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .viewer-header {
+        height: 52px;
+        padding: 0 16px;
+        gap: 10px;
+      }
+      .viewer-brand {
+        display: none;
+      }
+      .viewer-title {
+        display: block !important;
+        font-size: 13.5px;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .viewer-icon-btn {
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 16px;
       }
     }
   </style>
@@ -976,6 +1019,22 @@
 
     // Accurate Back navigation
     function handleBack() {
+      // Check if an update arrived while student was reading PDF
+      try {
+        const pending = localStorage.getItem('btechx_pending_update');
+        if (pending) {
+          localStorage.removeItem('btechx_pending_update');
+          const returnTarget = refParam ? decodeURIComponent(refParam) : (sessionStorage.getItem('btechx_viewer_return_url') || getContextualFallback(fileParam));
+          if (returnTarget && !returnTarget.includes('viewer.html')) {
+            const urlObj = new URL(returnTarget, window.location.origin);
+            urlObj.searchParams.set('v_sync', Date.now());
+            sessionStorage.removeItem('btechx_viewer_return_url');
+            window.location.href = urlObj.toString();
+            return;
+          }
+        }
+      } catch (e) {}
+
       if (refParam) {
         try {
           const decodedRef = decodeURIComponent(refParam);
@@ -1603,10 +1662,30 @@
           bookFlipSheet.style.transform = 'rotateY(0deg)';
           bookFlipSheet.style.display = 'block';
 
+          // Reset initial lighting for forward turn
+          flipShadowFront.style.transition = 'none';
+          flipShadowFront.style.opacity = '0';
+          flipShadowBack.style.transition = 'none';
+          flipShadowBack.style.opacity = '0.7';
+
           bookFlipSheet.offsetHeight; // Force reflow
-          bookFlipSheet.style.transition = 'transform 0.52s cubic-bezier(0.25, 1, 0.5, 1)';
+
+          const flipDuration = 640;
+          const flipCurve = 'cubic-bezier(0.38, 0.04, 0.18, 1)';
+
+          bookFlipSheet.style.transition = `transform ${flipDuration}ms ${flipCurve}`;
           bookFlipSheet.style.transform = 'rotateY(-180deg)';
-          flipShadowFront.style.opacity = '1';
+
+          // Smooth lighting as front lifts up
+          flipShadowFront.style.transition = `opacity ${Math.round(flipDuration * 0.48)}ms ease-in`;
+          flipShadowFront.style.opacity = '0.75';
+
+          // Smooth lighting as back descends to the left page
+          setTimeout(() => {
+            if (!isFlipping) return;
+            flipShadowBack.style.transition = `opacity ${Math.round(flipDuration * 0.52)}ms ease-out`;
+            flipShadowBack.style.opacity = '0';
+          }, Math.round(flipDuration * 0.44));
 
           let finished = false;
           const completeFlip = () => {
@@ -1623,6 +1702,7 @@
             bookFlipSheet.style.transition = 'none';
             bookFlipSheet.style.transform = 'rotateY(0deg)';
             flipShadowFront.style.opacity = '0';
+            flipShadowBack.style.opacity = '0';
 
             renderHighlightsInLayer(bookHlLeft, currentBookSpread);
             renderHighlightsInLayer(bookHlRight, newRight);
@@ -1631,7 +1711,7 @@
           };
 
           bookFlipSheet.addEventListener('transitionend', completeFlip, { once: true });
-          setTimeout(completeFlip, 560);
+          setTimeout(completeFlip, flipDuration + 40);
         });
       });
     }
@@ -1662,10 +1742,30 @@
           bookFlipSheet.style.transform = 'rotateY(-180deg)';
           bookFlipSheet.style.display = 'block';
 
+          // Reset initial lighting for backward turn
+          flipShadowBack.style.transition = 'none';
+          flipShadowBack.style.opacity = '0';
+          flipShadowFront.style.transition = 'none';
+          flipShadowFront.style.opacity = '0.7';
+
           bookFlipSheet.offsetHeight;
-          bookFlipSheet.style.transition = 'transform 0.52s cubic-bezier(0.25, 1, 0.5, 1)';
+
+          const flipDuration = 640;
+          const flipCurve = 'cubic-bezier(0.38, 0.04, 0.18, 1)';
+
+          bookFlipSheet.style.transition = `transform ${flipDuration}ms ${flipCurve}`;
           bookFlipSheet.style.transform = 'rotateY(0deg)';
-          flipShadowBack.style.opacity = '1';
+
+          // Smooth lighting as back lifts up
+          flipShadowBack.style.transition = `opacity ${Math.round(flipDuration * 0.48)}ms ease-in`;
+          flipShadowBack.style.opacity = '0.75';
+
+          // Smooth lighting as front descends to the right page
+          setTimeout(() => {
+            if (!isFlipping) return;
+            flipShadowFront.style.transition = `opacity ${Math.round(flipDuration * 0.52)}ms ease-out`;
+            flipShadowFront.style.opacity = '0';
+          }, Math.round(flipDuration * 0.44));
 
           let finished = false;
           const completeFlip = () => {
@@ -1681,6 +1781,7 @@
             bookFlipSheet.style.display = 'none';
             bookFlipSheet.style.transition = 'none';
             flipShadowBack.style.opacity = '0';
+            flipShadowFront.style.opacity = '0';
 
             renderHighlightsInLayer(bookHlLeft, currentBookSpread);
             renderHighlightsInLayer(bookHlRight, newRight);
@@ -1689,7 +1790,7 @@
           };
 
           bookFlipSheet.addEventListener('transitionend', completeFlip, { once: true });
-          setTimeout(completeFlip, 560);
+          setTimeout(completeFlip, flipDuration + 40);
         });
       });
     }
@@ -1726,12 +1827,22 @@
       return Math.max(0.2, Math.min(fit, 3.5));
     }
 
-    function renderSinglePage(pageNum) {
+    let isSingleTransitioning = false;
+
+    function renderSinglePage(pageNum, direction) {
       if (!pdfDoc) return;
       updateNavSingle();
 
       if (singleRenderTask) {
         singleRenderTask.cancel();
+      }
+
+      const outClass = direction === 'next' ? 'turn-slide-left' : (direction === 'prev' ? 'turn-slide-right' : '');
+      const inClass = direction === 'next' ? 'turn-slide-right' : (direction === 'prev' ? 'turn-slide-left' : '');
+
+      if (outClass) {
+        isSingleTransitioning = true;
+        pageContainer.classList.add(outClass);
       }
 
       pdfDoc.getPage(pageNum).then(page => {
@@ -1764,9 +1875,23 @@
         singleRenderTask.promise.then(() => {
           singleRenderTask = null;
           renderHighlightsInLayer(highlightLayer, pageNum);
+
+          if (outClass) {
+            pageContainer.classList.remove(outClass);
+            pageContainer.classList.add(inClass);
+            pageContainer.offsetHeight; // trigger reflow
+            requestAnimationFrame(() => {
+              pageContainer.classList.remove(inClass);
+              setTimeout(() => { isSingleTransitioning = false; }, 220);
+            });
+          }
         }).catch(err => {
           if (err && err.name !== 'RenderingCancelledException') {
             console.warn('Single render error:', err);
+          }
+          if (outClass) {
+            pageContainer.classList.remove(outClass, inClass);
+            isSingleTransitioning = false;
           }
         });
       });
@@ -1788,9 +1913,9 @@
       } else if (currentMode === 'book') {
         flipBookPrev();
       } else {
-        if (currentPage > 1) {
+        if (currentPage > 1 && !isSingleTransitioning) {
           currentPage--;
-          renderSinglePage(currentPage);
+          renderSinglePage(currentPage, 'prev');
         }
       }
     }
@@ -1801,12 +1926,45 @@
       } else if (currentMode === 'book') {
         flipBookNext();
       } else {
-        if (currentPage < totalPages) {
+        if (currentPage < totalPages && !isSingleTransitioning) {
           currentPage++;
-          renderSinglePage(currentPage);
+          renderSinglePage(currentPage, 'next');
         }
       }
     }
+
+    // Touch Swipe Gestures for Page Turning (Mobile & Tablet)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    viewerMain.addEventListener('touchstart', (e) => {
+      if (highlightModeActive || e.touches.length > 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
+    }, { passive: true });
+
+    viewerMain.addEventListener('touchend', (e) => {
+      if (highlightModeActive || currentMode === 'scroll') return;
+      if (!touchStartX || !touchStartTime) return;
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+      const elapsedTime = Date.now() - touchStartTime;
+
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4 && elapsedTime < 600) {
+        if (deltaX < 0) {
+          nextPage(); // swipe left -> turn forward
+        } else {
+          prevPage(); // swipe right -> turn backward
+        }
+      }
+      touchStartX = 0;
+      touchStartY = 0;
+      touchStartTime = 0;
+    }, { passive: true });
 
     function zoomIn() {
       if (currentMode === 'scroll') {
@@ -1983,10 +2141,11 @@
       externalBtn.href = cleanPdfPath;
 
       const isFileProtocol = window.location.protocol === 'file:';
-      const isMobileDevice = !isFileProtocol && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isTablet = /iPad/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || (/Android/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent)) || window.innerWidth >= 768;
+      const isSmallPhone = !isFileProtocol && !isTablet && /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-      // --- MOBILE: DIRECT STRAIGHT TO GOOGLE DRIVE (Only for actual smartphones/tablets over HTTP/HTTPS) ---
-      if (isMobileDevice) {
+      // --- MOBILE: DIRECT STRAIGHT TO GOOGLE DRIVE (Only for small compact smartphones over HTTP/HTTPS; iPads & tablets use full native viewer) ---
+      if (isSmallPhone) {
         const absoluteUrl = new URL(cleanPdfPath, window.location.href).href;
         const gDriveUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(absoluteUrl)}`;
 
@@ -2039,5 +2198,6 @@
 
     initViewer();
   </script>
+  <script src="assets/js/version-check.js?v=16.7"></script>
 </body>
 </html>

@@ -29,7 +29,8 @@
       background: var(--bg);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-xl);
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin-bottom: 32px;
     }
 
@@ -124,6 +125,28 @@
       pointer-events: none;
     }
 
+   .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      color: #ffffff !important;
+      font-size: 12.5px;
+      font-weight: 500;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+   .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
     @media(max-width:680px) {
      .syl-table {
         display: block;
@@ -153,6 +176,19 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
+      }
+    }
+
+    @media (min-width: 681px) and (max-width: 1024px) {
+      .syl-table th,
+      .syl-table td {
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      .syl-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
       }
     }
 
@@ -215,10 +251,10 @@
         <h2>All Subjects</h2>
         <div class="section-divider"></div>
       <div class="year-filter">
-        <button class="year-btn active" onclick="switchYear('year-1', this)">1st Year</button>
-        <button class="year-btn" onclick="switchYear('year-2', this)">2nd Year</button>
-        <button class="year-btn" onclick="switchYear('year-3', this)">3rd Year</button>
-        <button class="year-btn" onclick="switchYear('year-4', this)">4th Year</button>
+        <button class="year-btn active" onclick="switchYear('year-1', this)"><span class="desktop-lbl">1st Year</span><span class="mobile-lbl">1</span></button>
+        <button class="year-btn" onclick="switchYear('year-2', this)"><span class="desktop-lbl">2nd Year</span><span class="mobile-lbl">2</span></button>
+        <button class="year-btn" onclick="switchYear('year-3', this)"><span class="desktop-lbl">3rd Year</span><span class="mobile-lbl">3</span></button>
+        <button class="year-btn" onclick="switchYear('year-4', this)"><span class="desktop-lbl">4th Year</span><span class="mobile-lbl">4</span></button>
       </div>
 
         <p>Click "Download" to get the full syllabus PDF for any subject. Click the subject name to access lecture
@@ -518,13 +554,13 @@
                   <div class="syl-name">
                     <div class="syl-icon"><i class="fas fa-leaf"></i></div>
                     <div>
-                      <div class="syl-subject-name">Biology and Enviornmental Science</div>
+                      <div class="syl-subject-name">Biology and Environmental Studies</div>
                     </div>
                   </div>
                 </td>
-                <td><span class="badge badge-gray">TBD</span></td>
+                <td><span class="badge badge-purple">CY202</span></td>
                 <td><a href="javascript:void(0)" class="syl-link unavailable"><i class="fas fa-download"></i> Download</a></td>
-                <td><a href="javascript:void(0)" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Coming Soon</a></td>
+                <td><a href="2ndYearSub/bevs.html" class="btn btn-outline" style="padding:6px 14px;font-size:13px;">View Notes</a></td>
               </tr>
               <tr>
                 <td>
@@ -570,10 +606,11 @@
           <div class="logo-text">BTechX</div>
           <p>A free academic resource platform for B.Tech students. BTechX is powered by <a href="https://itsme-gilt.vercel.app" target="_blank" style="color: #ffffff; text-decoration: underline;">DLM</a>.</p>
           <div class="footer-social">
-            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank" title="Instagram"><i
                 class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank"><i
+            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank" title="LinkedIn"><i
                 class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/SubhamM17005388" target="_blank" title="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
           </div>
         </div>
         <div class="footer-col">
@@ -638,6 +675,6 @@
         }
     });
   </script>
-  <script src="assets/js/version-check.js?v=15.7"></script>
+  <script src="assets/js/version-check.js?v=16.7"></script>
 </body>
 </html>

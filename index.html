@@ -32,7 +32,7 @@
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;700&family=Outfit:wght@700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css?v=15.4">
+  <link rel="stylesheet" href="styles.css?v=16.8">
   <link rel="icon" type="image/png" href="logo.png?v=7" />
 
 
@@ -804,9 +804,31 @@
     </div>
   </div>
 
+  <!-- ══ HERO SECTION ══ -->
+  <section class="home-hero">
+    <div class="container hero-container">
+      <div class="hero-title-box">
+        <h1 class="hero-title">Free Academic Notes for Engineering</h1>
+      </div>
 
+      <p class="hero-subtitle">
+        Upload the notes to me &mdash; email via the <a href="about.html">About section</a> if you have any.<br>
+        <span class="hero-subtitle-tag">(College &amp; faculty notes accepted &bull; Only digital text &amp; PDF based, no handwritten)</span>
+      </p>
 
-  <section id="subjects" style="padding: 120px 0 60px;">
+      <!-- Instant Subject & Syllabus Search Bar -->
+      <div class="hero-search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="subjectSearchInput" placeholder="Search chapters, modules, subjects, or syllabus (e.g. Calculus, Logic, BEE, Syllabus)..." oninput="handleSearchInput(this.value)" onkeydown="handleSearchKeydown(event)" autocomplete="off">
+        <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSubjectSearch()" title="Clear search"><i class="fas fa-times"></i></button>
+
+        <!-- Live Recommendations Dropdown -->
+        <div class="search-suggestions" id="searchSuggestions"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="subjects" style="padding: 10px 0 60px;">
     <div class="container">
       <div class="section-header">
         <h2>Explore BTech Notes</h2>
@@ -814,10 +836,10 @@
 
         <!-- Year Filter matching syllabus.html -->
         <div class="year-filter">
-          <button class="year-btn active" onclick="switchYear('year-1', this)">1st Year</button>
-          <button class="year-btn" onclick="switchYear('year-2', this)">2nd Year</button>
-          <button class="year-btn" onclick="switchYear('year-3', this)">3rd Year</button>
-          <button class="year-btn" onclick="switchYear('year-4', this)">4th Year</button>
+          <button class="year-btn active" onclick="switchYear('year-1', this)"><span class="desktop-lbl">1st Year</span><span class="mobile-lbl">1</span></button>
+          <button class="year-btn" onclick="switchYear('year-2', this)"><span class="desktop-lbl">2nd Year</span><span class="mobile-lbl">2</span></button>
+          <button class="year-btn" onclick="switchYear('year-3', this)"><span class="desktop-lbl">3rd Year</span><span class="mobile-lbl">3</span></button>
+          <button class="year-btn" onclick="switchYear('year-4', this)"><span class="desktop-lbl">4th Year</span><span class="mobile-lbl">4</span></button>
         </div>
       </div>
 
@@ -1068,15 +1090,16 @@
           style="font-size: 1.2rem; font-weight: 600; margin: 40px 0 20px; color: var(--text); border-left: 4px solid var(--primary); padding-left: 10px;">
           Satisfactory</h3>
         <div class="subjects-grid">
-          <a href="#" class="subject-card">
+          <a href="2ndYearSub/bevs.html" class="subject-card">
             <div class="subject-card-head">
               <div class="subject-icon"><i class="fas fa-leaf"></i></div>
-              <span class="badge">TBD</span>
+              <span class="badge">CY202</span>
             </div>
-            <h3>Biology and Enviornmental Science</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Biological systems and environmental impact.</p>
+            <h3>Biology and Environmental Studies</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Biological concepts, ecology, pollution, and sustainability.</p>
             <div class="subject-card-footer">
-              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-clock"></i> Coming Soon</span>
+              <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-layer-group"></i> 5 Modules</span>
+              <div class="arrow"><i class="fas fa-arrow-right"></i></div>
             </div>
           </a>
           <a href="#" class="subject-card">
@@ -1094,16 +1117,24 @@
       </div>
 
       <div id="year-3" class="year-content" style="display: none;">
-        <div
-          style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
-          Content for 3rd Year coming soon!
+        <div class="coming-soon-card">
+          <div class="coming-soon-icon">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3>3rd Year Modules in Progress</h3>
+          <p>We are actively curating lecture notes, PYQ solutions, and syllabi for 5th & 6th semester subjects.</p>
+          <div class="coming-soon-badge"><i class="fas fa-clock"></i> Releasing in Upcoming Update</div>
         </div>
       </div>
 
       <div id="year-4" class="year-content" style="display: none;">
-        <div
-          style="padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--bg);">
-          Content for 4th Year coming soon!
+        <div class="coming-soon-card">
+          <div class="coming-soon-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3>4th Year Modules in Progress</h3>
+          <p>Electives, major project guidelines, and placement prep notes for 7th & 8th semester are currently being prepared.</p>
+          <div class="coming-soon-badge"><i class="fas fa-clock"></i> Releasing in Upcoming Update</div>
         </div>
       </div>
 
@@ -1117,10 +1148,11 @@
           <div class="logo-text">BTechX</div>
           <p>A free academic resource platform for B.Tech students. BTechX is powered by <a href="https://itsme-gilt.vercel.app" target="_blank" style="color: #ffffff; text-decoration: underline;">DLM</a>.</p>
           <div class="footer-social">
-            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank" title="Instagram"><i
                 class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank"><i
+            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank" title="LinkedIn"><i
                 class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/SubhamM17005388" target="_blank" title="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
           </div>
         </div>
         <div class="footer-col">
@@ -1147,7 +1179,7 @@
   </footer>
 
   <script src="assets/js/nav.js"></script>
-  <script src="assets/js/pdf-modal.js?v=15.7"></script>
+  <script src="assets/js/pdf-modal.js?v=16.7"></script>
   <script>
     // Year Filter Script
     function switchYear(yearId, btnElement) {
@@ -1168,6 +1200,345 @@
 
       // Save chosen year to localStorage
       localStorage.setItem('btechx_selected_year', yearId);
+
+      // Re-apply live search filter if active
+      const searchInput = document.getElementById('subjectSearchInput');
+      if (searchInput && searchInput.value) {
+        filterSubjectsLive(searchInput.value);
+      }
+    }
+
+    // Searchable Directory (Chapters/Modules, Subjects & Syllabus PDFs)
+    const SEARCHABLE_ITEMS = [
+      // ═══════════════ 1. SYLLABUS (1st & 2nd Year) ═══════════════
+      { name: "Mathematics — I", code: "MA101", year: "1st Year", type: "syllabus", title: "Mathematics — I Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/math_1.pdf", icon: "fa-square-root-alt", keywords: "math 1 calculus algebra linear differential syllabus" },
+      { name: "Mathematics — II", code: "MA201", year: "1st Year", type: "syllabus", title: "Mathematics — II Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/math_2.pdf", icon: "fa-infinity", keywords: "math 2 ode laplace complex numerical analysis syllabus" },
+      { name: "Engineering Physics", code: "PH101", year: "1st Year", type: "syllabus", title: "Engineering Physics Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/physics.pdf", icon: "fa-atom", keywords: "physics optics quantum laser semiconductor electromagnetism syllabus" },
+      { name: "Programming For Problem Solving", code: "CS101", year: "1st Year", type: "syllabus", title: "Programming (CSE) Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/cse.pdf", icon: "fa-code", keywords: "cse c programming problem solving coding syllabus" },
+      { name: "Data Structures", code: "CS102", year: "1st Year", type: "syllabus", title: "Data Structures Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/ds.pdf", icon: "fa-code", keywords: "data structures dsa cse stack queue tree graph linked list syllabus" },
+      { name: "Intro to Electronics Engineering", code: "EC101", year: "1st Year", type: "syllabus", title: "IEE Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/iee.pdf", icon: "fa-microchip", keywords: "iee electronics diode bjt opamp logic gates communication syllabus" },
+      { name: "Intro to Mechanical Engineering", code: "ME101", year: "1st Year", type: "syllabus", title: "IME Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/ime.pdf", icon: "fa-cogs", keywords: "ime mechanical statics dynamics thermodynamics mechanics manufacturing syllabus" },
+      { name: "Basic Electrical Engineering", code: "EE102", year: "1st Year", type: "syllabus", title: "BEE Syllabus PDF", pdfUrl: "Data/Syllabus/1st Year/bee.pdf", icon: "fa-plug", keywords: "bee electrical circuits ohm kcl kvl transformer motor ac dc syllabus" },
+      { name: "Discrete Mathematics and Graph Theory", code: "MA203", year: "2nd Year", type: "syllabus", title: "DMGT Syllabus PDF", pdfUrl: "Data/Syllabus/2nd Year/dmgt.pdf", icon: "fa-project-diagram", keywords: "dmgt discrete math graph theory combinatorics logic relations syllabus" },
+
+      // ═══════════════ 2. SUBJECTS (1st & 2nd Year) ═══════════════
+      { name: "Mathematics — I", code: "MA101", year: "1st Year", type: "subject", title: "Mathematics — I", url: "1stYearSub/math1.html", icon: "fa-square-root-alt", keywords: "math 1 calculus linear algebra differential equations notes" },
+      { name: "Mathematics — II", code: "MA201", year: "1st Year", type: "subject", title: "Mathematics — II", url: "1stYearSub/math2.html", icon: "fa-infinity", keywords: "math 2 ode ordinary differential laplace complex numerical notes" },
+      { name: "Engineering Physics", code: "PH101", year: "1st Year", type: "subject", title: "Engineering Physics", url: "1stYearSub/physics.html", icon: "fa-atom", keywords: "physics optics electromagnetism quantum semiconductor laser notes" },
+      { name: "Programming For Problem Solving", code: "CS101", year: "1st Year", type: "subject", title: "Programming for Problem Solving (CSE)", url: "1stYearSub/cse.html", icon: "fa-code", keywords: "cse c language programming data structures notes" },
+      { name: "Intro to Electronics Engineering", code: "EC101", year: "1st Year", type: "subject", title: "Intro to Electronics Engineering (IEE)", url: "1stYearSub/iee.html", icon: "fa-microchip", keywords: "iee electronics diodes transistors opamp digital notes" },
+      { name: "Intro to Mechanical Engineering", code: "ME101", year: "1st Year", type: "subject", title: "Intro to Mechanical Engineering (IME)", url: "1stYearSub/ime.html", icon: "fa-cogs", keywords: "ime mechanical statics dynamics thermodynamics som notes" },
+      { name: "Basic Electrical Engineering", code: "EE102", year: "1st Year", type: "subject", title: "Basic Electrical Engineering (BEE)", url: "1stYearSub/bee.html", icon: "fa-plug", keywords: "bee electrical dc ac circuits machines transformers notes" },
+      { name: "Discrete Mathematics & Graph Theory", code: "MA203", year: "2nd Year", type: "subject", title: "Discrete Mathematics & Graph Theory (DMGT)", url: "2ndYearSub/dmgt.html", icon: "fa-project-diagram", keywords: "dmgt discrete math logic graph theory combinatorics trees notes" },
+      { name: "Biology and Environmental Studies", code: "CY202", year: "2nd Year", type: "subject", title: "Biology & Environmental Studies (BEVS)", url: "2ndYearSub/bevs.html", icon: "fa-leaf", keywords: "bevs biology environment ecology pollution cells waste management notes question bank" },
+
+      // ═══════════════ 3. CHAPTERS & MODULES ═══════════════
+      // Mathematics — I (MA101)
+      { name: "Differential Calculus", code: "MA101", year: "1st Year", type: "chapter", subName: "Mathematics — I", moduleNum: "Module 1", title: "Differential Calculus", url: "1stYearSub/math1.html#module-1", icon: "fa-square-root-alt", keywords: "differential calculus limits continuity differentiation curve sketching rolle mean value theorem" },
+      { name: "Functions of Two or More Variables", code: "MA101", year: "1st Year", type: "chapter", subName: "Mathematics — I", moduleNum: "Module 2", title: "Functions of Two or More Variables", url: "1stYearSub/math1.html#module-2", icon: "fa-square-root-alt", keywords: "partial derivatives euler theorem taylor series maxima minima beta gamma functions multivariable" },
+      { name: "Vector Differential Calculus", code: "MA101", year: "1st Year", type: "chapter", subName: "Mathematics — I", moduleNum: "Module 3", title: "Vector Differential Calculus", url: "1stYearSub/math1.html#module-3", icon: "fa-square-root-alt", keywords: "vector calculus gradient directional derivative divergence curl line double integrals" },
+      { name: "Integral Calculus", code: "MA101", year: "1st Year", type: "chapter", subName: "Mathematics — I", moduleNum: "Module 4", title: "Integral Calculus", url: "1stYearSub/math1.html#module-4", icon: "fa-square-root-alt", keywords: "integral calculus surface integrals volume integrals green theorem gauss divergence stokes theorem" },
+      { name: "Fourier Series & Transforms", code: "MA101", year: "1st Year", type: "chapter", subName: "Mathematics — I", moduleNum: "Module 5", title: "Fourier Series & Transforms", url: "1stYearSub/math1.html#module-5", icon: "fa-square-root-alt", keywords: "fourier series fourier transform half range series harmonic analysis z transforms periodic" },
+
+      // Mathematics — II (MA201)
+      { name: "Ordinary Differential Equations — I", code: "MA201", year: "1st Year", type: "chapter", subName: "Mathematics — II", moduleNum: "Module 1", title: "Ordinary Differential Equations — I", url: "1stYearSub/math2.html#module-1", icon: "fa-infinity", keywords: "ode first order separable linear exact bernoulli differential equations" },
+      { name: "Ordinary Differential Equations — II", code: "MA201", year: "1st Year", type: "chapter", subName: "Mathematics — II", moduleNum: "Module 2", title: "Ordinary Differential Equations — II", url: "1stYearSub/math2.html#module-2", icon: "fa-infinity", keywords: "higher order linear ode constant coefficients undetermined coefficients variation of parameters" },
+      { name: "Laplace Transforms", code: "MA201", year: "1st Year", type: "chapter", subName: "Mathematics — II", moduleNum: "Module 3", title: "Laplace Transforms", url: "1stYearSub/math2.html#module-3", icon: "fa-infinity", keywords: "laplace transforms inverse laplace ode solution differential equations transform" },
+      { name: "Complex Variables", code: "MA201", year: "1st Year", type: "chapter", subName: "Mathematics — II", moduleNum: "Module 4", title: "Complex Variables", url: "1stYearSub/math2.html#module-4", icon: "fa-infinity", keywords: "complex variables analytic functions cauchy riemann equations complex integration cauchy integral formula" },
+      { name: "Numerical Methods", code: "MA201", year: "1st Year", type: "chapter", subName: "Mathematics — II", moduleNum: "Module 5", title: "Numerical Methods", url: "1stYearSub/math2.html#module-5", icon: "fa-infinity", keywords: "numerical methods newton raphson interpolation euler method runge kutta rk4 roots" },
+
+      // Engineering Physics (PH101)
+      { name: "Oscillations and Wave Optics", code: "PH101", year: "1st Year", type: "chapter", subName: "Engineering Physics", moduleNum: "Module 1", title: "Oscillations and Wave Optics", url: "1stYearSub/physics.html#module-1", icon: "fa-atom", keywords: "shm simple harmonic motion damped forced oscillations resonance interference diffraction wave optics" },
+      { name: "Electromagnetism", code: "PH101", year: "1st Year", type: "chapter", subName: "Engineering Physics", moduleNum: "Module 2", title: "Electromagnetism", url: "1stYearSub/physics.html#module-2", icon: "fa-atom", keywords: "electromagnetism maxwell equations gauss law ampere law em waves poynting vector grad div curl" },
+      { name: "Quantum Mechanics", code: "PH101", year: "1st Year", type: "chapter", subName: "Engineering Physics", moduleNum: "Module 3", title: "Quantum Mechanics", url: "1stYearSub/physics.html#module-3", icon: "fa-atom", keywords: "quantum mechanics matter waves heisenberg uncertainty principle schrodinger equation particle in a box tunneling" },
+      { name: "Semiconductor Physics", code: "PH101", year: "1st Year", type: "chapter", subName: "Engineering Physics", moduleNum: "Module 4", title: "Semiconductor Physics", url: "1stYearSub/physics.html#module-4", icon: "fa-atom", keywords: "semiconductor physics band theory fermi dirac carrier concentration hall effect pn junction bjt" },
+      { name: "Lasers & Superconductivity", code: "PH101", year: "1st Year", type: "chapter", subName: "Engineering Physics", moduleNum: "Module 5", title: "Lasers & Superconductivity", url: "1stYearSub/physics.html#module-5", icon: "fa-atom", keywords: "lasers superconductivity he ne ruby laser optical fibers meissner effect bcs theory" },
+
+      // Programming for Problem Solving (CS101)
+      { name: "C Language Programming", code: "CS101", year: "1st Year", type: "chapter", subName: "Programming (CSE)", moduleNum: "Chapter 1", title: "C Language Programming", url: "1stYearSub/cse.html#c-language", icon: "fa-code", keywords: "c language programming data types control flow functions arrays strings pointers structures dynamic memory dma file io" },
+      { name: "Data Structures in C", code: "CS101", year: "1st Year", type: "chapter", subName: "Programming (CSE)", moduleNum: "Chapter 2", title: "Data Structures in C", url: "1stYearSub/cse.html#data-structures", icon: "fa-code", keywords: "data structures stack queue linked list trees binary tree graphs searching sorting dsa" },
+
+      // Intro to Electronics Engineering (EC101)
+      { name: "Semiconductor Diodes & Applications", code: "EC101", year: "1st Year", type: "chapter", subName: "Electronics (IEE)", moduleNum: "Module 1", title: "Semiconductor Diodes & Applications", url: "1stYearSub/iee.html#module-1", icon: "fa-microchip", keywords: "pn junction diodes rectifiers clippers clampers zener diode led photodiode electronics" },
+      { name: "BJT & JFET Transistors", code: "EC101", year: "1st Year", type: "chapter", subName: "Electronics (IEE)", moduleNum: "Module 2", title: "BJT & JFET Transistors", url: "1stYearSub/iee.html#module-2", icon: "fa-microchip", keywords: "transistors bjt jfet npn pnp ce cb cc biasing amplification characteristics" },
+      { name: "Sinusoidal Oscillators & Op-Amps", code: "EC101", year: "1st Year", type: "chapter", subName: "Electronics (IEE)", moduleNum: "Module 3", title: "Sinusoidal Oscillators & Op-Amps", url: "1stYearSub/iee.html#module-3", icon: "fa-microchip", keywords: "oscillators opamp operational amplifiers barkhausen criteria rc lc crystal frequency stability" },
+      { name: "Introduction to Digital Electronics", code: "EC101", year: "1st Year", type: "chapter", subName: "Electronics (IEE)", moduleNum: "Module 4", title: "Introduction to Digital Electronics", url: "1stYearSub/iee.html#module-4", icon: "fa-microchip", keywords: "digital electronics number systems boolean algebra logic gates combinational sequential flip flops" },
+      { name: "Electronic Communication Systems", code: "EC101", year: "1st Year", type: "chapter", subName: "Electronics (IEE)", moduleNum: "Module 5", title: "Electronic Communication Systems", url: "1stYearSub/iee.html#module-5", icon: "fa-microchip", keywords: "communication systems modulation am fm pm demodulation transmitters receivers" },
+
+      // Intro to Mechanical Engineering (ME101)
+      { name: "Engineering Mechanics — Statics", code: "ME101", year: "1st Year", type: "chapter", subName: "Mechanical (IME)", moduleNum: "Module 1", title: "Engineering Mechanics — Statics", url: "1stYearSub/ime.html#module-1", icon: "fa-cogs", keywords: "statics engineering mechanics forces moments equilibrium trusses frames friction centroid moment of inertia" },
+      { name: "Engineering Mechanics — Dynamics", code: "ME101", year: "1st Year", type: "chapter", subName: "Mechanical (IME)", moduleNum: "Module 2", title: "Engineering Mechanics — Dynamics", url: "1stYearSub/ime.html#module-2", icon: "fa-cogs", keywords: "dynamics kinematics kinetics newton laws work energy theorem impulse momentum" },
+      { name: "Strength of Materials", code: "ME101", year: "1st Year", type: "chapter", subName: "Mechanical (IME)", moduleNum: "Module 3", title: "Strength of Materials", url: "1stYearSub/ime.html#module-3", icon: "fa-cogs", keywords: "strength of materials som stress strain elastic constants bending of beams torsion columns" },
+      { name: "Thermodynamics & Manufacturing", code: "ME101", year: "1st Year", type: "chapter", subName: "Mechanical (IME)", moduleNum: "Module 4 & 5", title: "Thermodynamics & Manufacturing Processes", url: "1stYearSub/ime.html#module-4", icon: "fa-cogs", keywords: "thermodynamics laws heat engines refrigerators ideal gas casting welding machining forming metrology" },
+
+      // Basic Electrical Engineering (EE102)
+      { name: "DC Circuit Analysis", code: "EE102", year: "1st Year", type: "chapter", subName: "Electrical (BEE)", moduleNum: "Module 1", title: "DC Circuit Analysis", url: "1stYearSub/bee.html#module-1", icon: "fa-plug", keywords: "dc circuits ohm law kirchhoff kcl kvl mesh node thevenin norton superposition network theorems" },
+      { name: "AC Circuit Analysis", code: "EE102", year: "1st Year", type: "chapter", subName: "Electrical (BEE)", moduleNum: "Module 2", title: "AC Circuit Analysis", url: "1stYearSub/bee.html#module-2", icon: "fa-plug", keywords: "ac circuits phasors impedance resonance single phase three phase power factor correction" },
+      { name: "Magnetic Circuits & DC Machines", code: "EE102", year: "1st Year", type: "chapter", subName: "Electrical (BEE)", moduleNum: "Module 3", title: "Magnetic Circuits & DC Machines", url: "1stYearSub/bee.html#module-3", icon: "fa-plug", keywords: "magnetic circuits bh curve dc generators dc motors construction working" },
+      { name: "AC Machines (Transformers & Motors)", code: "EE102", year: "1st Year", type: "chapter", subName: "Electrical (BEE)", moduleNum: "Module 4", title: "AC Machines (Transformers & Induction Motors)", url: "1stYearSub/bee.html#module-4", icon: "fa-plug", keywords: "ac machines transformers induction motor single phase 3 phase equivalent circuit" },
+      { name: "Instruments, Power Systems & Safety", code: "EE102", year: "1st Year", type: "chapter", subName: "Electrical (BEE)", moduleNum: "Module 5", title: "Instruments, Power Systems & Installations", url: "1stYearSub/bee.html#module-5", icon: "fa-plug", keywords: "measuring instruments pmmc mi power transmission distribution fuses mcb earthing safety" },
+
+      // Discrete Mathematics & Graph Theory (MA203)
+      { name: "Logic and Relations", code: "MA203", year: "2nd Year", type: "chapter", subName: "DMGT", moduleNum: "Module 1", title: "Logic and Relations", url: "2ndYearSub/dmgt.html#module-1", icon: "fa-project-diagram", keywords: "logic relations propositions predicate calculus mathematical induction warshall algorithm poset lattices" },
+      { name: "Combinatorics", code: "MA203", year: "2nd Year", type: "chapter", subName: "DMGT", moduleNum: "Module 2", title: "Combinatorics", url: "2ndYearSub/dmgt.html#module-2", icon: "fa-project-diagram", keywords: "combinatorics combinations permutations pigeonhole inclusion exclusion generating functions recurrence relations" },
+      { name: "Graph Theory", code: "MA203", year: "2nd Year", type: "chapter", subName: "DMGT", moduleNum: "Module 3", title: "Graph Theory", url: "2ndYearSub/dmgt.html#module-3", icon: "fa-project-diagram", keywords: "graph theory matrices isomorphism planar graphs eulerian hamiltonian bipartite graph colouring" },
+      { name: "Trees and Networks", code: "MA203", year: "2nd Year", type: "chapter", subName: "DMGT", moduleNum: "Module 4", title: "Trees and Networks", url: "2ndYearSub/dmgt.html#module-4", icon: "fa-project-diagram", keywords: "trees networks dfs bfs minimal spanning tree mst kruskal prim dijkstra shortest path network flow ford fulkerson" },
+      { name: "Algebraic Structures and Applications", code: "MA203", year: "2nd Year", type: "chapter", subName: "DMGT", moduleNum: "Module 5", title: "Algebraic Structures and Applications", url: "2ndYearSub/dmgt.html#module-5", icon: "fa-project-diagram", keywords: "algebraic structures binary operations semigroups monoids groups subgroups lagrange theorem homomorphism error correction" },
+
+      // Biology and Environmental Studies (CY202)
+      { name: "Cells and Biomolecules - Structure", code: "CY202", year: "2nd Year", type: "chapter", subName: "BEVS", moduleNum: "Unit 1", title: "Cells and Biomolecules - Structure", url: "2ndYearSub/bevs.html#module-1", icon: "fa-leaf", keywords: "cells biomolecules structure organelles proteins carbohydrates lipids nucleic acids dna biology" },
+      { name: "Cells and Biomolecules - Function", code: "CY202", year: "2nd Year", type: "chapter", subName: "BEVS", moduleNum: "Unit 2", title: "Cells and Biomolecules - Function", url: "2ndYearSub/bevs.html#module-2", icon: "fa-leaf", keywords: "biomolecules function enzymes enzyme kinetics metabolic pathways cellular transport energy transduction" },
+      { name: "Structure and Function of Ecosystem", code: "CY202", year: "2nd Year", type: "chapter", subName: "BEVS", moduleNum: "Unit 3", title: "Structure and Function of Ecosystem", url: "2ndYearSub/bevs.html#module-3", icon: "fa-leaf", keywords: "ecosystem ecology structure function trophic levels energy flow food chain food web biogeochemical cycles" },
+      { name: "Air and Noise Pollution: Source, cause and treatment", code: "CY202", year: "2nd Year", type: "chapter", subName: "BEVS", moduleNum: "Unit 4", title: "Air and Noise Pollution: Source, cause and treatment", url: "2ndYearSub/bevs.html#module-4", icon: "fa-leaf", keywords: "air pollution noise pollution sources causes treatment emission control particulate scrubber cyclone noise standards" },
+      { name: "Water pollution abatement and Solid waste management", code: "CY202", year: "2nd Year", type: "chapter", subName: "BEVS", moduleNum: "Unit 5", title: "Water pollution abatement and Solid waste management", url: "2ndYearSub/bevs.html#module-5", icon: "fa-leaf", keywords: "water pollution wastewater treatment primary secondary tertiary effluent solid waste management recycling disposal" }
+    ];
+
+    let selectedSuggestionIndex = -1;
+
+    // Handle Search Input & Render Recommendations (Chapters, Subjects, Syllabus)
+    function handleSearchInput(query) {
+      const q = query.trim().toLowerCase();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+
+      if (!q) {
+        if (suggestionsEl) {
+          suggestionsEl.innerHTML = '';
+          suggestionsEl.classList.remove('show');
+        }
+        filterCardsGrid('');
+        return;
+      }
+
+      const words = q.split(/\s+/).filter(Boolean);
+      const isSyllabusQuery = q.includes('syl') || q.includes('syllab') || q.includes('curriculum');
+      const isChapterQuery = q.includes('chap') || q.includes('unit') || q.includes('modul') || q.includes('topic');
+      const cleanTerm = q.replace(/syllabus|syllabi|notes|note|chapter|module|unit|topic/gi, '').trim();
+
+      const scored = [];
+      SEARCHABLE_ITEMS.forEach(item => {
+        let score = 0;
+        const nameL = item.name.toLowerCase();
+        const titleL = item.title.toLowerCase();
+        const codeL = item.code.toLowerCase();
+        const kwL = (item.keywords || '').toLowerCase();
+        const subNameL = (item.subName || '').toLowerCase();
+        const moduleNumL = (item.moduleNum || '').toLowerCase();
+        const fullText = `${nameL} ${titleL} ${codeL} ${kwL} ${subNameL} ${moduleNumL}`;
+
+        // Exact matches
+        if (titleL === q || nameL === q || codeL === q) score += 100;
+        else if (titleL.startsWith(q) || nameL.startsWith(q)) score += 60;
+        else if (titleL.includes(q) || nameL.includes(q)) score += 40;
+        else if (codeL.includes(q)) score += 35;
+        else if (kwL.includes(q)) score += 25;
+
+        // Multi-word / partial match
+        if (words.length > 1) {
+          let allWordsMatch = true;
+          words.forEach(w => {
+            if (fullText.includes(w)) score += 15;
+            else allWordsMatch = false;
+          });
+          if (allWordsMatch) score += 30;
+        }
+
+        // Clean term match
+        if (cleanTerm && (titleL.includes(cleanTerm) || nameL.includes(cleanTerm) || codeL.includes(cleanTerm) || kwL.includes(cleanTerm))) {
+          score += 20;
+        }
+
+        // Boost based on query intent
+        if (isSyllabusQuery && item.type === 'syllabus') score += 60;
+        if (isChapterQuery && item.type === 'chapter') score += 60;
+
+        if (score > 0) {
+          scored.push({ item, score });
+        }
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      const matches = scored.map(s => s.item);
+
+      renderSuggestions(matches.slice(0, 8), q);
+      filterCardsGrid(q);
+    }
+
+    function renderSuggestions(matches, query) {
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      if (!suggestionsEl) return;
+      selectedSuggestionIndex = -1;
+
+      if (matches.length === 0) {
+        suggestionsEl.innerHTML = `
+          <div style="padding: 18px; text-align: center; color: var(--text-muted); font-size: 13.5px;">
+            <i class="fas fa-search" style="opacity: 0.5; margin-bottom: 6px; display: block;"></i>
+            No chapter, subject, or syllabus matching "<b>${escapeHtml(query)}</b>" found.
+          </div>`;
+        suggestionsEl.classList.add('show');
+        return;
+      }
+
+      let html = '';
+      matches.forEach((item, idx) => {
+        let iconClass = '';
+        let badgeClass = '';
+        let badgeText = '';
+        let subtitle = '';
+        let clickAction = '';
+
+        if (item.type === 'chapter') {
+          iconClass = 'chapter-icon';
+          badgeClass = 'badge-chapter';
+          badgeText = `<i class="fas fa-bookmark"></i> ${escapeHtml(item.moduleNum || 'Chapter')}`;
+          subtitle = `${escapeHtml(item.subName || item.name)} &bull; ${item.code} &bull; ${item.year}`;
+          clickAction = `window.location.href='${escapeJs(item.url)}'`;
+        } else if (item.type === 'syllabus') {
+          iconClass = 'syllabus-icon';
+          badgeClass = 'badge-syllabus';
+          badgeText = '<i class="fas fa-file-pdf"></i> Syllabus PDF';
+          subtitle = `Syllabus PDF &bull; ${item.code} &bull; ${item.year}`;
+          clickAction = `openSyllabusPdf('${escapeJs(item.pdfUrl)}', '${escapeJs(item.title)}')`;
+        } else {
+          // Subject
+          iconClass = '';
+          badgeClass = 'badge-subject';
+          badgeText = '<i class="fas fa-book"></i> Subject';
+          subtitle = `${escapeHtml(item.name)} &bull; ${item.code} &bull; ${item.year}`;
+          clickAction = `window.location.href='${escapeJs(item.url)}'`;
+        }
+
+        html += `
+          <div class="search-suggestion-item" data-index="${idx}" onclick="${clickAction}">
+            <div class="search-item-left">
+              <div class="search-item-icon ${iconClass}">
+                <i class="fas ${item.icon || (item.type === 'syllabus' ? 'fa-file-pdf' : item.type === 'chapter' ? 'fa-book-open' : 'fa-book')}"></i>
+              </div>
+              <div class="search-item-info">
+                <div class="search-item-title">${escapeHtml(item.title)}</div>
+                <div class="search-item-sub">${subtitle}</div>
+              </div>
+            </div>
+            <span class="search-item-badge ${badgeClass}">${badgeText}</span>
+          </div>`;
+      });
+
+      suggestionsEl.innerHTML = html;
+      suggestionsEl.classList.add('show');
+    }
+
+    // Direct Syllabus PDF opener in BTechX Viewer
+    function openSyllabusPdf(pdfPath, title) {
+      const viewerUrl = 'viewer.html?file=' + encodeURIComponent(pdfPath) + '&title=' + encodeURIComponent(title) + '&ref=index.html';
+      window.location.href = viewerUrl;
+    }
+
+    // Keyboard navigation
+    function handleSearchKeydown(e) {
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      if (!suggestionsEl || !suggestionsEl.classList.contains('show')) return;
+      const items = suggestionsEl.querySelectorAll('.search-suggestion-item');
+      if (!items.length) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+        updateSelectedSuggestion(items);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+        updateSelectedSuggestion(items);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0 && items[selectedSuggestionIndex]) {
+          items[selectedSuggestionIndex].click();
+        } else if (items[0]) {
+          items[0].click();
+        }
+      } else if (e.key === 'Escape') {
+        suggestionsEl.classList.remove('show');
+      }
+    }
+
+    function updateSelectedSuggestion(items) {
+      items.forEach((it, idx) => {
+        if (idx === selectedSuggestionIndex) {
+          it.classList.add('selected');
+          it.scrollIntoView({ block: 'nearest' });
+        } else {
+          it.classList.remove('selected');
+        }
+      });
+    }
+
+    // Filter cards in grid
+    function filterCardsGrid(query) {
+      const q = query.trim().toLowerCase();
+      const activeYear = document.querySelector('.year-content.active') || document.getElementById('year-1');
+      if (!activeYear) return;
+
+      const cards = activeYear.querySelectorAll('.subject-card');
+      let matchCount = 0;
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          card.style.display = '';
+          matchCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      let noMatchMsg = activeYear.querySelector('.no-subject-match');
+      if (matchCount === 0 && q) {
+        if (!noMatchMsg) {
+          noMatchMsg = document.createElement('div');
+          noMatchMsg.className = 'no-subject-match';
+          noMatchMsg.style.cssText = 'padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; grid-column: 1 / -1; width: 100%;';
+          const grid = activeYear.querySelector('.subjects-grid');
+          if (grid) grid.appendChild(noMatchMsg);
+        }
+        noMatchMsg.innerHTML = '<i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px; display: block; opacity: 0.5;"></i>No subjects matching "<b>' + escapeHtml(query) + '</b>" found in this year.';
+        noMatchMsg.style.display = 'block';
+      } else if (noMatchMsg) {
+        noMatchMsg.style.display = 'none';
+      }
+    }
+
+    function clearSubjectSearch() {
+      const input = document.getElementById('subjectSearchInput');
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      if (suggestionsEl) {
+        suggestionsEl.innerHTML = '';
+        suggestionsEl.classList.remove('show');
+      }
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      filterCardsGrid('');
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      const searchBox = document.querySelector('.hero-search-box');
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      if (searchBox && !searchBox.contains(e.target) && suggestionsEl) {
+        suggestionsEl.classList.remove('show');
+      }
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escapeJs(str) {
+      if (!str) return '';
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     }
 
     // Restore chosen year from localStorage on load
@@ -1306,7 +1677,7 @@
       setTimeout(() => { rLines(); typeCode() }, 2200);
     })();
   </script>
-  <script src="assets/js/version-check.js?v=15.7"></script>
+  <script src="assets/js/version-check.js?v=16.7"></script>
 </body>
 
 </html>

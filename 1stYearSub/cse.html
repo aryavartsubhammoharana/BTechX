@@ -29,8 +29,8 @@
 
     .notes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+      gap: 20px;
     }
 
     .note-card {
@@ -88,12 +88,13 @@
     }
 
     .note-card-footer {
-      padding: 20px 24px;
+      padding: 16px 20px;
       border-top: 1.5px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      flex-wrap: wrap;
       background: var(--bg-alt);
     }
 
@@ -114,6 +115,26 @@
       background: #3b82f6;
       color: #fff;
       transform: translateY(-1px);
+    }
+
+    @media (max-width: 520px) {
+      .note-card-header,
+      .note-card-body,
+      .note-card-footer {
+        padding: 16px;
+      }
+      .note-card-footer .btn-group {
+        width: 100%;
+        gap: 8px;
+      }
+      .note-card-footer .btn-group .download-btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .note-card-footer .file-size {
+        font-size: 11px;
+        margin-top: 4px;
+      }
     }
   </style>
   <link rel="canonical" href="https://btechx.infinityfreeapp.com/1stYearSub/cse.html" />
@@ -175,7 +196,7 @@
       </div>
       <div class="notes-grid">
         <!-- C Language -->
-        <div class="note-card">
+        <div class="note-card" id="c-language">
           <div class="note-card-header">
             <div class="note-icon"><i class="fab fa-cuttlefish"></i></div>
             <div>
@@ -212,7 +233,7 @@
         </div>
 
         <!-- Data Structures -->
-        <div class="note-card">
+        <div class="note-card" id="data-structures">
           <div class="note-card-header">
             <div class="note-icon">
               <i class="fas fa-project-diagram"></i>
@@ -259,10 +280,11 @@
           <div class="logo-text">BTechX</div>
           <p>A free academic resource platform for B.Tech students.</p>
           <div class="footer-social">
-            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank"><i
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank" title="Instagram"><i
                 class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank"><i
+            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank" title="LinkedIn"><i
                 class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/SubhamM17005388" target="_blank" title="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
           </div>
         </div>
         <div class="footer-col">
@@ -298,8 +320,8 @@
     <i class="fas fa-chevron-up"></i>
   </button>
   <script src="../assets/js/nav.js"></script>
-  <script src="../assets/js/pdf-modal.js?v=15.7"></script>
-  <script src="../assets/js/version-check.js?v=15.7"></script>
+  <script src="../assets/js/pdf-modal.js?v=16.7"></script>
+  <script src="../assets/js/version-check.js?v=16.7"></script>
 </body>
 
 </html>
