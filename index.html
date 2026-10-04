@@ -35,11 +35,157 @@
   <link rel="stylesheet" href="styles.css?v=16.9">
   <link rel="icon" type="image/png" href="logo.png?v=7" />
 
-  <!-- Pre-render head check: Prevents flash of intro if seen in current session -->
+  <!-- Pre-render head check: smart intro gating for internal navigation and time cooldown -->
   <script>
-    try { if (sessionStorage.getItem('btxIntroSeen')) document.documentElement.classList.add('btx-skip'); } catch (e) {}
+    (function () {
+      try {
+        var isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        var COOLDOWN_MS = 20 * 60 * 1000; // 20 minutes cooldown between direct home visits
+        var shouldSkip = false;
+
+        // 1. Mobile session check
+        if (isMobile && sessionStorage.getItem('btxIntroSeenMobile')) {
+          shouldSkip = true;
+        }
+
+        // 2. Internal link navigation check via sessionStorage stamp (from About, Tools, Syllabus, etc.)
+        var lastInternalNav = parseInt(sessionStorage.getItem('btxLastInternalNav') || '0', 10);
+        if (lastInternalNav > 0 && (Date.now() - lastInternalNav < 15000)) {
+          shouldSkip = true;
+        }
+
+        // 3. Internal navigation check via document.referrer
+        var ref = document.referrer;
+        if (ref) {
+          try {
+            var refUrl = new URL(ref);
+            if (refUrl.origin === window.location.origin || refUrl.hostname === window.location.hostname) {
+              shouldSkip = true;
+            }
+          } catch (e) {
+            if (ref.indexOf(window.location.host) !== -1 || ref.indexOf('btechx') !== -1 || ref.indexOf('BTechX') !== -1) {
+              shouldSkip = true;
+            }
+          }
+        }
+
+        // 4. Time cooldown check: don't replay if visited home directly within cooldown window
+        var lastIntroTime = parseInt(localStorage.getItem('btxLastIntroTime') || '0', 10);
+        if (lastIntroTime > 0 && (Date.now() - lastIntroTime < COOLDOWN_MS)) {
+          shouldSkip = true;
+        }
+
+        if (shouldSkip) {
+          document.documentElement.classList.add('btx-skip');
+        }
+      } catch (e) {}
+    })();
   </script>
   <noscript><style>#btx-intro{display:none !important}</style></noscript>
+
+  <!-- ══ BTechX Intro Styling (Direct Embed for 100% faithful font & styling) ══ -->
+  <style>
+    html.btx-lock, html.btx-lock body { overflow: hidden !important; }
+    html.btx-skip #btx-intro { display: none !important; }
+
+    #btx-intro, #btx-intro * {
+      box-sizing: border-box;
+    }
+
+    #btx-intro {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #05060a; color: #fff; overflow: hidden; cursor: pointer;
+      font-family: 'Poppins', system-ui, sans-serif;
+      letter-spacing: normal;
+      line-height: normal;
+      transition: opacity .5s ease, transform .5s ease, filter .5s ease;
+    }
+    #btx-intro.btx-out { opacity: 0; transform: scale(1.08); filter: blur(6px); pointer-events: none; }
+
+    /* backdrop: soft glows + faint grid */
+    #btx-intro .btx-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(60% 50% at 80% 90%, rgba(37, 80, 220, .35), transparent 70%),
+        radial-gradient(50% 40% at 15% 5%, rgba(14, 120, 170, .28), transparent 70%);
+      animation: btx-fade 1s ease both;
+    }
+    #btx-intro .btx-bg::after {
+      content: ""; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(circle at center, #000 20%, transparent 75%);
+              mask-image: radial-gradient(circle at center, #000 20%, transparent 75%);
+    }
+
+    /* logo: written on from left to right with a light streak */
+    #btx-intro .btx-logo { position: relative; display: flex; align-items: center; gap: .08em; z-index: 1; font-size: clamp(64px, 17vw, 200px); }
+    #btx-intro .btx-word {
+      font-family: 'Dancing Script', cursive !important;
+      font-weight: 600 !important;
+      line-height: 1.1 !important;
+      padding: 0 .06em !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      text-shadow: 0 0 28px rgba(80, 140, 255, .55) !important;
+      clip-path: inset(0 100% 0 0);
+      animation: btx-write .9s cubic-bezier(.65, 0, .35, 1) .3s forwards;
+    }
+    #btx-intro .btx-logo::after {
+      content: ""; position: absolute; top: -8%; bottom: -8%; width: 3px; left: 0; opacity: 0;
+      background: linear-gradient(#0000, #cfe3ff, #0000); box-shadow: 0 0 24px 6px rgba(90, 150, 255, .8);
+      animation: btx-sweep .9s cubic-bezier(.65, 0, .35, 1) .3s forwards;
+    }
+    #btx-intro .btx-chev { height: .42em; width: auto; overflow: visible; }
+    #btx-intro .btx-chev path {
+      fill: none; stroke: #3b82f6; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 120; stroke-dashoffset: 120; filter: drop-shadow(0 0 8px rgba(59, 130, 246, .9));
+      animation: btx-draw .45s ease 1.05s forwards;
+    }
+
+    #btx-intro .btx-line {
+      height: 3px; width: 0; margin-top: 1.2vh; border-radius: 3px; z-index: 1;
+      background: linear-gradient(90deg, #38bdf8, #3b82f6);
+      box-shadow: 0 0 16px rgba(56, 189, 248, .7);
+      animation: btx-grow .6s ease 1s forwards;
+    }
+    #btx-intro .btx-tag {
+      z-index: 1; margin-top: 3.5vh; opacity: 0; color: #c9d2e6;
+      font-family: 'Poppins', system-ui, sans-serif !important;
+      font-weight: 500 !important;
+      font-size: clamp(14px, 2.6vw, 26px) !important;
+      letter-spacing: .5em !important;
+      animation: btx-tag .8s ease 1.15s forwards;
+    }
+    #btx-intro .btx-by {
+      z-index: 1; margin-top: 2.6vh; opacity: 0; color: #8b93a8;
+      font-family: 'Poppins', system-ui, sans-serif !important;
+      font-size: clamp(13px, 2vw, 19px) !important;
+      letter-spacing: normal !important;
+      animation: btx-fade .6s ease 1.95s forwards;
+    }
+    #btx-intro .btx-by b { color: #fff !important; font-weight: 500 !important; }
+    #btx-intro .btx-skip {
+      position: absolute; right: 20px; bottom: 16px; z-index: 1; opacity: 0; color: #5d6580;
+      font-family: 'Poppins', system-ui, sans-serif !important;
+      font-size: 12px !important;
+      letter-spacing: normal !important;
+      animation: btx-fade .5s ease 1s forwards;
+    }
+
+    @keyframes btx-write { to { clip-path: inset(0 0 0 0); } }
+    @keyframes btx-sweep { 0% { left: 0; opacity: 1; } 85% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+    @keyframes btx-draw  { to { stroke-dashoffset: 0; } }
+    @keyframes btx-grow  { to { width: min(62vw, 560px); } }
+    @keyframes btx-tag   { from { opacity: 0; letter-spacing: .5em; filter: blur(6px); } to { opacity: 1; letter-spacing: .2em; filter: blur(0); } }
+    @keyframes btx-fade  { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      #btx-intro *, #btx-intro .btx-bg { animation-duration: .01s !important; animation-delay: 0s !important; }
+      #btx-intro .btx-logo::after { display: none; }
+    }
+  </style>
 
 
   <script type="application/ld+json">
@@ -873,17 +1019,60 @@
   <!-- ══ BTechX INTRO ENGINE ══ -->
   <script>
     (function () {
-      var CONFIG = {
-        poweredBy: "DLM",
-        totalMs: 3200,         // how long the intro stays before it fades out
-        showOnce: true         // true = plays once per browser session
-      };
+      var isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      var COOLDOWN_MS = 20 * 60 * 1000;
 
       var el = document.getElementById('btx-intro');
       if (!el) return;
       var root = document.documentElement;
 
-      if (CONFIG.showOnce && root.classList.contains('btx-skip')) { el.remove(); return; }
+      // Verify skip conditions (if marked by pre-render head script or checks match)
+      var shouldSkip = root.classList.contains('btx-skip');
+
+      if (!shouldSkip) {
+        var lastInternalNav = parseInt(sessionStorage.getItem('btxLastInternalNav') || '0', 10);
+        if (lastInternalNav > 0 && (Date.now() - lastInternalNav < 15000)) shouldSkip = true;
+      }
+      if (!shouldSkip && document.referrer) {
+        try {
+          var refUrl = new URL(document.referrer);
+          if (refUrl.origin === window.location.origin || refUrl.hostname === window.location.hostname) {
+            shouldSkip = true;
+          }
+        } catch (e) {
+          if (document.referrer.indexOf(window.location.host) !== -1 || document.referrer.indexOf('btechx') !== -1 || document.referrer.indexOf('BTechX') !== -1) {
+            shouldSkip = true;
+          }
+        }
+      }
+      if (!shouldSkip) {
+        var lastIntroTime = parseInt(localStorage.getItem('btxLastIntroTime') || '0', 10);
+        if (lastIntroTime > 0 && (Date.now() - lastIntroTime < COOLDOWN_MS)) {
+          shouldSkip = true;
+        }
+      }
+      if (!shouldSkip && isMobile && sessionStorage.getItem('btxIntroSeenMobile')) {
+        shouldSkip = true;
+      }
+
+      if (shouldSkip) {
+        el.remove();
+        root.classList.remove('btx-lock');
+        return;
+      }
+
+      // Mark intro as played NOW so immediate refreshes or quick tab switches don't trigger it again
+      try {
+        localStorage.setItem('btxLastIntroTime', Date.now().toString());
+        if (isMobile) {
+          sessionStorage.setItem('btxIntroSeenMobile', '1');
+        }
+      } catch (e) {}
+
+      var CONFIG = {
+        poweredBy: "DLM",
+        totalMs: 3200
+      };
 
       var byEl = document.getElementById('btx-by-name');
       if (byEl) byEl.textContent = CONFIG.poweredBy;
@@ -891,10 +1080,13 @@
 
       var done = false;
       function finish() {
-        if (done) return; done = true;
-        try { sessionStorage.setItem('btxIntroSeen', '1'); } catch (e) {}
+        if (done) return;
+        done = true;
         el.classList.add('btx-out');
-        setTimeout(function () { el.remove(); root.classList.remove('btx-lock'); }, 550);
+        setTimeout(function () {
+          el.remove();
+          root.classList.remove('btx-lock');
+        }, 550);
       }
 
       el.addEventListener('click', finish);

@@ -198,10 +198,49 @@
         gap: 5px;
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 900px) and (min-width: 769px) {
         .about-intro {
           grid-template-columns: 1fr;
           gap: 32px;
+        }
+      }
+
+      /* Mobile UI optimizations */
+      @media (max-width: 768px) {
+        .about-section {
+          padding: 32px 0 24px;
+        }
+        .about-intro {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          margin-bottom: 0;
+        }
+        /* Logo placed at the very top - photo only */
+        .about-image-col {
+          order: -1;
+          background: transparent;
+          border: none;
+          box-shadow: none;
+          padding: 0;
+          margin: 0 0 8px 0;
+        }
+        .about-image-col .big-icon {
+          width: 90px;
+          height: 90px;
+          margin: 0 auto;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+        .about-image-col h3 {
+          display: none;
+        }
+        /* Hide stats row (7+ Subjects, 15+ Notes, 100% Free) on mobile */
+        .about-stat-row {
+          display: none !important;
+        }
+        /* Hide Our Mission section on mobile */
+        .about-mission-section {
+          display: none !important;
         }
       }
 
@@ -210,15 +249,10 @@
           grid-template-columns: 1fr;
           gap: 12px;
         }
-        .about-image-col {
-          padding: 20px 16px;
-        }
         .contact-card {
           padding: 20px 16px;
         }
       }
-
-      
     </style>
     <link
       rel="canonical"
@@ -263,7 +297,7 @@
           <a href="https://itsme-gilt.vercel.app" target="_blank" title="BTechX is powered by DLM" style="display: flex; align-items: center;">
             <img src="images/dlm.png" alt="DLM Logo" style="height: 22px; width: auto; opacity: 0.9; align-self: center; display: block;" />
           </a>
-          <button class="close-btn" id="closeMenu" style="margin-left: auto;">&times;</button>
+          <button class="close-btn" id="closeMenu">&times;</button>
         </div>
         <a href="index.html">Home</a>
         <a href="index.html#subjects">Subjects</a>
@@ -321,69 +355,68 @@
               />
             </div>
             <h3>BTechX</h3>
-            <p style="margin-bottom: 16px">
-              B.Tech — Computer Science Engineering<br />Bhubaneswar, Odisha
-            </p>
           </div>
         </div>
 
         <!-- Mission -->
-        <div class="section-header" style="margin-top: 16px">
-          <h2>Our Mission</h2>
-          <div class="section-divider"></div>
-        </div>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-          "
-        >
-          <div class="card">
-            <i
-              class="fas fa-unlock-alt"
-              style="
-                color: var(--primary);
-                font-size: 1.5rem;
-                margin-bottom: 12px;
-              "
-            ></i>
-            <h4 style="margin-bottom: 8px">Open Access</h4>
-            <p style="font-size: 13.5px">
-              No login, no paywall, no limits. Every resource on BTechX is
-              freely accessible to all students.
-            </p>
+        <div class="about-mission-section">
+          <div class="section-header" style="margin-top: 16px">
+            <h2>Our Mission</h2>
+            <div class="section-divider"></div>
           </div>
-          <div class="card">
-            <i
-              class="fas fa-bullseye"
-              style="
-                color: var(--primary);
-                font-size: 1.5rem;
-                margin-bottom: 12px;
-              "
-            ></i>
-            <h4 style="margin-bottom: 8px">Curriculum-Aligned</h4>
-            <p style="font-size: 13.5px">
-              All notes and syllabi are closely aligned with the official B.Tech
-              curriculum so nothing is wasted.
-            </p>
-          </div>
-          <div class="card">
-            <i
-              class="fas fa-layer-group"
-              style="
-                color: var(--primary);
-                font-size: 1.5rem;
-                margin-bottom: 12px;
-              "
-            ></i>
-            <h4 style="margin-bottom: 8px">Well Organized</h4>
-            <p style="font-size: 13.5px">
-              Content is structured by subject → module → lecture so you always
-              know exactly where to find what you need.
-            </p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+              gap: 20px;
+              margin-bottom: 24px;
+            "
+          >
+            <div class="card">
+              <i
+                class="fas fa-unlock-alt"
+                style="
+                  color: var(--primary);
+                  font-size: 1.5rem;
+                  margin-bottom: 12px;
+                "
+              ></i>
+              <h4 style="margin-bottom: 8px">Open Access</h4>
+              <p style="font-size: 13.5px">
+                No login, no paywall, no limits. Every resource on BTechX is
+                freely accessible to all students.
+              </p>
+            </div>
+            <div class="card">
+              <i
+                class="fas fa-bullseye"
+                style="
+                  color: var(--primary);
+                  font-size: 1.5rem;
+                  margin-bottom: 12px;
+                "
+              ></i>
+              <h4 style="margin-bottom: 8px">Curriculum-Aligned</h4>
+              <p style="font-size: 13.5px">
+                All notes and syllabi are closely aligned with the official B.Tech
+                curriculum so nothing is wasted.
+              </p>
+            </div>
+            <div class="card">
+              <i
+                class="fas fa-layer-group"
+                style="
+                  color: var(--primary);
+                  font-size: 1.5rem;
+                  margin-bottom: 12px;
+                "
+              ></i>
+              <h4 style="margin-bottom: 8px">Well Organized</h4>
+              <p style="font-size: 13.5px">
+                Content is structured by subject → module → lecture so you always
+                know exactly where to find what you need.
+              </p>
+            </div>
           </div>
         </div>
       </div>

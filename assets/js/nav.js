@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Helper functions to open and close mobile drawer
     function openDrawer() {
         if (!mobileMenu) return;
+        if (navbar && navbar.classList.contains("scrolled")) {
+            mobileMenu.classList.add("is-scrolled");
+        } else {
+            mobileMenu.classList.remove("is-scrolled");
+        }
         mobileMenu.classList.add("open");
         if (navToggle) navToggle.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -302,4 +307,21 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("storage", () => {
         updateStorageUI();
     });
+
+    // Track internal link navigation so intro isn't triggered when switching pages (About -> Home, etc.)
+    document.addEventListener("click", (e) => {
+        const link = e.target.closest("a");
+        if (!link) return;
+        const href = link.getAttribute("href");
+        if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
+        if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:") && !href.startsWith("tel:")) {
+            try {
+                sessionStorage.setItem("btxLastInternalNav", Date.now().toString());
+            } catch (err) {}
+        } else if (href.includes(window.location.hostname) || href.includes("btechx")) {
+            try {
+                sessionStorage.setItem("btxLastInternalNav", Date.now().toString());
+            } catch (err) {}
+        }
+    }, { capture: true, passive: true });
 });
