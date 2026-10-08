@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision | Subham Moharana</title>
+<meta name="description" content="Subham Moharana's AI engineering vision, goals, milestones, task sheet and daily success tracker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </span>
+      <span>Subham Moharana</span>
+    </a>
+    <div class="nav-links">
+      <button class="nav-link tab-btn active" data-tab="today" onclick="showTab('today')">Today</button>
+      <button class="nav-link tab-btn" data-tab="tasksheet" onclick="showTab('tasksheet')">Task Sheet</button>
+      <button class="nav-link tab-btn" data-tab="goal" onclick="showTab('goal')">Goal &amp; Milestone</button>
+      <button class="nav-link tab-btn" data-tab="calendar" onclick="showTab('calendar')">Calendar</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-scroll">
+  <div class="container">
+
+    <!-- ================= TAB: TODAY ================= -->
+    <div class="tab-panel active" id="tab-today">
+      <section class="vhead">
+        <div class="glass vision-card">
+          <div class="focus-date">MY VISION &middot; tap to edit</div>
+          <p class="vision-quote" id="vision-text" contenteditable="true" spellcheck="false" data-default="Build open-weights sovereign AI systems &mdash; one focused day at a time."></p>
+        </div>
+        <div class="statbar" id="statbar"></div>
+      </section>
+
+      <section id="session">
+        <div class="section-head">
+          <div>
+            <h2>Session Sheet</h2>
+            <p>Changes every night. Tick off today's session, then plan tomorrow before you sleep.</p>
+          </div>
+        </div>
+        <div class="session-layout">
+          <div class="glass score-card">
+            <div class="score-ring" id="progress-ring">
+              <div class="score-inner">
+                <strong id="session-ring-val">0%</strong>
+                <span id="session-ring-label">TODAY COMPLETE</span>
+              </div>
+            </div>
+            <div class="seg" id="session-seg">
+              <button class="seg-btn active" data-day="today" onclick="setSessionDay('today')">Today</button>
+              <button class="seg-btn" data-day="tomorrow" onclick="setSessionDay('tomorrow')">Tomorrow</button>
+            </div>
+            <div class="tracker-add">
+              <input type="text" id="session-input" placeholder="Add a session item..." onkeydown="if(event.key==='Enter')addSession()">
+              <button class="add-btn" onclick="addSession()">Add</button>
+            </div>
+          </div>
+          <div>
+            <div class="session-head" id="session-head">TODAY</div>
+            <div class="milestones" id="session-list"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= TAB: TASK SHEET ================= -->
+    <div class="tab-panel" id="tab-tasksheet">
+      <section id="tasksheet">
+        <div class="section-head">
+          <div>
+            <h2>Task Sheet</h2>
+            <p>Changes every week. Link each task to a milestone and drop it on a day.</p>
+          </div>
+        </div>
+        <div class="glass matrix-card">
+          <div class="matrix-input-group">
+            <input type="text" id="weekly-input" placeholder="Add a task for the week..." onkeydown="if(event.key==='Enter')addWeekly()">
+            <select id="weekly-week" title="Week">
+              <option value="This Week" selected>This Week</option>
+              <option value="Next Week">Next Week</option>
+              <option value="Later">Later</option>
+            </select>
+            <select id="weekly-milestone" title="Linked milestone"></select>
+            <select id="weekly-day" title="Day of week">
+              <option value="">&mdash; day &mdash;</option>
+              <option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option><option>Sun</option>
+            </select>
+            <button class="matrix-btn" onclick="addWeekly()">+</button>
+          </div>
+          <div class="matrix-list" id="weekly-list"></div>
+          <div class="matrix-progress-box">
+            <div class="matrix-progress-label"><span>THIS WEEK COMPLETION</span><span id="weekly-progress-text">0%</span></div>
+            <div class="matrix-progress-bar"><div class="matrix-progress-fill" id="weekly-progress-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= TAB: GOAL & MILESTONE ================= -->
+    <div class="tab-panel" id="tab-goal">
+      <section id="goals">
+        <div class="section-head">
+          <div>
+            <h2>Goals (Months &amp; Years)</h2>
+            <p>The long-horizon goals you are aiming at.</p>
+          </div>
+        </div>
+        <div class="glass matrix-card">
+          <div class="matrix-input-group">
+            <input type="text" id="goals-input" placeholder="Add a multi-month / year goal..." onkeydown="if(event.key==='Enter')addGoal()">
+            <select id="goals-tag" title="Horizon">
+              <option value="6M">6 Mos</option>
+              <option value="1Y">1 Year</option>
+              <option value="3Y">3 Years</option>
+            </select>
+            <button class="matrix-btn" onclick="addGoal()">+</button>
+          </div>
+          <div class="matrix-list" id="goals-list"></div>
+          <div class="matrix-progress-box">
+            <div class="matrix-progress-label"><span>GOALS COMPLETED</span><span id="goals-progress-text">0%</span></div>
+            <div class="matrix-progress-bar"><div class="matrix-progress-fill" id="goals-progress-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="milestones">
+        <div class="section-head">
+          <div>
+            <h2>Milestones</h2>
+            <p>One milestone per month &mdash; each holds its own tasks. Milestone % = its tasks done.</p>
+          </div>
+        </div>
+        <div class="glass matrix-card">
+          <div class="matrix-input-group">
+            <input type="text" id="ms-month" placeholder="Month (e.g. Oct)">
+            <input type="text" id="ms-text" placeholder="Milestone for that month..." onkeydown="if(event.key==='Enter')addMilestone()">
+            <button class="matrix-btn" onclick="addMilestone()">+</button>
+          </div>
+          <div class="matrix-list" id="milestones-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= TAB: CALENDAR ================= -->
+    <div class="tab-panel" id="tab-calendar">
+      <section id="calendar">
+        <div class="section-head">
+          <div>
+            <h2>Daily Success Tracker</h2>
+            <p>How much of each layer is done &mdash; session sheet, task sheet and milestone tasks.</p>
+          </div>
+        </div>
+
+        <div class="glass tracker-bars">
+          <div class="tbar">
+            <div class="matrix-progress-label"><span>SESSION SHEET &middot; TODAY</span><span id="ts-session-text">0%</span></div>
+            <div class="matrix-progress-bar"><div class="matrix-progress-fill" id="ts-session-bar" style="width:0%"></div></div>
+          </div>
+          <div class="tbar">
+            <div class="matrix-progress-label"><span>TASK SHEET &middot; THIS WEEK</span><span id="ts-task-text">0%</span></div>
+            <div class="matrix-progress-bar"><div class="matrix-progress-fill" id="ts-task-bar" style="width:0%"></div></div>
+          </div>
+          <div class="tbar">
+            <div class="matrix-progress-label"><span>MILESTONES &middot; TASKS DONE</span><span id="ts-ms-text">0%</span></div>
+            <div class="matrix-progress-bar"><div class="matrix-progress-fill" id="ts-ms-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="focus-layout">
+          <div class="glass calendar-card">
+            <div class="calendar-toolbar">
+              <button class="icon-btn" onclick="prevMonth()">&lsaquo;</button>
+              <h3 id="calendar-title">Month Year</h3>
+              <button class="icon-btn" onclick="nextMonth()">&rsaquo;</button>
+              <button class="icon-btn today-btn" onclick="goToday()">Today</button>
+            </div>
+            <div class="weekdays">
+              <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+            </div>
+            <div class="calendar-grid" id="calendar-days"></div>
+          </div>
+
+          <div class="glass focus-card">
+            <div class="focus-date" id="selected-date-label">SELECT A DAY</div>
+            <h3>Session &mdash; that day</h3>
+            <p>What was planned for this date, and how much of it got done.</p>
+            <div class="focus-input">
+              <input type="text" id="task-input" placeholder="Add session item..." onkeydown="if(event.key==='Enter')addTask()">
+              <button class="add-btn" onclick="addTask()">Add</button>
+            </div>
+            <div class="focus-tasks" id="tasks-container"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <strong>Subham Moharana</strong> &bull; Vision &amp; Engineering Hub
+      <div class="foot-actions">
+        <button class="btn-ghost" onclick="exportData()">&#8681; Export backup</button>
+        <label class="btn-ghost">&#8679; Import<input type="file" accept="application/json" hidden onchange="importData(event)"></label>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

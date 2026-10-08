@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apps - BTechX</title>
+  <meta name="description" content="Explore innovative web apps and AI tools built by DLM for BTechX students." />
+  <meta name="keywords" content="Apps, dheeLM, Metacleaner, Veda AI, Realiology, BTechX" />
+  <meta name="author" content="BTechX" />
+  <meta property="og:title" content="Apps - BTechX" />
+  <meta property="og:description" content="Explore innovative web apps and AI tools built by DLM for BTechX students." />
+  <meta property="og:image" content="https://btechx.infinityfreeapp.com/logo.png" />
+  <meta property="og:url" content="https://btechx.infinityfreeapp.com/apps.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css?v=17.1" />
+  <style>
+    /* ── IMMERSIVE APPS STUDIO SHOWCASE ── */
+    .apps-stage-section {
+      padding: 60px 0 110px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .apps-hero-header {
+      text-align: center;
+      max-width: 660px;
+      margin: 0 auto 60px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .apps-hero-title {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .apps-hero-desc {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* ── SHOWCASE STAGES CONTAINER ── */
+    .stage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stage-card {
+      position: relative;
+      background: rgba(13, 15, 22, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 48px;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      align-items: center;
+      gap: 56px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .stage-card.reverse {
+      grid-template-columns: 1.3fr 1fr;
+    }
+
+    .stage-card.reverse .stage-content {
+      order: 2;
+    }
+
+    .stage-card.reverse .stage-window-wrap {
+      order: 1;
+    }
+
+    .stage-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 32px 70px -15px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    /* Ambient Glow Blobs Behind Each Card */
+    .stage-glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .stage-card:hover .stage-glow {
+      opacity: 0.32;
+      transform: scale(1.15);
+    }
+
+    .glow-gold {
+      background: radial-gradient(circle, #f59e0b, #d97706);
+      top: -40px;
+      right: -40px;
+    }
+
+    .glow-purple {
+      background: radial-gradient(circle, #a855f7, #6366f1);
+      bottom: -40px;
+      left: -40px;
+    }
+
+    .glow-cyan {
+      background: radial-gradient(circle, #06b6d4, #3b82f6);
+      top: -40px;
+      right: -40px;
+    }
+
+    /* ── STAGE CONTENT ── */
+    .stage-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-title {
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .stage-desc {
+      font-size: 1rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .stage-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 30px;
+      background: #ffffff;
+      color: #0b0c10;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 14px;
+      width: fit-content;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+    }
+
+    .stage-btn i {
+      font-size: 0.85rem;
+      transition: transform 0.25s ease;
+    }
+
+    .stage-btn:hover {
+      background: #f1f5f9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
+    }
+
+    .stage-btn:hover i {
+      transform: translate(2px, -2px);
+    }
+
+    /* ── MAC-STYLE BROWSER WINDOW MOCKUP ── */
+    .stage-window-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .stage-window {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #090a10;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+      transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+
+    .stage-card:hover .stage-window {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: scale(1.015);
+    }
+
+    .window-header {
+      height: 38px;
+      background: rgba(255, 255, 255, 0.035);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .dot-red { background: #ef4444; opacity: 0.85; }
+    .dot-yellow { background: #f59e0b; opacity: 0.85; }
+    .dot-green { background: #10b981; opacity: 0.85; }
+
+    .window-url-bar {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: #64748b;
+      letter-spacing: -0.2px;
+      user-select: none;
+    }
+
+    .window-url-bar i {
+      font-size: 0.68rem;
+      margin-right: 6px;
+      opacity: 0.6;
+    }
+
+    .window-screen {
+      width: 100%;
+      aspect-ratio: 16/10;
+      position: relative;
+      background: #06070a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .window-screen img,
+    .window-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+
+    .stage-card:hover .window-screen img,
+    .stage-card:hover .window-screen video {
+      transform: scale(1.03);
+      opacity: 1;
+    }
+
+    /* ── RESPONSIVE ADAPTATIONS ── */
+    @media (max-width: 960px) {
+      .stage-card,
+      .stage-card.reverse {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 32px 24px;
+      }
+
+      .stage-card.reverse .stage-content {
+        order: 1;
+      }
+
+      .stage-card.reverse .stage-window-wrap {
+        order: 2;
+      }
+
+      .apps-stage-section {
+        padding: 40px 0 70px;
+      }
+
+      .apps-hero-header {
+        margin-bottom: 40px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stage-card,
+      .stage-card.reverse {
+        padding: 24px 18px;
+        border-radius: 20px;
+        gap: 26px;
+      }
+
+      .stage-title {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+      }
+
+      .stage-desc {
+        font-size: 0.92rem;
+        margin-bottom: 24px;
+      }
+
+      .stage-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        font-size: 0.92rem;
+      }
+
+      .window-url-bar {
+        font-size: 0.68rem;
+      }
+    }
+  </style>
+  <link rel="canonical" href="https://btechx.infinityfreeapp.com/apps.html" />
+  <link rel="icon" type="image/png" href="logo.png?v=7" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <div class="navbar-brand">
+        <a href="index.html" style="text-decoration: none; display: flex; align-items: center;">
+          <span class="logo-text">BTechX</span>
+        </a>
+        <span style="height: 18px; width: 1px; background: rgba(255, 255, 255, 0.15); margin: 0 10px; align-self: center;"></span>
+        <a href="https://itsme-gilt.vercel.app" target="_blank" title="BTechX is powered by DLM" style="display: flex; align-items: center;">
+          <img src="images/dlm.png" alt="DLM Logo" style="height: 24px; width: auto; opacity: 0.9; align-self: center; display: block;" />
+        </a>
+      </div>
+      <div class="navbar-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#subjects">Subjects</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="about.html">About & Contact</a>
+        <a href="apps.html" class="active">Apps</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-panel">
+      <div class="sidebar-header" style="display: flex; align-items: center;">
+        <a href="index.html" style="text-decoration: none; display: flex; align-items: center;">
+          <span class="logo-text">BTechX</span>
+        </a>
+        <span style="height: 18px; width: 1px; background: rgba(255, 255, 255, 0.15); margin: 0 8px; align-self: center;"></span>
+        <a href="https://itsme-gilt.vercel.app" target="_blank" title="BTechX is powered by DLM" style="display: flex; align-items: center;">
+          <img src="images/dlm.png" alt="DLM Logo" style="height: 22px; width: auto; opacity: 0.9; align-self: center; display: block;" />
+        </a>
+        <button class="close-btn" id="closeMenu">&times;</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="index.html#subjects">Subjects</a>
+      <a href="syllabus.html">Syllabus</a>
+      <a href="about.html">About & Contact</a>
+      <a href="apps.html" class="active">Apps</a>
+    </div>
+  </div>
+
+  <!-- ═══ APPS STAGE SECTION ═══ -->
+  <section class="apps-stage-section">
+    <div class="container">
+
+      <div class="apps-hero-header">
+        <h1 class="apps-hero-title">Apps</h1>
+        <p class="apps-hero-desc">Handcrafted web applications and next-gen AI tools built by DLM.</p>
+      </div>
+
+      <div class="stage-list">
+
+        <!-- 1. Realiology -->
+        <div class="stage-card">
+          <div class="stage-glow glow-gold"></div>
+          <div class="stage-content">
+            <h2 class="stage-title">Realiology</h2>
+            <p class="stage-desc">
+              A next-generation AI-powered knowledge retrieval platform engineered to provide accurate, multilingual, and context-aware answers directly from the vast literature of Sanatana Dharma. Built on a sophisticated Retrieval-Augmented Generation (RAG) architecture.
+            </p>
+            <a href="https://realiology.infinityfreeapp.com" target="_blank" class="stage-btn">
+              Explore Realiology <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+          <div class="stage-window-wrap">
+            <div class="stage-window">
+              <div class="window-header">
+                <div class="window-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <div class="window-url-bar">
+                  <i class="fas fa-lock"></i> realiology.infinityfreeapp.com
+                </div>
+              </div>
+              <div class="window-screen">
+                <video src="Videos/INTRO.mp4" poster="images/realiology.png" loop muted playsinline disablePictureInPicture controlsList="nodownload" oncontextmenu="return false;" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9; filter: contrast(1.15) saturate(1.25) brightness(0.95) sepia(0.12); pointer-events: none;"></video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Veda AI (Alternating layout) -->
+        <div class="stage-card reverse">
+          <div class="stage-glow glow-purple"></div>
+          <div class="stage-content">
+            <h2 class="stage-title">Veda AI</h2>
+            <p class="stage-desc">
+              A futuristic Video Lecture Analyzer that converts unstructured YouTube educational videos into highly structured, comprehensive study notes. Powered by advanced LLMs like Sarvam AI and Groq LLaMA-3.
+            </p>
+            <a href="https://veda-ai-k7a4.onrender.com/" target="_blank" class="stage-btn">
+              Try Veda AI <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+          <div class="stage-window-wrap">
+            <div class="stage-window">
+              <div class="window-header">
+                <div class="window-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <div class="window-url-bar">
+                  <i class="fas fa-lock"></i> veda-ai-k7a4.onrender.com
+                </div>
+              </div>
+              <div class="window-screen">
+                <img src="images/veda-ai.png" alt="Veda AI Preview" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Metacleaner -->
+        <div class="stage-card">
+          <div class="stage-glow glow-cyan"></div>
+          <div class="stage-content">
+            <h2 class="stage-title">Metacleaner</h2>
+            <p class="stage-desc">
+              Clean hidden metadata from your files to protect your personal privacy before sharing documents or images online. Remove EXIF records, author information, device fingerprints, and timestamps instantly.
+            </p>
+            <a href="https://metacleaner.onrender.com/" target="_blank" class="stage-btn">
+              Clean Metadata <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+          <div class="stage-window-wrap">
+            <div class="stage-window">
+              <div class="window-header">
+                <div class="window-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <div class="window-url-bar">
+                  <i class="fas fa-lock"></i> metacleaner.onrender.com
+                </div>
+              </div>
+              <div class="window-screen">
+                <img src="images/metacleaner.png" alt="Metacleaner Preview" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-text">BTechX</div>
+          <p>A free academic resource platform for B.Tech students. BTechX is powered by <a href="https://itsme-gilt.vercel.app" target="_blank" style="color: #ffffff; text-decoration: underline;">DLM</a>.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mr.backbencher.007.in" target="_blank" title="Instagram"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/subhammoharana2007/?locale=en-US" target="_blank" title="LinkedIn"><i
+                class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/SubhamM17005388" target="_blank" title="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#subjects">Subjects</a></li>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+            <li><a href="apps.html">Apps</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="syllabus.html">Syllabus</a></li>
+            <li><a href="about.html">About & Contact</a></li>
+            <li><a href="apps.html">Apps</a></li>
+            <li>
+              <a href="https://www.confessout.com/btechx-cgu" target="_blank">Feedback Portal</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2025&ndash;2029 <strong>BTechX</strong>. All rights
+          reserved. | BTechX is powered by <a href="https://itsme-gilt.vercel.app" target="_blank" style="color: #ffffff; text-decoration: underline;">DLM</a>
+        </p>
+        <p>Built by <strong>BTechX</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" title="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/pdf-modal.js?v=15.7"></script>
+  <script src="assets/js/version-check.js?v=16.7"></script>
+  <script>
+    document.querySelectorAll('.stage-card').forEach(item => {
+      const video = item.querySelector('video');
+      if (video) {
+        video.preload = "auto";
+        item.addEventListener('mouseenter', () => {
+          video.play().catch(err => console.debug("Video play blocked:", err));
+        });
+        item.addEventListener('mouseleave', () => {
+          video.pause();
+          video.load();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -63,7 +63,7 @@ BTechX/
 ├── index.html          # Main Landing Homepage
 ├── syllabus.html       # Syllabus directory
 ├── about.html          # About & Contact page
-├── tool.html           # Tools & AI Showcase page
+├── apps.html           # Apps & AI Showcase page (Bento Grid)
 ├── styles.css          # Main Design System & Responsive Stylesheet
 ├── sitemap.xml         # Search engine sitemap
 ├── robots.txt          # Web crawler configuration
